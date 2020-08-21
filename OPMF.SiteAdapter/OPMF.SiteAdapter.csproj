@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OPMF.Config\OPMF.Config.csproj" />
+    <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
   </ItemGroup>
 
 </Project>
