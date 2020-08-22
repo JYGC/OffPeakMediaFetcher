@@ -7,15 +7,3 @@ E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFet
 E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.csproj.CoreCompileInputs.cache
 E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.dll
 E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.pdb
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\bin\Debug\netcoreapp3.1\OPMF.SiteAdapter.deps.json
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\bin\Debug\netcoreapp3.1\OPMF.SiteAdapter.dll
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\bin\Debug\netcoreapp3.1\OPMF.SiteAdapter.pdb
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\bin\Debug\netcoreapp3.1\OPMF.Entities.dll
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\bin\Debug\netcoreapp3.1\OPMF.Entities.pdb
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.csprojAssemblyReference.cache
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.AssemblyInfoInputs.cache
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.AssemblyInfo.cs
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.csproj.CoreCompileInputs.cache
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.csproj.CopyComplete
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.dll
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.SiteAdapter\obj\Debug\netcoreapp3.1\OPMF.SiteAdapter.pdb
