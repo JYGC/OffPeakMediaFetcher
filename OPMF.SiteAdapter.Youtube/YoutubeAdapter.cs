@@ -39,29 +39,43 @@ namespace OPMF.SiteAdapter.Youtube
 
             List<YoutubeChannel> channels = __channelDatabase.DBCall.GetNotBacklisted();
             ActivitiesResource.ListRequest request = this.__youtubeService.Activities.List(__videoInfoParts);
-            request.ChannelId = string.Join(",", channels.Select(channel => channel.SiteId).ToArray());
-            request.PublishedAfter = new DateTime(2020, 08, 13);
-            string nextPageToken = null;
-            do
-            {
-                ActivityListResponse response = request.Execute();
-                IList<Activity> activities = response.Items;
-                foreach (Activity activity in activities)
-                {
-                    vidoeInfos.Add(new YoutubeVideoInfo()
-                    {
-                        SiteId = activity.ContentDetails.Upload.VideoId
-                        , Title = activity.Snippet.Title
-                        , Description = activity.Snippet.Description
-                        , ChannelSiteId = activity.Snippet.ChannelId
-                        , PublishedAt = Convert.ToDateTime(activity.Snippet.PublishedAt)
-                    });
-                }
-                nextPageToken = request.PageToken = response.NextPageToken;
-            }
-            while (nextPageToken != null);
 
-            __videoInfoDatabase.DBCall.InsertOrUpdate(vidoeInfos);
+            foreach (YoutubeChannel channel in channels)
+            {
+                Console.WriteLine("fetch new videos for youtube channel: " + channel.Name);
+                //request.ChannelId = string.Join(",", channels.Select(channel => channel.SiteId).ToArray());
+                request.ChannelId = channel.SiteId;
+                request.PublishedAfter = new DateTime(2020, 08, 22);
+                string nextPageToken = null;
+                do
+                {
+                    ActivityListResponse response = request.Execute();
+                    IList<Activity> activities = response.Items;
+                    foreach (Activity activity in activities)
+                    {
+                        if (activity.ContentDetails.Upload == null)
+                        {
+                            Console.WriteLine("no video id. skip");
+                        }
+                        else
+                        {
+                            Console.WriteLine("fetched video: " + activity.Snippet.Title);
+                            vidoeInfos.Add(new YoutubeVideoInfo()
+                            {
+                                SiteId = activity.ContentDetails.Upload.VideoId
+                                , Title = activity.Snippet.Title
+                                , Description = activity.Snippet.Description
+                                , ChannelSiteId = activity.Snippet.ChannelId
+                                , PublishedAt = Convert.ToDateTime(activity.Snippet.PublishedAt)
+                            });
+                        }
+                    }
+                    nextPageToken = request.PageToken = response.NextPageToken;
+                }
+                while (nextPageToken != null);
+            }
+
+            __videoInfoDatabase.DBCall.InsertOrIgnore(vidoeInfos);
         }
 
         public void ImportChannels()
@@ -93,7 +107,6 @@ namespace OPMF.SiteAdapter.Youtube
             while (nextPageToken != null);
 
             Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
-
             __channelDatabase.DBCall.InsertOrUpdate(channels);
         }
     }
