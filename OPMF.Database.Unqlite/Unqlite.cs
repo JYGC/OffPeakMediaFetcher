@@ -1,46 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-using UnQLiteNet;
+using LiteDB;
 using Newtonsoft.Json;
 
 namespace OPMF.Database.Unqlite
 {
     public class Unqlite<TValue> : IDatabase<TValue>
     {
-        private UnQLite __database;
+        private LiteDatabase __database;
 
         public Unqlite(string dbpath)
         {
-            __database = new UnQLite(dbpath, UnQLiteOpenModel.Create | UnQLiteOpenModel.ReadWrite);
+            __database = new LiteDatabase(dbpath);
         }
-
-        ~Unqlite()
+        public void Insert(Dictionary<string, TValue> items)
         {
-            __database.Close();
-        }
-
-        public void Save(Dictionary<string, TValue> items)
-        {
-            foreach(KeyValuePair<string, TValue> item in items)
-            {
-                __database.Save(item.Key, JsonConvert.SerializeObject(item.Value));
-            }
+            ILiteCollection<TValue> collection = __database.GetCollection<TValue>();
+            collection.InsertBulk(items.Select(x => x.Value));
         }
 
         public string Get(string key)
         {
-            return __database.Get(key);
+            ILiteCollection<TValue> collection = __database.GetCollection<TValue>();
+            collection.Find(x => (string)typeof(TValue).GetProperty("SiteID").GetValue(x) == key);
+            return null;
         }
         
-        public Dictionary<string, TValue> GetAll()
+        public List<TValue> GetAll()
         {
-            return __database.GetAll().ToDictionary(item => item.Item1, item => JsonConvert.DeserializeObject<TValue>(item.Item2));
+            return __database.GetCollection<TValue>().FindAll().ToList();
         }
         
         public void Remove(string key)
         {
-            __database.Remove(key);
+            //__database.Remove(key);
         }
     }
 }

@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OPMF.Database.Unqlite\OPMF.Database.Unqlite.csproj" />
     <ProjectReference Include="..\OPMF.Database\OPMF.Database.csproj" />
     <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
     <ProjectReference Include="..\OPMF.SiteAdapter\OPMF.SiteAdapter.csproj" />

@@ -1,0 +1,15 @@
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\OPMF.Database.deps.json
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\OPMF.Database.dll
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\OPMF.Database.pdb
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\obj\Debug\netcoreapp3.1\OPMF.Database.csprojAssemblyReference.cache
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\obj\Debug\netcoreapp3.1\OPMF.Database.AssemblyInfoInputs.cache
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\obj\Debug\netcoreapp3.1\OPMF.Database.AssemblyInfo.cs
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\obj\Debug\netcoreapp3.1\OPMF.Database.csproj.CoreCompileInputs.cache
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\obj\Debug\netcoreapp3.1\OPMF.Database.dll
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\obj\Debug\netcoreapp3.1\OPMF.Database.pdb
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\config.example.json
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\OPMF.Config.dll
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\OPMF.Entities.dll
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\OPMF.Config.pdb
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\bin\Debug\netcoreapp3.1\OPMF.Entities.pdb
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Database\obj\Debug\netcoreapp3.1\OPMF.Database.csproj.CopyComplete

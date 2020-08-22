@@ -1,6 +1,5 @@
-﻿using System;
-
-using OPMF.Config;
+﻿using OPMF.SiteAdapter;
+using OPMF.SiteAdapter.Youtube;
 
 namespace OffPeakMediaFetcher
 {
@@ -8,8 +7,11 @@ namespace OffPeakMediaFetcher
     {
         static void Main(string[] args)
         {
-            AppConfig config = ConfigHelper.GetConfig();
-            Console.WriteLine(config.AppDataName);
+            OPMF.Startup.DirectorySetup.CheckAppDirectory();
+
+            ISiteAdapter youtubeAdapter = new YoutubeAdapter();
+            youtubeAdapter.ImportChannels();
+            youtubeAdapter.FetchVideoInfos();
         }
     }
 }

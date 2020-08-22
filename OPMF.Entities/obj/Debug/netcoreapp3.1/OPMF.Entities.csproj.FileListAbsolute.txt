@@ -1,0 +1,9 @@
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\bin\Debug\netcoreapp3.1\OPMF.Entities.deps.json
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\bin\Debug\netcoreapp3.1\OPMF.Entities.dll
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\bin\Debug\netcoreapp3.1\OPMF.Entities.pdb
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\obj\Debug\netcoreapp3.1\OPMF.Entities.csprojAssemblyReference.cache
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\obj\Debug\netcoreapp3.1\OPMF.Entities.AssemblyInfoInputs.cache
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\obj\Debug\netcoreapp3.1\OPMF.Entities.AssemblyInfo.cs
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\obj\Debug\netcoreapp3.1\OPMF.Entities.csproj.CoreCompileInputs.cache
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\obj\Debug\netcoreapp3.1\OPMF.Entities.dll
+E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\OPMF.Entities\obj\Debug\netcoreapp3.1\OPMF.Entities.pdb

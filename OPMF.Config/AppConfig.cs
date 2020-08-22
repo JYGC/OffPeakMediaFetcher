@@ -7,19 +7,19 @@ namespace OPMF.Config
 {
     public class AppConfig
     {
-        private string __appDataName;
+        private string __appDataDir;
 
         public AppConfig(string configJson)
         {
             Dictionary<string, string> configDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(configJson);
-            __appDataName = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), configDict["AppDataName"]);
+            __appDataDir = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), configDict["AppDataDirectory"]);
         }
 
-        public string AppDataName
+        public string AppDataDirectory
         {
             get
             {
-                return __appDataName;
+                return __appDataDir;
             }
         }
     }

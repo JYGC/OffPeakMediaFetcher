@@ -13,11 +13,23 @@ namespace OPMF.Entities
         string ChannelSiteId { get; set; }
     }
 
-    public class VideoInfo : IVideoInfo
+    public class VideoInfo : IVideoInfo, IId
     {
-        public string SiteId { get; set; }
+        public string Id { get; set; }
+        public string SiteId
+        {
+            get
+            {
+                return Id;
+            }
+            set
+            {
+                Id = value;
+            }
+        }
         public string Title { get; set; }
         public string Description { get; set; }
+        public bool Approved { get; set; } = false;
         public bool Ignore { get; set; } = false;
         public bool Downloaded { get; set; } = false;
         public DateTime PublishedAt { get; set; }

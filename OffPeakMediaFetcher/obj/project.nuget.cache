@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "FvVCEdd6wkFa6yf1Rs4CZ2WBUHBOjNH9qq4zn45UE4n8VWliSkdhrXq7/PhuSwBimbY3PSsHdrjlWp+ysfgc0w==",
+  "success": true,
+  "projectFilePath": "E:\\Users\\Junying\\OneDrive\\Programming\\OffPeakMediaFetcherProject\\OffPeakMediaFetcher\\OffPeakMediaFetcher\\OffPeakMediaFetcher.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Junying\\.nuget\\packages\\google.apis\\1.47.0\\google.apis.1.47.0.nupkg.sha512",
+    "C:\\Users\\Junying\\.nuget\\packages\\google.apis.auth\\1.47.0\\google.apis.auth.1.47.0.nupkg.sha512",
+    "C:\\Users\\Junying\\.nuget\\packages\\google.apis.core\\1.47.0\\google.apis.core.1.47.0.nupkg.sha512",
+    "C:\\Users\\Junying\\.nuget\\packages\\google.apis.youtube.v3\\1.47.0.2008\\google.apis.youtube.v3.1.47.0.2008.nupkg.sha512",
+    "C:\\Users\\Junying\\.nuget\\packages\\litedb\\5.0.9\\litedb.5.0.9.nupkg.sha512",
+    "C:\\Users\\Junying\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

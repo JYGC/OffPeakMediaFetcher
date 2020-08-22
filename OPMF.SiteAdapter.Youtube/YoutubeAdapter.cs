@@ -1,54 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
 using System.Linq;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
-using Google.Apis.Upload;
-using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 
-using Newtonsoft.Json;
-using OPMF.Entities;
-
 namespace OPMF.SiteAdapter.Youtube
 {
-    public class Youtube : ISiteAdapter
+    public class YoutubeAdapter : ISiteAdapter
     {
-        private readonly int __maxResultsPerResponse = 5;
+        private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
+        private readonly int __maxResultsPerResponse = 50;
         private readonly string __videoInfoParts = "snippet,contentDetails";
         private readonly string __channelParts = "snippet";
 
         private YouTubeService __youtubeService;
-        private Database.IDatabase<Entities.IChannel> __channelDatabase;
-        private Database.IDatabase<Entities.IVideoInfo> __videoInfoDatabase;
+        private Database.DatabaseAdapter<YoutubeChannelDbCalls> __channelDatabase;
+        private Database.DatabaseAdapter<YoutubeVideoInfoDbCalls> __videoInfoDatabase;
 
-        public Youtube(UserCredential credential = null)
+        public YoutubeAdapter()
         {
+            UserCredential credential = GoogleAuth.GetCredential(__apiScope);
             __youtubeService = new YouTubeService(new BaseClientService.Initializer() {
                 ApplicationName = this.GetType().ToString()
                 , HttpClientInitializer = credential
             });
 
-            __channelDatabase = new Database.Unqlite.Unqlite<Entities.IChannel>("Youtube.Channels.db");
-            __videoInfoDatabase = new Database.Unqlite.Unqlite<Entities.IVideoInfo>("Youtube.VideoInfos.db");
+            Console.WriteLine("connect to database");
+            __channelDatabase = new Database.DatabaseAdapter<YoutubeChannelDbCalls>("Youtube.Channels.db");
+            __videoInfoDatabase = new Database.DatabaseAdapter<YoutubeVideoInfoDbCalls>("Youtube.VideoInfos.db");
         }
-
-        //private TReturn __fetchItemList<TReturn>()
-        //{
-        //    string 
-        //}
 
         public void FetchVideoInfos()
         {
-            Dictionary<string, Entities.IVideoInfo> vidoeInfos = new Dictionary<string, Entities.IVideoInfo>();
+            List<YoutubeVideoInfo> vidoeInfos = new List<YoutubeVideoInfo>();
 
-            Dictionary<string, Entities.IChannel> channels = __channelDatabase.GetAll().Where(
-                channel => channel.Value.BlackListed = false
-            ).ToDictionary(item => item.Key, item => item.Value);
+            List<YoutubeChannel> channels = __channelDatabase.DBCall.GetNotBacklisted();
             ActivitiesResource.ListRequest request = this.__youtubeService.Activities.List(__videoInfoParts);
-            request.ChannelId = string.Join(",", channels.Select(channel => channel.Value.SiteId).ToArray());
+            request.ChannelId = string.Join(",", channels.Select(channel => channel.SiteId).ToArray());
             request.PublishedAfter = new DateTime(2020, 08, 13);
             string nextPageToken = null;
             do
@@ -57,7 +48,7 @@ namespace OPMF.SiteAdapter.Youtube
                 IList<Activity> activities = response.Items;
                 foreach (Activity activity in activities)
                 {
-                    vidoeInfos.Add(activity.ContentDetails.Upload.VideoId, new VideoInfo()
+                    vidoeInfos.Add(new YoutubeVideoInfo()
                     {
                         SiteId = activity.ContentDetails.Upload.VideoId
                         , Title = activity.Snippet.Title
@@ -66,16 +57,18 @@ namespace OPMF.SiteAdapter.Youtube
                         , PublishedAt = Convert.ToDateTime(activity.Snippet.PublishedAt)
                     });
                 }
+                nextPageToken = request.PageToken = response.NextPageToken;
             }
             while (nextPageToken != null);
 
-            __videoInfoDatabase.Save(vidoeInfos);
+            __videoInfoDatabase.DBCall.InsertOrUpdate(vidoeInfos);
         }
 
         public void ImportChannels()
         {
-            Dictionary<string, Entities.IChannel> channels = new Dictionary<string, Entities.IChannel>();
+            List<YoutubeChannel> channels = new List<YoutubeChannel>();
 
+            Console.WriteLine("import channels from google");
             SubscriptionsResource.ListRequest request = this.__youtubeService.Subscriptions.List(__channelParts);
             request.Mine = true;
             request.MaxResults = __maxResultsPerResponse;
@@ -86,18 +79,22 @@ namespace OPMF.SiteAdapter.Youtube
                 IList<Subscription> subscriptions = response.Items;
                 foreach (Subscription subscription in subscriptions)
                 {
-                    channels.Add(subscription.Snippet.ResourceId.ChannelId, new YoutubeChannel()
+                    Console.WriteLine("import channel: " + subscription.Snippet.Title);
+                    channels.Add(new YoutubeChannel()
                     {
                         SiteId = subscription.Snippet.ResourceId.ChannelId
                         , Name = subscription.Snippet.Title
                         , Description = subscription.Snippet.Description
+                        , LastCheckedOut = DateTime.Now
                     });
                 }
                 nextPageToken = request.PageToken = response.NextPageToken;
             }
             while (nextPageToken != null);
 
-            __channelDatabase.Save(channels);
+            Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
+
+            __channelDatabase.DBCall.InsertOrUpdate(channels);
         }
     }
 }
