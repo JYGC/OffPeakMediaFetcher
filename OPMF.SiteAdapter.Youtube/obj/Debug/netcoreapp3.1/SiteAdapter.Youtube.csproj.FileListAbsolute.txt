@@ -1,5 +1,0 @@
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter.Youtube\bin\Debug\netcoreapp3.1\SiteAdapter.Youtube.deps.json
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter.Youtube\bin\Debug\netcoreapp3.1\SiteAdapter.Youtube.dll
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter.Youtube\obj\Debug\netcoreapp3.1\SiteAdapter.Youtube.csprojAssemblyReference.cache
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter.Youtube\obj\Debug\netcoreapp3.1\SiteAdapter.Youtube.AssemblyInfoInputs.cache
-E:\Users\Junying\OneDrive\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\SiteAdapter.Youtube\obj\Debug\netcoreapp3.1\SiteAdapter.Youtube.AssemblyInfo.cs
