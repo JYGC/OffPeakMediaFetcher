@@ -8,24 +8,19 @@ using LiteDB;
 
 namespace OPMF.Database
 {
-    public class DatabaseAdapter<TDerivedCalls> where TDerivedCalls : IDbCalls, new()
+    public interface IDatabaseAdapter { }
+
+    public class DatabaseAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IId
     {
-        private LiteDatabase __db;
-        private TDerivedCalls __dbCalls;
+        protected readonly string _keyName = "_id";
+
+        protected LiteDatabase _db;
+        protected ILiteCollection<TItem> _collection;
 
         public DatabaseAdapter(string dbname)
         {
-            __db = new LiteDatabase(Path.Join(Config.ConfigHelper.GetConfig().AppDataDirectory, dbname));
-            __dbCalls = new TDerivedCalls();
-            __dbCalls.DB = __db;
-        }
-
-        public TDerivedCalls DBCall
-        {
-            get
-            {
-                return __dbCalls;
-            }
+            _db = new LiteDatabase(Path.Join(Config.ConfigHelper.GetConfig().AppDataDirectory, dbname));
+            _collection = _db.GetCollection<TItem>();
         }
     }
 }

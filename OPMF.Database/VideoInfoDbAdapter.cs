@@ -5,8 +5,10 @@ using LiteDB;
 
 namespace OPMF.Database
 {
-    public class VideoInfoDbCalls<TItem> : DbCalls<TItem> where TItem : Entities.IVideoInfo, Entities.IId
+    public class VideoInfoDbAdapter<TItem> : DatabaseAdapter<TItem> where TItem : Entities.IVideoInfo, Entities.IId
     {
+        public VideoInfoDbAdapter(string dbname) : base(dbname) { }
+
         public List<TItem> GetNotIgnore()
         {
             return _collection.Find(i => i.Ignore == false).ToList();

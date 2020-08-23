@@ -5,8 +5,10 @@ using LiteDB;
 
 namespace OPMF.Database
 {
-    public class ChannelDbCalls<TItem> : DbCalls<TItem> where TItem : Entities.IChannel, Entities.IId
+    public class ChannelDbAdapter<TItem> : DatabaseAdapter<TItem> where TItem : Entities.IChannel, Entities.IId
     {
+        public ChannelDbAdapter(string dbname) : base(dbname) { }
+
         public List<TItem> GetNotBacklisted()
         {
             return _collection.Find(i => i.BlackListed == false).ToList();
