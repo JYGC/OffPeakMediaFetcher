@@ -18,7 +18,7 @@ namespace OPMF.SiteAdapter.Youtube
                 // The file token.json stores the user's access and refresh tokens, and is created
                 // automatically when the authorization flow completes for the first time.
                 Console.WriteLine("authenticate with google");
-                string credPath = "token.json";
+                string credPath = Settings.ConfigHelper.Config.CredentialPath;
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     scope,

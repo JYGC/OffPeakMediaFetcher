@@ -7,5 +7,6 @@
     {
         public int NewChannelPastVideoDayLimit { get; set; } = 28;
         public string GoogleClientSecretPath { get; set; } = "gmail-python-quickstart.json";
+        public string CredentialPath { get; set; } = "token.json";
     }
 }

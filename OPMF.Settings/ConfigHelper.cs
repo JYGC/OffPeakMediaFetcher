@@ -33,7 +33,6 @@ namespace OPMF.Settings
             else
             {
                 __config = new AppConfig();
-                __config.GoogleClientSecretPath = Path.Join(OSEnvironment.GetExecDirectory(), __config.GoogleClientSecretPath);
                 File.WriteAllText(ReadonlySettings.ConfigFilePath, JsonConvert.SerializeObject(__config, Formatting.Indented));
             }
         }

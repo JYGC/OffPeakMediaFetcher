@@ -17,20 +17,20 @@ namespace OPMF.Database
 
         public List<TItem> GetNotIgnore()
         {
-            return _collection.Find(i => i.Ignore == false).ToList();
+            return _Collection.Find(i => i.Ignore == false).ToList();
         }
 
         public void InsertOrIgnore(List<TItem> items)
         {
             try
             {
-                IEnumerable<TItem> toInsert = items.Where(i => _collection.FindOne(Query.EQ(_keyName, i.Id)) == null);
-                _collection.InsertBulk(toInsert);
-                _db.Commit();
+                IEnumerable<TItem> toInsert = items.Where(i => _Collection.FindOne(Query.EQ(_KeyName, i.Id)) == null);
+                _Collection.InsertBulk(toInsert);
+                _Db.Commit();
             }
             catch
             {
-                _db.Rollback();
+                _Db.Rollback();
             }
         }
     }

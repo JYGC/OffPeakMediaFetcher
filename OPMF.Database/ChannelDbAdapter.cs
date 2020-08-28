@@ -19,7 +19,7 @@ namespace OPMF.Database
 
         public List<TItem> GetNotBacklisted()
         {
-            return _collection.Find(i => i.BlackListed == false).ToList();
+            return _Collection.Find(i => i.BlackListed == false).ToList();
         }
 
         public void InsertOrUpdate(List<TItem> items)
@@ -27,22 +27,23 @@ namespace OPMF.Database
             try
             {
                 IEnumerable<string> itemIds = items.Select(i => i.Id);
-                IEnumerable<TItem> dbToUpdate = _collection.Find(i => itemIds.Contains(i.Id));
-                IEnumerable<TItem> toInsert = items.Where(i => !dbToUpdate.Any(j => j.Id == i.Id));
-                _collection.InsertBulk(toInsert);
-
+                List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList();
                 foreach(TItem dbItem in dbToUpdate)
                 {
                     TItem item = items.First(i => i.Id == dbItem.Id);
                     dbItem.Name = item.Name;
                     dbItem.Description = item.Description;
                 }
-                _collection.Update(dbToUpdate);
-                _db.Commit();
+                _Collection.Update(dbToUpdate);
+
+                IEnumerable<TItem> toInsert = items.Where(i => !dbToUpdate.Any(j => j.Id == i.Id));
+                _Collection.InsertBulk(toInsert);
+
+                _Db.Commit();
             }
             catch (Exception e)
             {
-                _db.Rollback();
+                _Db.Rollback();
             }
         }
 
@@ -51,19 +52,20 @@ namespace OPMF.Database
             try
             {
                 IEnumerable<string> itemIds = items.Select(i => i.Id);
-                List<TItem> dbToUpdate = _collection.Find(i => itemIds.Contains(i.Id)).ToList();
+                List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList();
                 foreach (TItem dbItem in dbToUpdate)
                 {
                     TItem item = items.First(i => i.Id == dbItem.Id);
                     dbItem.LastCheckedOut = item.LastCheckedOut;
                     dbItem.LastActivityDate = item.LastActivityDate;
                 }
-                _collection.Update(dbToUpdate);
-                _db.Commit();
+                _Collection.Update(dbToUpdate);
+
+                _Db.Commit();
             }
             catch (Exception)
             {
-                _db.Rollback();
+                _Db.Rollback();
             }
         }
     }
