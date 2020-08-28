@@ -7,13 +7,13 @@ using Google.Apis.Util.Store;
 
 namespace OPMF.SiteAdapter.Youtube
 {
-    class GoogleAuth
+    public class GoogleAuthentication
     {
         public static UserCredential GetCredential(string[] scope)
         {
             UserCredential credential;
 
-            using (FileStream stream = new FileStream("gmail-python-quickstart.json", FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(Settings.ConfigHelper.Config.GoogleClientSecretPath, FileMode.Open, FileAccess.Read))
             {
                 // The file token.json stores the user's access and refresh tokens, and is created
                 // automatically when the authorization flow completes for the first time.

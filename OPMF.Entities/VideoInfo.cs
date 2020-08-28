@@ -2,7 +2,7 @@
 
 namespace OPMF.Entities
 {
-    public interface IVideoInfo
+    public interface IVideoInfo : IId
     {
         string SiteId { get; set; }
         string Title { get; set; }
@@ -14,7 +14,7 @@ namespace OPMF.Entities
         string ChannelSiteId { get; set; }
     }
 
-    public class VideoInfo : IVideoInfo, IId
+    public class VideoInfo : IVideoInfo
     {
         public string Id { get; set; }
         public string SiteId

@@ -5,9 +5,15 @@ using LiteDB;
 
 namespace OPMF.Database
 {
-    public class VideoInfoDbAdapter<TItem> : DatabaseAdapter<TItem> where TItem : Entities.IVideoInfo, Entities.IId
+    public interface IVideoInfoDbAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IVideoInfo
     {
-        public VideoInfoDbAdapter(string dbname) : base(dbname) { }
+        List<TItem> GetNotIgnore();
+        void InsertOrIgnore(List<TItem> items);
+    }
+
+    public class VideoInfoDbAdapter<TItem> : DatabaseAdapter<TItem>, IVideoInfoDbAdapter<TItem> where TItem : Entities.IVideoInfo
+    {
+        public VideoInfoDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
 
         public List<TItem> GetNotIgnore()
         {

@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OPMF.Config\OPMF.Config.csproj" />
     <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
+    <ProjectReference Include="..\OPMF.Settings\OPMF.Settings.csproj" />
   </ItemGroup>
 
 </Project>

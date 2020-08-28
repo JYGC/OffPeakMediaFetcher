@@ -1,17 +1,15 @@
-﻿using OPMF.SiteAdapter;
-using OPMF.SiteAdapter.Youtube;
-
-namespace OffPeakMediaFetcher
+﻿namespace OffPeakMediaFetcher
 {
     class Program
     {
         static void Main(string[] args)
         {
-            OPMF.Startup.DirectorySetup.CheckAppDirectory();
+            OPMF.Settings.ConfigHelper.EstablishConfig();
+            OPMF.Actions.DirectorySetup.EstablishAppDirectory();
+            OPMF.Actions.SiteDownload.ImportChannels();
+            OPMF.Actions.SiteDownload.FetchVideoInfos();
 
-            ISiteAdapter youtubeAdapter = new YoutubeAdapter();
-            youtubeAdapter.ImportChannels();
-            youtubeAdapter.FetchVideoInfos();
+            //OPMF.Actions.DatabaseChanges.Migrate();
         }
     }
 }

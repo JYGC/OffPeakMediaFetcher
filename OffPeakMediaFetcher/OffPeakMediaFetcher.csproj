@@ -6,10 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OPMF.Config\OPMF.Config.csproj" />
-    <ProjectReference Include="..\OPMF.SiteAdapter.Youtube\OPMF.SiteAdapter.Youtube.csproj" />
-    <ProjectReference Include="..\OPMF.SiteAdapter\OPMF.SiteAdapter.csproj" />
-    <ProjectReference Include="..\OPMF.Startup\OPMF.Startup.csproj" />
+    <ProjectReference Include="..\OPMF.Actions\OPMF.Actions.csproj" />
+    <ProjectReference Include="..\OPMF.Settings\OPMF.Settings.csproj" />
   </ItemGroup>
 
 </Project>

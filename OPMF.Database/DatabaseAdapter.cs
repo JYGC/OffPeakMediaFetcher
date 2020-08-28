@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 
 using LiteDB;
 
 namespace OPMF.Database
 {
-    public interface IDatabaseAdapter { }
+    public interface IDatabaseAdapter : IDisposable
+    {
+        void MigrateData();
+    }
 
     public class DatabaseAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IId
     {
@@ -16,11 +16,25 @@ namespace OPMF.Database
 
         protected LiteDatabase _db;
         protected ILiteCollection<TItem> _collection;
+        protected string _dbPath;
 
-        public DatabaseAdapter(string dbname)
+        public DatabaseAdapter(string dbName, string collectionName)
         {
-            _db = new LiteDatabase(Path.Join(Config.ConfigHelper.GetConfig().AppDataDirectory, dbname));
-            _collection = _db.GetCollection<TItem>();
+            _dbPath = Path.Join(Settings.ReadonlySettings.AppFolderPath, dbName);
+            _db = new LiteDatabase(_dbPath);
+            _collection = _db.GetCollection<TItem>(collectionName);
+        }
+
+        public void MigrateData()
+        {
+            LiteDatabase newDb = new LiteDatabase(_dbPath + ".new");
+            ILiteCollection<TItem> newCollection = newDb.GetCollection<TItem>();
+            newCollection.InsertBulk(_collection.FindAll());
+        }
+
+        public void Dispose()
+        {
+            _db.Dispose();
         }
     }
 }
