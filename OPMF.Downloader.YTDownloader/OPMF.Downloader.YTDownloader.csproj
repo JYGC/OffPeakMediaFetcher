@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NYoutubeDL" Version="0.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OPMF.Downloader\OPMF.Downloader.csproj" />
+    <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
+    <ProjectReference Include="..\OPMF.Settings\OPMF.Settings.csproj" />
+  </ItemGroup>
+
+</Project>

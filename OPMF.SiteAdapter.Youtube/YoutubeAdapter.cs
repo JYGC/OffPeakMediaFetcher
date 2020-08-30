@@ -10,12 +10,13 @@ using Newtonsoft.Json;
 
 namespace OPMF.SiteAdapter.Youtube
 {
-    public class YoutubeAdapter : ISiteAdapter<Entities.IChannel, Entities.IVideoInfo>
+    public class YoutubeAdapter : ISiteAdapter<Entities.IChannel, Entities.IMetadata>
     {
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
         private readonly int __maxResultsPerResponse = 50;
         private readonly string __videoInfoParts = "snippet,contentDetails";
         private readonly string __channelParts = "snippet";
+        private readonly string __urlSaffolding = "https://www.youtube.com/watch?v={0}";
 
         private YouTubeService __youtubeService;
 
@@ -28,17 +29,17 @@ namespace OPMF.SiteAdapter.Youtube
             });
         }
 
-        public List<Entities.IVideoInfo> FetchVideoInfos(ref List<Entities.IChannel> channels)
+        public List<Entities.IMetadata> FetchMetadata(ref List<Entities.IChannel> channels)
         {
-            List<Entities.IVideoInfo> vidoeInfos = new List<Entities.IVideoInfo>();
+            List<Entities.IMetadata> vidoeInfos = new List<Entities.IMetadata>();
             foreach (Entities.YoutubeChannel channel in channels)
             {
-                Console.WriteLine("fetching new video informtion for youtube channel: " + channel.Name);
-                ActivitiesResource.ListRequest request = this.__youtubeService.Activities.List(__videoInfoParts);
+                Console.WriteLine("fetching video metadata for youtube channel: " + channel.Name);
+                ActivitiesResource.ListRequest request = __youtubeService.Activities.List(__videoInfoParts);
                 request.ChannelId = channel.SiteId;
                 request.PublishedAfter = channel.LastCheckedOut.HasValue ? channel.LastCheckedOut.Value : DateTime.Now.AddDays(-Settings.ConfigHelper.Config.NewChannelPastVideoDayLimit);
                 bool updateLastCheckedOutAndActivity = true;
-                DateTime? lastActivityDate = null;
+                DateTime? lastActivityDate = channel.LastActivityDate;
                 DateTime checkOutDatetime;
                 string nextPageToken = null;
                 do
@@ -58,9 +59,10 @@ namespace OPMF.SiteAdapter.Youtube
                             {
                                 DateTime publishedAt = Convert.ToDateTime(activity.Snippet.PublishedAt);
                                 Console.WriteLine("fetched: " + activity.Snippet.Title);
-                                vidoeInfos.Add(new Entities.YoutubeVideoInfo()
+                                vidoeInfos.Add(new Entities.YoutubeMetadata()
                                 {
                                     SiteId = activity.ContentDetails.Upload.VideoId
+                                    , Url = string.Format(__urlSaffolding, activity.ContentDetails.Upload.VideoId)
                                     , Title = activity.Snippet.Title
                                     , Description = activity.Snippet.Description
                                     , ChannelSiteId = activity.Snippet.ChannelId

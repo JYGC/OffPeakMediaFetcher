@@ -2,9 +2,10 @@
 
 namespace OPMF.Entities
 {
-    public interface IVideoInfo : IId
+    public interface IMetadata : IId
     {
         string SiteId { get; set; }
+        string Url { get; set; }
         string Title { get; set; }
         string Description { get; set; }
         bool LookedAt { get; set; }
@@ -14,9 +15,10 @@ namespace OPMF.Entities
         string ChannelSiteId { get; set; }
     }
 
-    public class VideoInfo : IVideoInfo
+    public class Metadata : IMetadata
     {
         public string Id { get; set; }
+        public string Url { get; set; }
         public string SiteId
         {
             get
@@ -31,7 +33,7 @@ namespace OPMF.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public bool LookedAt { get; set; } = false;
-        public bool Ignore { get; set; } = false;
+        public bool Ignore { get; set; } = true;
         public bool Downloaded { get; set; } = false;
         public DateTime PublishedAt { get; set; }
         public string ChannelSiteId { get; set; }

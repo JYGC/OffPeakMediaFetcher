@@ -39,7 +39,7 @@ namespace OPMF.Database
 
         public DatabaseAdapter(string dbName, string collectionName)
         {
-            __dbPath = Path.Join(Settings.ReadonlySettings.AppFolderPath, dbName);
+            __dbPath = Path.Join(Settings.ReadonlySettings.DatabaseFolderPath, dbName);
             __db = new LiteDatabase(__dbPath);
             __collection = __db.GetCollection<TItem>(collectionName);
         }
@@ -49,6 +49,20 @@ namespace OPMF.Database
             LiteDatabase newDb = new LiteDatabase(__dbPath + ".new");
             ILiteCollection<TItem> newCollection = newDb.GetCollection<TItem>();
             newCollection.InsertBulk(__collection.FindAll());
+        }
+
+        protected List<TItem> _UpdateFields(List<TItem> items, Action<TItem, TItem> UpdateFields)
+        {
+            IEnumerable<string> itemIds = items.Select(i => i.Id);
+            List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList();
+            foreach (TItem dbItem in dbToUpdate)
+            {
+                TItem item = items.First(i => i.Id == dbItem.Id);
+                UpdateFields(item, dbItem);
+            }
+            _Collection.Update(dbToUpdate);
+
+            return dbToUpdate;
         }
 
         public void Dispose()

@@ -4,9 +4,9 @@
 
 namespace OPMF.SiteAdapter
 {
-    public interface ISiteAdapter<TChannel, TVideoInfo> where TChannel : Entities.IChannel where TVideoInfo : Entities.IVideoInfo
+    public interface ISiteAdapter<TChannel, TVideoInfo> where TChannel : Entities.IChannel where TVideoInfo : Entities.IMetadata
     {
-        List<TVideoInfo> FetchVideoInfos(ref List<TChannel> channels);
+        List<TVideoInfo> FetchMetadata(ref List<TChannel> channels);
         List<TChannel> ImportChannels();
     }
 }

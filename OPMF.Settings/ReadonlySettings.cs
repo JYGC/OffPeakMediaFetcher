@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Threading.Tasks.Dataflow;
 
 namespace OPMF.Settings
 {
@@ -9,13 +8,66 @@ namespace OPMF.Settings
     {
         private static string __appFolderName = "OffPeakMediaFetcher";
 
-        public static string ConfigFilePath { get; } = "config.json";
-
         public static string AppFolderPath
         {
             get
             {
-                return Path.Join(OSEnvironment.GetUserLocalAppDirectory(), __appFolderName);
+                return Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), __appFolderName);
+            }
+        }
+
+        public static string TempFolderPath
+        {
+            get
+            {
+                return Path.Join(Path.GetTempPath(), __appFolderName);
+            }
+        }
+
+        public static string CredentialPath
+        {
+            get
+            {
+                return Path.Join(AppFolderPath, "Token.json");
+            }
+        }
+
+        public static string ConfigFilePath {
+            get
+            {
+                return Path.Join(AppFolderPath, "config.json");
+            }
+        }
+
+        public static string DownloadFolderPath
+        {
+            get
+            {
+                return Path.Join(TempFolderPath, "Downloads");
+            }
+        }
+
+        public static string DatabaseFolderPath
+        {
+            get
+            {
+                return Path.Join(AppFolderPath, "Databases");
+            }
+        }
+
+        public static string BinFolderPath
+        {
+            get
+            {
+                return Path.Join(AppFolderPath, "Bin");
+            }
+        }
+
+        public static string YoutubeDLPath
+        {
+            get
+            {
+                return Path.Join(BinFolderPath, "youtube-dl.exe");
             }
         }
     }

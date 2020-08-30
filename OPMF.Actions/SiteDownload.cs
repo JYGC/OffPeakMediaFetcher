@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Google.Apis.Util;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace OPMF.Actions
 {
@@ -7,7 +9,7 @@ namespace OPMF.Actions
     {
         public static void ImportChannels()
         {
-            SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IVideoInfo> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
+            SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
 
             List<Entities.IChannel> channels = siteAdapter.ImportChannels();
 
@@ -20,23 +22,40 @@ namespace OPMF.Actions
             
         }
 
-        public static void FetchVideoInfos()
+        public static void FetchMetadata()
         {
-            SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IVideoInfo> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
+            SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
 
             using (Database.IChannelDbAdapter<Entities.IChannel> channelDbAdapter = new Database.YoutubeChannelDbAdapter())
             {
                 List<Entities.IChannel> channels = channelDbAdapter.GetNotBacklisted();
-                List<Entities.IVideoInfo> videoInfos = siteAdapter.FetchVideoInfos(ref channels);
+                List<Entities.IMetadata> metadatas = siteAdapter.FetchMetadata(ref channels);
 
-                Console.WriteLine("saving video information to database");
-                using (Database.IVideoInfoDbAdapter<Entities.IVideoInfo> videoInfoDbAdapter = new Database.YoutubeVideoInfoDbAdapter())
+                Console.WriteLine("saving metadata to database");
+                using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
                 {
-                    videoInfoDbAdapter.InsertOrIgnore(videoInfos);
+                    metadataDbAdapter.InsertOrIgnore(metadatas);
                 }
                 Console.WriteLine("updating channels");
                 channelDbAdapter.UpdateLastCheckedOutAndActivity(channels);
             }
+        }
+
+        public static void FetchVideos()
+        {
+            Downloader.IDownloader<Entities.IMetadata> downloader = new Downloader.YTDownloader.YTDownloader();
+
+            Console.WriteLine("fetching videos");
+            using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
+            {
+                List<Entities.IMetadata> metadatas = metadataDbAdapter.GetLookedAtNotIgnoreNotDownloaded();
+                downloader.Download(ref metadatas);
+                metadataDbAdapter.UpdateDownloaded(metadatas);
+            }
+            Actions.FolderSetup.EstablishVideoOutputFolder();
+            Actions.FileOperations.MoveAllInFolder(Settings.ReadonlySettings.DownloadFolderPath,
+                                                   Settings.ConfigHelper.Config.VideoOutputFolderPath,
+                                                   Settings.ConfigHelper.Config.YoutubeDL.OutputExtension);
         }
     }
 }

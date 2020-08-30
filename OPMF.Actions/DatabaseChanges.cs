@@ -9,7 +9,7 @@ namespace OPMF.Actions
         public static void Migrate()
         {
             using (var channelDbAdapter = new Database.YoutubeChannelDbAdapter())
-            using (var videoInfoDbAdapter = new Database.YoutubeVideoInfoDbAdapter())
+            using (var videoInfoDbAdapter = new Database.YoutubeMetadataDbAdapter())
             {
                 channelDbAdapter.MigrateData();
                 videoInfoDbAdapter.MigrateData();

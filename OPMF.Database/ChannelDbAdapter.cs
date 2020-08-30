@@ -26,15 +26,11 @@ namespace OPMF.Database
         {
             try
             {
-                IEnumerable<string> itemIds = items.Select(i => i.Id);
-                List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList();
-                foreach(TItem dbItem in dbToUpdate)
+                List<TItem> dbToUpdate = _UpdateFields(items, (item, dbItem) =>
                 {
-                    TItem item = items.First(i => i.Id == dbItem.Id);
                     dbItem.Name = item.Name;
                     dbItem.Description = item.Description;
-                }
-                _Collection.Update(dbToUpdate);
+                });
 
                 IEnumerable<TItem> toInsert = items.Where(i => !dbToUpdate.Any(j => j.Id == i.Id));
                 _Collection.InsertBulk(toInsert);
@@ -44,6 +40,7 @@ namespace OPMF.Database
             catch (Exception e)
             {
                 _Db.Rollback();
+                throw e;
             }
         }
 
@@ -51,21 +48,18 @@ namespace OPMF.Database
         {
             try
             {
-                IEnumerable<string> itemIds = items.Select(i => i.Id);
-                List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList();
-                foreach (TItem dbItem in dbToUpdate)
+                _UpdateFields(items, (item, dbItem) =>
                 {
-                    TItem item = items.First(i => i.Id == dbItem.Id);
                     dbItem.LastCheckedOut = item.LastCheckedOut;
                     dbItem.LastActivityDate = item.LastActivityDate;
-                }
-                _Collection.Update(dbToUpdate);
+                });
 
                 _Db.Commit();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 _Db.Rollback();
+                throw e;
             }
         }
     }
