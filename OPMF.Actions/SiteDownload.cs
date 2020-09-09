@@ -1,11 +1,9 @@
-﻿using Google.Apis.Util;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace OPMF.Actions
 {
-    public class SiteDownload
+    public static class SiteDownload
     {
         public static void ImportChannels()
         {
@@ -28,13 +26,13 @@ namespace OPMF.Actions
 
             using (Database.IChannelDbAdapter<Entities.IChannel> channelDbAdapter = new Database.YoutubeChannelDbAdapter())
             {
-                List<Entities.IChannel> channels = channelDbAdapter.GetNotBacklisted();
+                List<Entities.IChannel> channels = new List<Entities.IChannel>(channelDbAdapter.GetNotBacklisted());
                 List<Entities.IMetadata> metadatas = siteAdapter.FetchMetadata(ref channels);
 
                 Console.WriteLine("saving metadata to database");
                 using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
                 {
-                    metadataDbAdapter.InsertOrIgnore(metadatas);
+                    metadataDbAdapter.InsertNew(metadatas);
                 }
                 Console.WriteLine("updating channels");
                 channelDbAdapter.UpdateLastCheckedOutAndActivity(channels);
@@ -48,9 +46,9 @@ namespace OPMF.Actions
             Console.WriteLine("fetching videos");
             using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
             {
-                List<Entities.IMetadata> metadatas = metadataDbAdapter.GetLookedAtNotIgnoreNotDownloaded();
+                List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(metadataDbAdapter.GetReallyForDownload());
                 downloader.Download(ref metadatas);
-                metadataDbAdapter.UpdateDownloaded(metadatas);
+                metadataDbAdapter.UpdateStatus(metadatas);
             }
             Actions.FolderSetup.EstablishVideoOutputFolder();
             Actions.FileOperations.MoveAllInFolder(Settings.ReadonlySettings.DownloadFolderPath,

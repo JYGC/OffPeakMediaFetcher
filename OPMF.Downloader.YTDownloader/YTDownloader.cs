@@ -35,7 +35,7 @@ namespace OPMF.Downloader.YTDownloader
                 
                 if (__downloadError != null)
                 {
-                    item.Downloaded = true;
+                    item.Status = Entities.MetadataStatus.Downloaded;
                 }
                 else
                 {

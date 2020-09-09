@@ -6,4 +6,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OPMF.Actions\OPMF.Actions.csproj" />
+    <ProjectReference Include="..\OPMF.Database\OPMF.Database.csproj" />
+    <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
+    <ProjectReference Include="..\OPMF.Settings\OPMF.Settings.csproj" />
+  </ItemGroup>
+
 </Project>

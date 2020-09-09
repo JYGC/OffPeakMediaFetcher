@@ -8,21 +8,27 @@ namespace OPMF.Database
 {
     public interface IMetadataDbAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IMetadata
     {
-        List<TItem> GetLookedAtNotIgnoreNotDownloaded();
-        void InsertOrIgnore(List<TItem> items);
-        void UpdateDownloaded(List<TItem> items);
+        IEnumerable<TItem> GetReallyForDownload();
+        IEnumerable<TItem> GetNew();
+        void InsertNew(IEnumerable<TItem> items);
+        void UpdateStatus(IEnumerable<TItem> items);
     }
 
     public class MetadataDbAdapter<TItem> : DatabaseAdapter<TItem>, IMetadataDbAdapter<TItem> where TItem : Entities.IMetadata
     {
         public MetadataDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
 
-        public List<TItem> GetLookedAtNotIgnoreNotDownloaded()
+        public IEnumerable<TItem> GetReallyForDownload()
         {
-            return _Collection.Find(i => i.LookedAt == true && i.Ignore == false && i.Downloaded == false).ToList();
+            return _Collection.Find(i => i.Status == Entities.MetadataStatus.ToDownload).ToList();
         }
 
-        public void InsertOrIgnore(List<TItem> items)
+        public IEnumerable<TItem> GetNew()
+        {
+            return _Collection.Find(i => i.Status == Entities.MetadataStatus.New).ToList();
+        }
+
+        public void InsertNew(IEnumerable<TItem> items)
         {
             try
             {
@@ -30,21 +36,18 @@ namespace OPMF.Database
                 _Collection.InsertBulk(toInsert);
                 _Db.Commit();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _Db.Rollback();
                 throw e;
             }
         }
 
-        public void UpdateDownloaded(List<TItem> items)
+        public void UpdateStatus(IEnumerable<TItem> items)
         {
             try
             {
-                _UpdateFields(items, (item, dbItem) =>
-                {
-                    dbItem.Downloaded = item.Downloaded;
-                });
+                _UpdateFields(items, (item, dbItem) => dbItem.Status = item.Status);
 
                 _Db.Commit();
             }

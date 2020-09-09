@@ -51,10 +51,10 @@ namespace OPMF.Database
             newCollection.InsertBulk(__collection.FindAll());
         }
 
-        protected List<TItem> _UpdateFields(List<TItem> items, Action<TItem, TItem> UpdateFields)
+        protected IEnumerable<TItem> _UpdateFields(IEnumerable<TItem> items, Action<TItem, TItem> UpdateFields)
         {
             IEnumerable<string> itemIds = items.Select(i => i.Id);
-            List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList();
+            List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList(); // dbToUpdate must be list or it won't update in foreach loop
             foreach (TItem dbItem in dbToUpdate)
             {
                 TItem item = items.First(i => i.Id == dbItem.Id);

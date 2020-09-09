@@ -2,15 +2,21 @@
 
 namespace OPMF.Entities
 {
+    public enum MetadataStatus
+    {
+        New,
+        ToDownload,
+        Ignore,
+        Downloaded
+    }
+
     public interface IMetadata : IId
     {
         string SiteId { get; set; }
         string Url { get; set; }
         string Title { get; set; }
         string Description { get; set; }
-        bool LookedAt { get; set; }
-        bool Ignore { get; set; }
-        bool Downloaded { get; set; }
+        MetadataStatus Status { get; set; }
         DateTime PublishedAt { get; set; }
         string ChannelSiteId { get; set; }
     }
@@ -32,9 +38,7 @@ namespace OPMF.Entities
         }
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool LookedAt { get; set; } = false;
-        public bool Ignore { get; set; } = true;
-        public bool Downloaded { get; set; } = false;
+        public MetadataStatus Status { get; set; } = MetadataStatus.New;
         public DateTime PublishedAt { get; set; }
         public string ChannelSiteId { get; set; }
     }

@@ -8,25 +8,37 @@ namespace OPMF.Database
 {
     public interface IChannelDbAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IChannel
     {
-        List<TItem> GetNotBacklisted();
-        void InsertOrUpdate(List<TItem> items);
-        void UpdateLastCheckedOutAndActivity(List<TItem> items);
+        IEnumerable<TItem> GetNotBacklisted();
+        TItem GetBySiteId(string id);
+        TItem GetById(string id);
+        void InsertOrUpdate(IEnumerable<TItem> items);
+        void UpdateLastCheckedOutAndActivity(IEnumerable<TItem> items);
     }
 
     public class ChannelDbAdapter<TItem> : DatabaseAdapter<TItem>, IChannelDbAdapter<TItem> where TItem : Entities.IChannel
     {
         public ChannelDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
 
-        public List<TItem> GetNotBacklisted()
+        public IEnumerable<TItem> GetNotBacklisted()
         {
             return _Collection.Find(i => i.BlackListed == false).ToList();
         }
 
-        public void InsertOrUpdate(List<TItem> items)
+        public TItem GetBySiteId(string id)
+        {
+            return GetById(id);
+        }
+
+        public TItem GetById(string id)
+        {
+            return _Collection.FindById(id);
+        }
+
+        public void InsertOrUpdate(IEnumerable<TItem> items)
         {
             try
             {
-                List<TItem> dbToUpdate = _UpdateFields(items, (item, dbItem) =>
+                IEnumerable<TItem> dbToUpdate = _UpdateFields(items, (item, dbItem) =>
                 {
                     dbItem.Name = item.Name;
                     dbItem.Description = item.Description;
@@ -44,7 +56,7 @@ namespace OPMF.Database
             }
         }
 
-        public void UpdateLastCheckedOutAndActivity(List<TItem> items)
+        public void UpdateLastCheckedOutAndActivity(IEnumerable<TItem> items)
         {
             try
             {
