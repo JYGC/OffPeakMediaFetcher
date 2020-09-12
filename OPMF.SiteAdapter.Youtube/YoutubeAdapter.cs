@@ -23,7 +23,8 @@ namespace OPMF.SiteAdapter.Youtube
         public YoutubeAdapter()
         {
             UserCredential credential = GoogleAuthentication.GetCredential(__apiScope);
-            __youtubeService = new YouTubeService(new BaseClientService.Initializer() {
+            __youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            {
                 ApplicationName = this.GetType().ToString()
                 , HttpClientInitializer = credential
             });

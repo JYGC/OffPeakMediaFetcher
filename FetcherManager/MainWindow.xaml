@@ -2,16 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:Tabs="clr-namespace:FetcherManager.Tabs.Videos"
+        xmlns:Videos="clr-namespace:FetcherManager.Tabs.Videos"
+        xmlns:Channels="clr-namespace:FetcherManager.Tabs.Channels"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="MainWindow" Height="750" Width="1200">
     <TabControl>
         <TabItem Header="Videos">
-            <Tabs:UCVideos />
+            <Videos:UCVideos />
         </TabItem>
         <TabItem Header="Channels">
-            <Grid Background="#FFE5E5E5"/>
+            <Channels:UCChannels />
         </TabItem>
     </TabControl>
 </Window>

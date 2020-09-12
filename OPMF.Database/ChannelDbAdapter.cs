@@ -41,7 +41,10 @@ namespace OPMF.Database
                 IEnumerable<TItem> dbToUpdate = _UpdateFields(items, (item, dbItem) =>
                 {
                     dbItem.Name = item.Name;
-                    dbItem.Description = item.Description;
+                    if (item.Description != null)
+                    {
+                        dbItem.Description = item.Description;
+                    }
                 });
 
                 IEnumerable<TItem> toInsert = items.Where(i => !dbToUpdate.Any(j => j.Id == i.Id));

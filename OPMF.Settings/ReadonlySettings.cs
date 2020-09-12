@@ -8,7 +8,7 @@ namespace OPMF.Settings
     {
         private static string __appFolderName = "OffPeakMediaFetcher";
 
-        public static string AppFolderPath
+        public static string LocalAppFolderPath
         {
             get
             {
@@ -28,14 +28,14 @@ namespace OPMF.Settings
         {
             get
             {
-                return Path.Join(AppFolderPath, "Token.json");
+                return Path.Join(LocalAppFolderPath, "Token.json");
             }
         }
 
         public static string ConfigFilePath {
             get
             {
-                return Path.Join(AppFolderPath, "config.json");
+                return Path.Join(LocalAppFolderPath, "config.json");
             }
         }
 
@@ -51,7 +51,7 @@ namespace OPMF.Settings
         {
             get
             {
-                return Path.Join(AppFolderPath, "Databases");
+                return Path.Join(LocalAppFolderPath, "Databases");
             }
         }
 
@@ -59,7 +59,7 @@ namespace OPMF.Settings
         {
             get
             {
-                return Path.Join(AppFolderPath, "Bin");
+                return Path.Join(LocalAppFolderPath, "Bin");
             }
         }
 

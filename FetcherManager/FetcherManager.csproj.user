@@ -10,6 +10,15 @@
     <Compile Update="LoadingDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Tabs\Channels\Subtabs\UCAddChannels.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Tabs\Channels\Subtabs\UCAllChannels.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Tabs\Channels\UCChannels.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Tabs\Videos\Subtabs\UCNewVideos.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -22,6 +31,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Tabs\Channels\Subtabs\UCAddChannels.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Tabs\Channels\Subtabs\UCAllChannels.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Tabs\Channels\UCChannels.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Tabs\Videos\Subtabs\UCNewVideos.xaml">

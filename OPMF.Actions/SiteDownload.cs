@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace OPMF.Actions
 {
@@ -17,7 +18,17 @@ namespace OPMF.Actions
             {
                 channelAdapter.InsertOrUpdate(channels);
             }
-            
+        }
+
+        public static void ImportChannels(string filePath)
+        {
+            string opml = File.ReadAllText(filePath);
+            SiteAdapter.Youtube.RssChannelImporter youtubeChannelImporter = new SiteAdapter.Youtube.RssChannelImporter(opml);
+            IEnumerable<Entities.IChannel> channels = youtubeChannelImporter.ImportChannels();
+            using (Database.IChannelDbAdapter<Entities.IChannel> channelAdapter = new Database.YoutubeChannelDbAdapter())
+            {
+                channelAdapter.InsertOrUpdate(channels);
+            }
         }
 
         public static void FetchMetadata()

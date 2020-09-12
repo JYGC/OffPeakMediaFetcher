@@ -20,7 +20,7 @@ namespace OPMF.Actions
         /// </summary>
         private static void __EstablishAppFolder()
         {
-            __EstablishFolder(Settings.ReadonlySettings.AppFolderPath);
+            __EstablishFolder(Settings.ReadonlySettings.LocalAppFolderPath);
         }
 
         private static void __EstablishDownloadFolder()
