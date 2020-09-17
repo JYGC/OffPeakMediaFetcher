@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace OPMF.Actions
 {
-    public static class RecordsManagement
+    public static class MetadataManagement
     {
         public static IEnumerable<Entities.IMetadataChannel> GetMetadataChannels()
         {
@@ -20,7 +20,7 @@ namespace OPMF.Actions
                     {
                         new Entities.MetadataChannel
                         {
-                            Metadata = new Entities.StatusChangedMetadata(metadata)
+                            Metadata = new Entities.PropertyChangedMetadata(metadata)
                             , Channel = channelDbAdapter.GetBySiteId(metadata.ChannelSiteId)
                         }
                     });
@@ -33,7 +33,6 @@ namespace OPMF.Actions
         public static (IEnumerable<Entities.IMetadataChannel>, IEnumerable<Entities.IMetadataChannel>) SplitFromNew(IEnumerable<Entities.IMetadataChannel> metadataChannels)
         {
             IEnumerable<Entities.IMetadataChannel> notNewMetadataChannels = metadataChannels.Where(i => i.Metadata.Status != Entities.MetadataStatus.New);
-
             IEnumerable<Entities.IMetadataChannel> newMetadataChannels = metadataChannels.Where(i => !notNewMetadataChannels.Any(j => j.Metadata.Id == i.Metadata.Id));
 
             return (newMetadataChannels, notNewMetadataChannels);

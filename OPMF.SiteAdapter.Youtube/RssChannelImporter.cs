@@ -14,6 +14,7 @@ namespace OPMF.SiteAdapter.Youtube
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
         private readonly string __channelParts = "snippet";
         private readonly string __xmlUrlChannelIdFlag = "channel_id=";
+        private readonly string __channelUrlScaffolding = "https://www.youtube.com/channel/{0}";
 
         private string __opml;
         private YouTubeService __youtubeService;
@@ -74,7 +75,10 @@ namespace OPMF.SiteAdapter.Youtube
                 request.Id = xmlUrlParts[1];
                 ChannelListResponse response = request.Execute();
                 IList<Channel> channelList = response.Items;
-                Entities.IChannel channel = new Entities.YoutubeChannel { SiteId = xmlUrlParts[1] };
+                Entities.IChannel channel = new Entities.YoutubeChannel {
+                    SiteId = xmlUrlParts[1]
+                    , Url = string.Format(__channelUrlScaffolding, xmlUrlParts[1])
+                };
                 if (channelList == null) // channelList becomes null if channel was deleted
                 {
                     channel.Name = outline.Title;

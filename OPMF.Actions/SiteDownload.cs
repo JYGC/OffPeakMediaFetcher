@@ -61,10 +61,14 @@ namespace OPMF.Actions
                 downloader.Download(ref metadatas);
                 metadataDbAdapter.UpdateStatus(metadatas);
             }
-            Actions.FolderSetup.EstablishVideoOutputFolder();
-            Actions.FileOperations.MoveAllInFolder(Settings.ReadonlySettings.DownloadFolderPath,
-                                                   Settings.ConfigHelper.Config.VideoOutputFolderPath,
-                                                   Settings.ConfigHelper.Config.YoutubeDL.OutputExtension);
+            FolderSetup.EstablishVideoOutputFolder();
+            FileOperations.MoveAllInFolder(Settings.ReadonlySettings.DownloadFolderPath,
+                                           Settings.ConfigHelper.Config.VideoOutputFolderPath,
+                                           new string[]
+                                           { 
+                                               Settings.ConfigHelper.Config.YoutubeDL.VideoExtension
+                                               , Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
+                                           });
         }
     }
 }

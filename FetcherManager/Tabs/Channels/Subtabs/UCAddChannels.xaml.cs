@@ -23,6 +23,7 @@ namespace FetcherManager.Tabs.Channels.Subtabs
                 {
                     OPMF.Actions.SiteDownload.ImportChannels(openFileDialog.FileName);
                 });
+                loadingDialog.Show();
             }
         }
     }

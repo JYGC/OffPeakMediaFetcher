@@ -1,12 +1,20 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace OPMF.Actions
 {
     public static class FileOperations
     {
-        public static void MoveAllInFolder(string srcFolderPath, string dstFolderPath, string fileExtension)
+        public static void MoveAllInFolder(string srcFolderPath, string dstFolderPath, string[] fileExtensions)
         {
-            string[] srcFilepaths = Directory.GetFiles(srcFolderPath, "*." + fileExtension);
+            IEnumerable<string> srcFilepaths = new string[] { };
+
+            foreach (string fileExtension in fileExtensions)
+            {
+                srcFilepaths = srcFilepaths.Concat(Directory.GetFiles(srcFolderPath).Where(f => f.EndsWith("." + fileExtension)));
+            }
+
             foreach (string srcFile in srcFilepaths)
             {
                 FileInfo srcFileInfo = new FileInfo(srcFile);

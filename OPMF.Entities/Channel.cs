@@ -5,6 +5,7 @@ namespace OPMF.Entities
     public interface IChannel : IId
     {
         string SiteId { get; set; }
+        string Url { get; set; }
         string Name { get; set; }
         string Description { get; set; }
         bool BlackListed { get; set; }
@@ -27,6 +28,7 @@ namespace OPMF.Entities
                 Id = value;
             }
         }
+        public string Url { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public bool BlackListed { get; set; } = false;

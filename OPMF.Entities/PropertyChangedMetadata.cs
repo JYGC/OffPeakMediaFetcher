@@ -3,9 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace OPMF.Entities
 {
-    public interface IStatusChangedMetadata : IMetadata, INotifyPropertyChanged { }
+    public interface IPropertyChangedMetadata : IMetadata, INotifyPropertyChanged { }
 
-    public class StatusChangedMetadata : Metadata, IStatusChangedMetadata
+    public class PropertyChangedMetadata : Metadata, IPropertyChangedMetadata
     {
         private MetadataStatus __status;
 
@@ -24,11 +24,10 @@ namespace OPMF.Entities
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StatusChangedMetadata(IMetadata metadata)
+        public PropertyChangedMetadata(IMetadata metadata)
         {
-            Id = metadata.Id;
-            Url = metadata.Url;
             SiteId = metadata.SiteId;
+            Url = metadata.Url;
             Title = metadata.Title;
             Description = metadata.Description;
             Status = metadata.Status;

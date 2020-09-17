@@ -8,16 +8,23 @@ namespace OPMF.Database
 {
     public interface IChannelDbAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IChannel
     {
+        IEnumerable<TItem> GetAll();
         IEnumerable<TItem> GetNotBacklisted();
         TItem GetBySiteId(string id);
         TItem GetById(string id);
         void InsertOrUpdate(IEnumerable<TItem> items);
         void UpdateLastCheckedOutAndActivity(IEnumerable<TItem> items);
+        void UpdateBlackListStatus(IEnumerable<TItem> items);
     }
 
     public class ChannelDbAdapter<TItem> : DatabaseAdapter<TItem>, IChannelDbAdapter<TItem> where TItem : Entities.IChannel
     {
         public ChannelDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
+
+        public IEnumerable<TItem> GetAll()
+        {
+            return _Collection.FindAll();
+        }
 
         public IEnumerable<TItem> GetNotBacklisted()
         {
@@ -41,6 +48,7 @@ namespace OPMF.Database
                 IEnumerable<TItem> dbToUpdate = _UpdateFields(items, (item, dbItem) =>
                 {
                     dbItem.Name = item.Name;
+                    dbItem.Url = item.Url;
                     if (item.Description != null)
                     {
                         dbItem.Description = item.Description;
@@ -70,6 +78,19 @@ namespace OPMF.Database
                 });
 
                 _Db.Commit();
+            }
+            catch (Exception e)
+            {
+                _Db.Rollback();
+                throw e;
+            }
+        }
+
+        public void UpdateBlackListStatus(IEnumerable<TItem> items)
+        {
+            try
+            {
+                _UpdateFields(items, (item, dbItem) => dbItem.BlackListed = item.BlackListed);
             }
             catch (Exception e)
             {

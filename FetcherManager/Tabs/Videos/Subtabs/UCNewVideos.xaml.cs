@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -27,16 +28,16 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         private void __InitializeKeyBindings()
         {
             cb_Ignore.Command = IgnoreMetadata;
-            IgnoreMetadata.InputGestures.Add(new KeyGesture(Key.OemMinus));
+            IgnoreMetadata.InputGestures.Add(new KeyGesture(Key.F1));
             cb_ToDownload.Command = ToDownloadMetadata;
-            ToDownloadMetadata.InputGestures.Add(new KeyGesture(Key.OemPlus));
+            ToDownloadMetadata.InputGestures.Add(new KeyGesture(Key.F2));
             cb_BackToNew.Command = BackToNewMetadata;
-            BackToNewMetadata.InputGestures.Add(new KeyGesture(Key.Back));
+            BackToNewMetadata.InputGestures.Add(new KeyGesture(Key.F3));
         }
 
         private void __btn_GetNewVideos_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(OPMF.Actions.RecordsManagement.GetMetadataChannels());
+            __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(OPMF.Actions.MetadataManagement.GetMetadataChannels().OrderBy(c => c.Channel.Name));
 
             LoadingDialog loadingDialog = new LoadingDialog("Loading " + __metadataChannels.Count.ToString() + " video entries...", () =>
             {
@@ -53,10 +54,10 @@ namespace FetcherManager.Tabs.Videos.Subtabs
             {
                 LoadingDialog loadingDialog = new LoadingDialog("Saving video selection...", () =>
                 {
-                    (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>) metadatas = OPMF.Actions.RecordsManagement.SplitFromNew(__metadataChannels);
+                    (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>) metadatas = OPMF.Actions.MetadataManagement.SplitFromNew(__metadataChannels);
                     IEnumerable<OPMF.Entities.IMetadataChannel> notNewMetadataChannels = metadatas.Item2;
                     __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(metadatas.Item1);
-                    OPMF.Actions.RecordsManagement.SaveMetadataChanges(notNewMetadataChannels);
+                    OPMF.Actions.MetadataManagement.SaveMetadataChanges(notNewMetadataChannels);
                     dg_VideoInfo.ItemsSource = __metadataChannels; // reload dg_VideoInfo
                 });
                 loadingDialog.Show();
@@ -72,7 +73,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
                 lbl_Channel.Content = selectedMetadataChannel.Channel.Name;
                 hl_Url.NavigateUri = new Uri(selectedMetadataChannel.Metadata.Url);
                 txt_UrlTextBlock.Text = selectedMetadataChannel.Metadata.Url;
-                lbl_Description.Content = selectedMetadataChannel.Metadata.Description;
+                lbl_Description.Text = selectedMetadataChannel.Metadata.Description;
             }
         }
 
@@ -82,19 +83,25 @@ namespace FetcherManager.Tabs.Videos.Subtabs
             e.Handled = true;
         }
 
-        private void __ignoreBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void __cb_Ignore_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             __metadataChannels[dg_VideoInfo.SelectedIndex].Metadata.Status = OPMF.Entities.MetadataStatus.Ignore;
         }
 
-        private void __toDownloadBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void __cb_ToDownload_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             __metadataChannels[dg_VideoInfo.SelectedIndex].Metadata.Status = OPMF.Entities.MetadataStatus.ToDownload;
         }
 
-        private void __backToNewCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void __cb_BackToNew_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             __metadataChannels[dg_VideoInfo.SelectedIndex].Metadata.Status = OPMF.Entities.MetadataStatus.New;
+        }
+
+        private void __hl_Url_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(OPMF.Settings.ConfigHelper.Config.WebBrowserPath, e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

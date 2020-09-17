@@ -7,9 +7,9 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="g_newVideos">
         <Grid.CommandBindings>
-            <CommandBinding x:Name="cb_Ignore" Executed="__ignoreBinding_Executed" />
-            <CommandBinding x:Name="cb_ToDownload" Executed="__toDownloadBinding_Executed" />
-            <CommandBinding x:Name="cb_BackToNew" Executed="__backToNewCommandBinding_Executed" />
+            <CommandBinding x:Name="cb_Ignore" Executed="__cb_Ignore_Executed" />
+            <CommandBinding x:Name="cb_ToDownload" Executed="__cb_ToDownload_Executed" />
+            <CommandBinding x:Name="cb_BackToNew" Executed="__cb_BackToNew_Executed" />
         </Grid.CommandBindings>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -26,15 +26,15 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="[Minus key] - Mark as ignore" Grid.Column="0" />
-                <Label Content="[Equals key] - Mark for download" Grid.Column="1" />
-                <Label Content="[Backspace key] - Mark as new" Grid.Column="2" />
+                <Label Content="[F1 key] - Mark as ignore" Grid.Column="0" />
+                <Label Content="[F2 key] - Mark for download" Grid.Column="1" />
+                <Label Content="[F3 key] - Mark as new" Grid.Column="2" />
             </Grid>
             <ScrollViewer x:Name="sv_VideoInfo" PreviewMouseWheel="__sv_VideoInfo_PreviewMouseWheel" Height="600" IsDeferredScrollingEnabled="True">
                 <StackPanel>
                     <DataGrid x:Name="dg_VideoInfo" CanUserAddRows="False" SelectedCellsChanged="__dg_VideoInfo_SelectedCellsChanged">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Metadata.Status}" Width="100" />
+                            <DataGridTextColumn Header="Status" Binding="{Binding Metadata.Status}" Width="100" IsReadOnly="True" />
                             <DataGridTextColumn Header="Author" Binding="{Binding Channel.Name}" Width="100" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -66,13 +66,13 @@
                     <Separator />
                     <Label Content="Url: " FontWeight="Bold" />
                     <TextBlock>
-                        <Hyperlink x:Name="hl_Url">
+                        <Hyperlink x:Name="hl_Url" RequestNavigate="__hl_Url_RequestNavigate">
                             <TextBlock x:Name="txt_UrlTextBlock" />
                         </Hyperlink>
                     </TextBlock>
                     <Separator />
                     <Label Content="Description: " FontWeight="Bold" />
-                    <Label x:Name="lbl_Description" />
+                    <TextBlock x:Name="lbl_Description" TextWrapping="Wrap"/>
                 </StackPanel>
             </ScrollViewer>
         </StackPanel>

@@ -7,6 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid x:Name="g_AllChannels">
+        <Grid.CommandBindings>
+            <CommandBinding x:Name="cb_Blacklist" Executed="__cb_Blacklist_Executed" />
+            <CommandBinding x:Name="cb_Unblacklist" Executed="__cb_Unblacklist_Executed" />
+        </Grid.CommandBindings>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -21,14 +25,14 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="[Minus key] - Mark as ignore" Grid.Column="0" />
-                <Label Content="[Equals key] - Mark as unignore" Grid.Column="1" />
+                <Label Content="[F1 key] - Blacklist" Grid.Column="0" />
+                <Label Content="[F2 key] - Unblacklist" Grid.Column="1" />
             </Grid>
-            <ScrollViewer x:Name="sv_Channels" PreviewMouseWheel="sv_Channels_PreviewMouseWheel" Height="600" IsDeferredScrollingEnabled="True">
+            <ScrollViewer x:Name="sv_Channels" PreviewMouseWheel="__sv_Channels_PreviewMouseWheel" Height="600" IsDeferredScrollingEnabled="True">
                 <StackPanel>
-                    <DataGrid x:Name="dg_Channels" CanUserAddRows="False" SelectedCellsChanged="dg_Channels_SelectedCellsChanged">
+                    <DataGrid x:Name="dg_Channels" CanUserAddRows="False" SelectedCellsChanged="__dg_Channels_SelectedCellsChanged">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Black Listed" Binding="{Binding BlackListed}" Width="100" />
+                            <DataGridTextColumn Header="Black Listed" Binding="{Binding BlackListed}" Width="100" IsReadOnly="True" />
                             <DataGridTextColumn Header="Channel Name" Binding="{Binding Name}" Width="300" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -36,7 +40,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Date of Last Video Upload" Binding="{Binding LastActivityDate}" Width="200">
+                            <DataGridTextColumn Header="Date of Last Upload" Binding="{Binding LastActivityDate, StringFormat=\{0:yy/MM/dd HH:mm:ss\}}" Width="150">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="TextWrapping" Value="Wrap" />
@@ -53,6 +57,13 @@
                 <StackPanel>
                     <Label  Content="Channel Name: " FontWeight="Bold" />
                     <Label x:Name="lbl_ChannelName" />
+                    <Separator />
+                    <Label Content="Url: " FontWeight="Bold" />
+                    <TextBlock>
+                        <Hyperlink x:Name="hl_Url" RequestNavigate="__hl_Url_RequestNavigate">
+                            <TextBlock x:Name="txt_UrlTextBlock" />
+                        </Hyperlink>
+                    </TextBlock>
                     <Separator />
                     <Label Content="Last checked out on: " FontWeight="Bold" />
                     <Label x:Name="lbl_LastCheckedOut" />

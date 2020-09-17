@@ -15,9 +15,9 @@
             {
                 OPMF.Actions.SiteDownload.FetchMetadata();
             }
-            else if (args.Length == 1 && args[0] == "channel")
+            else if (args.Length == 1 && args[0] == "updatechannel")
             {
-                OPMF.Actions.SiteDownload.ImportChannels();
+                //OPMF.Actions.SiteDownload.ImportChannels();
             }
             else
             {
