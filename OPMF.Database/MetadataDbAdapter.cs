@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using LiteDB;
+using OPMF.Entities;
 
 namespace OPMF.Database
 {
@@ -10,22 +11,34 @@ namespace OPMF.Database
     {
         IEnumerable<TItem> GetReallyForDownload();
         IEnumerable<TItem> GetNew();
+        IEnumerable<TItem> GetDownloaded();
+        IEnumerable<TItem> GetIgnored();
         void InsertNew(IEnumerable<TItem> items);
         void UpdateStatus(IEnumerable<TItem> items);
     }
 
-    public class MetadataDbAdapter<TItem> : DatabaseAdapter<TItem>, IMetadataDbAdapter<TItem> where TItem : Entities.IMetadata
+    public class MetadataDbAdapter<TItem> : DatabaseAdapter<TItem>, IMetadataDbAdapter<TItem> where TItem : IMetadata
     {
         public MetadataDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
 
         public IEnumerable<TItem> GetReallyForDownload()
         {
-            return _Collection.Find(i => i.Status == Entities.MetadataStatus.ToDownload).ToList();
+            return _Collection.Find(i => i.Status == MetadataStatus.ToDownload);
         }
 
         public IEnumerable<TItem> GetNew()
         {
-            return _Collection.Find(i => i.Status == Entities.MetadataStatus.New).ToList();
+            return _Collection.Find(i => i.Status == MetadataStatus.New);
+        }
+
+        public IEnumerable<TItem> GetDownloaded()
+        {
+            return _Collection.Find(i => i.Status == MetadataStatus.Downloaded);
+        }
+
+        public IEnumerable<TItem> GetIgnored()
+        {
+            return _Collection.Find(i => i.Status == MetadataStatus.Ignore);
         }
 
         public void InsertNew(IEnumerable<TItem> items)

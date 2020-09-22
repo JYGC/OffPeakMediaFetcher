@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FetcherManager.Tabs.Videos.Subtabs
 {
     /// <summary>
-    /// Interaction logic for NewVideos.xaml
+    /// Interaction logic for UCToDownload.xaml
     /// </summary>
-    public partial class UCNewVideos : UserControl
+    public partial class UCToDownload : UserControl
     {
         public RoutedCommand IgnoreMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand ToDownloadMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand BackToNewMetadata { get; set; } = new RoutedCommand();
 
-        public UCNewVideos()
+        public UCToDownload()
         {
             InitializeComponent();
             __PrepareChildUserControls();
@@ -25,9 +22,9 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         private void __PrepareChildUserControls()
         {
-            uc_VideoBrowser.Btn_GetVideos.Content = "Get New Videos";
-            uc_VideoBrowser.GetMetadataChannels = () => OPMF.Actions.MetadataManagement.GetNew().OrderBy(c => c.Channel.Name);
-            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => OPMF.Actions.MetadataManagement.SplitFromStatus(metadataChannels, OPMF.Entities.MetadataStatus.New);
+            uc_VideoBrowser.Btn_GetVideos.Content = "Get Download Queue";
+            uc_VideoBrowser.GetMetadataChannels = () => OPMF.Actions.MetadataManagement.GetToDownload().OrderBy(c => c.Channel.Name);
+            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => OPMF.Actions.MetadataManagement.SplitFromStatus(metadataChannels, OPMF.Entities.MetadataStatus.ToDownload);
             uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => OPMF.Actions.MetadataManagement.SaveMetadataChanges(notStatusMetadataChannels);
         }
 

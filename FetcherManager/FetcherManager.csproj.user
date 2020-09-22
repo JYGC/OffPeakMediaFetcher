@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Commons\UCVideoBrowser.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="LoadingDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -19,7 +22,16 @@
     <Compile Update="Tabs\Channels\UCChannels.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Tabs\Videos\Subtabs\UCDownloadedVideos.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Tabs\Videos\Subtabs\UCIgnoredVideos.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Tabs\Videos\Subtabs\UCNewVideos.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Tabs\Videos\Subtabs\UCToDownload.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Tabs\Videos\UCVideos.xaml.cs">
@@ -27,6 +39,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Commons\UCVideoBrowser.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="LoadingDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -42,7 +57,16 @@
     <Page Update="Tabs\Channels\UCChannels.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Tabs\Videos\Subtabs\UCDownloadedVideos.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Tabs\Videos\Subtabs\UCIgnoredVideos.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Tabs\Videos\Subtabs\UCNewVideos.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Tabs\Videos\Subtabs\UCToDownload.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Tabs\Videos\UCVideos.xaml">

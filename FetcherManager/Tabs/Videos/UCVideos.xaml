@@ -10,5 +10,14 @@
         <TabItem Header="New Videos">
             <Subtabs:UCNewVideos />
         </TabItem>
+        <TabItem Header="Download Queue">
+            <Subtabs:UCToDownload />
+        </TabItem>
+        <TabItem Header="Downloaded Videos">
+            <Subtabs:UCDownloadedVideos />
+        </TabItem>
+        <TabItem Header="Ignored Videos">
+            <Subtabs:UCIgnoredVideos />
+        </TabItem>
     </TabControl>
 </UserControl>
