@@ -18,8 +18,8 @@
         </Grid>
         <Grid>
             <Grid.CommandBindings>
-                <CommandBinding x:Name="cb_ToDownload" />
-                <CommandBinding x:Name="cb_BackToDownloaded" />
+                <CommandBinding x:Name="cb_ToDownload" Executed="__cb_ToDownload_Executed" />
+                <CommandBinding x:Name="cb_BackToDownloaded" Executed="__cb_BackToDownloaded_Executed" />
             </Grid.CommandBindings>
             <Commons:UCVideoBrowser x:Name="uc_VideoBrowser" />
         </Grid>

@@ -86,6 +86,14 @@ namespace FetcherManager.Commons
                 txt_UrlTextBlock.Text = selectedMetadataChannel.Metadata.Url;
                 lbl_Description.Text = selectedMetadataChannel.Metadata.Description;
             }
+            else
+            {
+                lbl_Title.Content = null;
+                lbl_Channel.Content = null;
+                hl_Url.NavigateUri = null;
+                txt_UrlTextBlock.Text = null;
+                lbl_Description.Text = null;
+            }
         }
 
         private void __sv_Videos_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

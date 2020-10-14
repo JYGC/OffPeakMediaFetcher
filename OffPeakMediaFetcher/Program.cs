@@ -6,18 +6,29 @@
         {
             OPMF.Settings.ConfigHelper.EstablishConfig();
             OPMF.Actions.FolderSetup.EstablishFolders();
-            
-            if (args.Length == 1 && args[0] == "videos")
+
+            if (args.Length == 1)
             {
-                OPMF.Actions.SiteDownload.FetchVideos();
-            }
-            else if (args.Length == 1 && args[0] == "metadata")
-            {
-                OPMF.Actions.SiteDownload.FetchMetadata();
-            }
-            else if (args.Length == 1 && args[0] == "updatechannel")
-            {
-                //OPMF.Actions.SiteDownload.ImportChannels();
+                if (args[0] == "videos")
+                {
+                    OPMF.Actions.SiteDownload.FetchVideos();
+                }
+                else if (args[0] == "metadata")
+                {
+                    OPMF.Actions.SiteDownload.FetchMetadata();
+                }
+                else if (args[0] == "updatechannels")
+                {
+                    //OPMF.Actions.SiteDownload.ImportChannels();
+                }
+                else if (args[0] == "test")
+                {
+                    //OPMF.Tests.Tests
+                }
+                else
+                {
+                    System.Console.WriteLine("Invalid argument.");
+                }
             }
             else
             {

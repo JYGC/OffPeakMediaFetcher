@@ -17,11 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Settings", "OPMF.Setti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Actions", "OPMF.Actions\OPMF.Actions.csproj", "{22ACBCE7-5076-49EF-B9B5-E432B394738A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetcherManager", "FetcherManager\FetcherManager.csproj", "{249CFA55-789F-4BB5-BF0C-68091A12F826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FetcherManager", "FetcherManager\FetcherManager.csproj", "{249CFA55-789F-4BB5-BF0C-68091A12F826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPMF.Downloader", "OPMF.Downloader\OPMF.Downloader.csproj", "{410A76CA-C020-4573-A66C-639E3FFA4CA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Downloader", "OPMF.Downloader\OPMF.Downloader.csproj", "{410A76CA-C020-4573-A66C-639E3FFA4CA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPMF.Downloader.YTDownloader", "OPMF.Downloader.YTDownloader\OPMF.Downloader.YTDownloader.csproj", "{DA23650E-B317-4709-9F31-D59D3F186486}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Downloader.YTDownloader", "OPMF.Downloader.YTDownloader\OPMF.Downloader.YTDownloader.csproj", "{DA23650E-B317-4709-9F31-D59D3F186486}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.SiteAdapter.Youtube.Tests", "OPMF.SiteAdapter.Youtube.Tests\OPMF.SiteAdapter.Youtube.Tests.csproj", "{05876989-37A7-4D53-8AC9-D9545593493B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,18 @@ Global
 		{DA23650E-B317-4709-9F31-D59D3F186486}.Release|x64.Build.0 = Release|Any CPU
 		{DA23650E-B317-4709-9F31-D59D3F186486}.Release|x86.ActiveCfg = Release|Any CPU
 		{DA23650E-B317-4709-9F31-D59D3F186486}.Release|x86.Build.0 = Release|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Debug|x64.Build.0 = Debug|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Debug|x86.Build.0 = Debug|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Release|x64.ActiveCfg = Release|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Release|x64.Build.0 = Release|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Release|x86.ActiveCfg = Release|Any CPU
+		{05876989-37A7-4D53-8AC9-D9545593493B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

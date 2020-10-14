@@ -42,7 +42,7 @@
             </ScrollViewer>
         </StackPanel>
         <StackPanel Grid.Column="1">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto"  Height="660">
+            <ScrollViewer HorizontalScrollBarVisibility="Visible"  Height="630">
                 <StackPanel>
                     <Label  Content="Title: " FontWeight="Bold" />
                     <Label x:Name="lbl_Title" />

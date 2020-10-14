@@ -36,5 +36,15 @@ namespace FetcherManager.Tabs.Videos.Subtabs
             cb_BackToDownloaded.Command = BackToDownloadedMetadata;
             BackToDownloadedMetadata.InputGestures.Add(new KeyGesture(Key.F2));
         }
+
+        private void __cb_ToDownload_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.ToDownload;
+        }
+
+        private void __cb_BackToDownloaded_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Downloaded;
+        }
     }
 }

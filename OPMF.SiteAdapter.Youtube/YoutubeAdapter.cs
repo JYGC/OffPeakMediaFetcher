@@ -38,7 +38,7 @@ namespace OPMF.SiteAdapter.Youtube
                 Console.WriteLine("fetching video metadata for youtube channel: " + channel.Name);
                 ActivitiesResource.ListRequest request = __youtubeService.Activities.List(__videoInfoParts);
                 request.ChannelId = channel.SiteId;
-                request.PublishedAfter = channel.LastCheckedOut.HasValue ? channel.LastCheckedOut.Value : DateTime.Now.AddDays(-Settings.ConfigHelper.Config.NewChannelPastVideoDayLimit);
+                request.PublishedAfter = channel.LastCheckedOut.HasValue ? channel.LastCheckedOut.Value.AddDays(-2) : DateTime.Now.AddDays(-Settings.ConfigHelper.Config.NewChannelPastVideoDayLimit);
                 bool updateLastCheckedOutAndActivity = true;
                 DateTime? lastActivityDate = channel.LastActivityDate;
                 DateTime checkOutDatetime;
