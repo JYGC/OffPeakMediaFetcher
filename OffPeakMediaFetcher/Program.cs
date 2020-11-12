@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
             OPMF.Settings.ConfigHelper.EstablishConfig();
             OPMF.Actions.FolderSetup.EstablishFolders();
 

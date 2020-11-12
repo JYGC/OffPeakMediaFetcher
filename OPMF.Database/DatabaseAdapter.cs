@@ -39,7 +39,7 @@ namespace OPMF.Database
 
         public DatabaseAdapter(string dbName, string collectionName)
         {
-            __dbPath = Path.Join(Settings.ReadonlySettings.DatabaseFolderPath, dbName);
+            __dbPath = Path.Join(Settings.ReadonlySettings.GetDatabaseFolderPath(), dbName);
             __db = new LiteDatabase(__dbPath);
             __collection = __db.GetCollection<TItem>(collectionName);
         }

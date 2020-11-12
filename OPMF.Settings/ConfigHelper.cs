@@ -26,14 +26,14 @@ namespace OPMF.Settings
         public static void EstablishConfig()
         {
             // get config settings from config.json if it exists and if not, create it and use default values
-            if (File.Exists(ReadonlySettings.ConfigFilePath))
+            if (File.Exists(ReadonlySettings.GetConfigFilePath()))
             {
-                __config = JsonConvert.DeserializeObject<AppConfig>(File.ReadAllText(ReadonlySettings.ConfigFilePath).Trim());
+                __config = JsonConvert.DeserializeObject<AppConfig>(File.ReadAllText(ReadonlySettings.GetConfigFilePath()).Trim());
             }
             else
             {
                 __config = new AppConfig();
-                File.WriteAllText(ReadonlySettings.ConfigFilePath, JsonConvert.SerializeObject(__config, Formatting.Indented));
+                File.WriteAllText(ReadonlySettings.GetConfigFilePath(), JsonConvert.SerializeObject(__config, Formatting.Indented));
             }
         }
     }

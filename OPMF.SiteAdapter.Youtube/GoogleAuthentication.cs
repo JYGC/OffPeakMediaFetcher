@@ -13,12 +13,12 @@ namespace OPMF.SiteAdapter.Youtube
         {
             UserCredential credential;
 
-            using (FileStream stream = new FileStream(Settings.ConfigHelper.Config.GoogleClientSecretPath, FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(Path.Join(OSCompat.EnvironmentHelper.Environment.GetProgramFolderPath(), Settings.ConfigHelper.Config.GoogleClientSecretPath), FileMode.Open, FileAccess.Read))
             {
                 // The file token.json stores the user's access and refresh tokens, and is created
                 // automatically when the authorization flow completes for the first time.
                 Console.WriteLine("authenticate with google");
-                string credPath = Settings.ReadonlySettings.CredentialPath;
+                string credPath = Settings.ReadonlySettings.GetCredentialPath();
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     scope,

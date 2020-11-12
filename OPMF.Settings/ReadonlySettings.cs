@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks.Dataflow;
 
 namespace OPMF.Settings
 {
@@ -8,67 +7,44 @@ namespace OPMF.Settings
     {
         private static string __appFolderName = "OffPeakMediaFetcher";
 
-        public static string LocalAppFolderPath
+        public static string GetLocalAppFolderPath()
         {
-            get
-            {
-                return Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), __appFolderName);
-            }
+            return Path.Join(OSCompat.EnvironmentHelper.Environment.GetUserLocalAppFolderPath(), __appFolderName);
         }
 
-        public static string TempFolderPath
+        public static string GetTempFolderPath()
         {
-            get
-            {
-                return Path.Join(Path.GetTempPath(), __appFolderName);
-            }
+            return Path.Join(OSCompat.EnvironmentHelper.Environment.GetUserTempFolderPath(), __appFolderName);
         }
 
-        public static string CredentialPath
+        public static string GetCredentialPath()
         {
-            get
-            {
-                return Path.Join(LocalAppFolderPath, "Token.json");
-            }
+            return Path.Join(GetLocalAppFolderPath(), "Token.json");
         }
 
-        public static string ConfigFilePath {
-            get
-            {
-                return Path.Join(LocalAppFolderPath, "config.json");
-            }
+        public static string GetConfigFilePath()
+        {
+            return Path.Join(GetLocalAppFolderPath(), "config.json");
         }
 
-        public static string DownloadFolderPath
+        public static string GetDownloadFolderPath()
         {
-            get
-            {
-                return Path.Join(TempFolderPath, "Downloads");
-            }
+            return Path.Join(GetTempFolderPath(), "Downloads");
         }
 
-        public static string DatabaseFolderPath
+        public static string GetDatabaseFolderPath()
         {
-            get
-            {
-                return Path.Join(LocalAppFolderPath, "Databases");
-            }
+            return Path.Join(GetLocalAppFolderPath(), "Databases");
         }
 
-        public static string BinFolderPath
+        public static string GetBinFolderPath()
         {
-            get
-            {
-                return Path.Join(LocalAppFolderPath, "Bin");
-            }
+            return Path.Join(GetLocalAppFolderPath(), "Bin");
         }
 
-        public static string YoutubeDLPath
+        public static string GetYoutubeDLPath()
         {
-            get
-            {
-                return Path.Join(BinFolderPath, "youtube-dl.exe");
-            }
+            return Path.Join(GetBinFolderPath(), "youtube-dl.exe");
         }
     }
 }

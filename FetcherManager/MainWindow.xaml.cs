@@ -14,6 +14,7 @@ namespace FetcherManager
     {
         public MainWindow()
         {
+            OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
             OPMF.Settings.ConfigHelper.EstablishConfig();
             
             InitializeComponent();

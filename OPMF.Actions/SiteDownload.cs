@@ -62,7 +62,7 @@ namespace OPMF.Actions
                 metadataDbAdapter.UpdateStatus(metadatas);
             }
             FolderSetup.EstablishVideoOutputFolder();
-            FileOperations.MoveAllInFolder(Settings.ReadonlySettings.DownloadFolderPath,
+            FileOperations.MoveAllInFolder(Settings.ReadonlySettings.GetDownloadFolderPath(),
                                            Settings.ConfigHelper.Config.VideoOutputFolderPath,
                                            new string[]
                                            { 
