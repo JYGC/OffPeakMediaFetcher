@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OPMF.OSCompat
+﻿namespace OPMF.OSCompat
 {
     public static class EnvironmentHelper
     {

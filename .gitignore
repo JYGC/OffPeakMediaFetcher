@@ -18,3 +18,16 @@
 /OPMF.SiteAdapter/bin
 /OPMF.SiteAdapter.Youtube/obj
 /OPMF.SiteAdapter.Youtube/bin
+/OPMF.OSCompat/bin/Debug/netcoreapp3.1
+/OPMF.OSCompat/obj
+/OPMF.OSDependent/obj
+/OPMF.OSEnvironment/obj/Debug/netcoreapp3.1
+/OPMF.OSEnvironment/obj
+/OPMF.OSEnvironment/bin/Debug/netcoreapp3.1
+/OPMF.SiteAdapter.Youtube.Tests/bin/Debug/netcoreapp3.1
+/OPMF.SiteAdapter.Youtube.Tests/obj/Debug/netcoreapp3.1
+/OPMF.SiteAdapter.Youtube.Tests/obj/Release/netcoreapp3.1
+/OPMF.SiteAdapter.Youtube.Tests/obj
+/OPMF.OSEnvironment.Windows/bin/Debug/netcoreapp3.1
+/OPMF.OSEnvironment.Windows/obj/Debug/netcoreapp3.1
+/OPMF.OSEnvironment.Windows/obj

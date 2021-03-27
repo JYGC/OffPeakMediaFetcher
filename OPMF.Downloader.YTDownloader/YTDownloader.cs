@@ -34,7 +34,7 @@ namespace OPMF.Downloader.YTDownloader
                                                                          item.Title.Replace("/", "") + "." + Settings.ConfigHelper.Config.YoutubeDL.VideoExtension);
                 __youtubeDL.Download(item.Url);
                 
-                if (__downloadError != null)
+                if (string.IsNullOrEmpty(__downloadError))
                 {
                     item.Status = Entities.MetadataStatus.Downloaded;
                 }
