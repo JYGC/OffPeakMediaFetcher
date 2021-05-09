@@ -15,7 +15,7 @@ namespace OPMF.Downloader.YTDownloader
         {
             YTDLSetup.EstablishYoutubeDLExec();
             __youtubeDL = new YoutubeDL();
-            //__youtubeDL.Options.GeneralOptions.Update = Settings.ConfigHelper.Config.YoutubeDL.CheckForBinaryUpdates;
+            __youtubeDL.Options.GeneralOptions.Update = Settings.ConfigHelper.Config.YoutubeDL.CheckForBinaryUpdates;
             __youtubeDL.Options.SubtitleOptions.AllSubs = Settings.ConfigHelper.Config.YoutubeDL.GetSubtitles;
             __youtubeDL.Options.VideoFormatOptions.Format = NYoutubeDL.Helpers.Enums.VideoFormat.best;
             __youtubeDL.YoutubeDlPath = Settings.ReadonlySettings.GetYoutubeDLPath();
