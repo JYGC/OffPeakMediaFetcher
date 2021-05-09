@@ -12,11 +12,6 @@ namespace OPMF.Settings
             return Path.Join(OSCompat.EnvironmentHelper.Environment.GetUserLocalAppFolderPath(), __appFolderName);
         }
 
-        public static string GetTempFolderPath()
-        {
-            return Path.Join(OSCompat.EnvironmentHelper.Environment.GetUserTempFolderPath(), __appFolderName);
-        }
-
         public static string GetCredentialPath()
         {
             return Path.Join(GetLocalAppFolderPath(), "Token.json");
@@ -29,7 +24,7 @@ namespace OPMF.Settings
 
         public static string GetDownloadFolderPath()
         {
-            return Path.Join(GetTempFolderPath(), "Downloads");
+            return Path.Join(GetLocalAppFolderPath(), "Downloads");
         }
 
         public static string GetDatabaseFolderPath()
