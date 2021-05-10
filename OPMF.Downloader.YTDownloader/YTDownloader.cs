@@ -31,7 +31,7 @@ namespace OPMF.Downloader.YTDownloader
                 Console.WriteLine("Downloading: " + item.Title);
                 __downloadError = null;
                 __youtubeDL.Options.FilesystemOptions.Output = Path.Join(Settings.ReadonlySettings.GetDownloadFolderPath(),
-                                                                         item.Title.Replace("/", "") + "." + Settings.ConfigHelper.Config.YoutubeDL.VideoExtension);
+                                                                         __ItemNameSanitizer(item.Title) + "." + Settings.ConfigHelper.Config.YoutubeDL.VideoExtension);
                 __youtubeDL.Download(item.Url);
                 
                 if (string.IsNullOrEmpty(__downloadError))
@@ -43,6 +43,16 @@ namespace OPMF.Downloader.YTDownloader
                     Console.WriteLine("Error: " + __downloadError);
                 }
             }
+        }
+
+        private string __ItemNameSanitizer(string itemName)
+        {
+            string sanitizeredItemName = null;
+
+            sanitizeredItemName = itemName.Replace("/", "");
+            sanitizeredItemName = sanitizeredItemName.Replace("\"", "''");
+
+            return sanitizeredItemName;
         }
     }
 }
