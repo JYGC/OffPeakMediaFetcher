@@ -37,9 +37,9 @@ namespace OPMF.Actions
             return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetNew());
         }
 
-        public static IEnumerable<Entities.IMetadataChannel> GetToDownload()
+        public static IEnumerable<Entities.IMetadataChannel> GetToDownloadAndWait()
         {
-            return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetReallyForDownload());
+            return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetReallyForDownloadAndWait());
         }
 
         public static IEnumerable<Entities.IMetadataChannel> GetDownloaded()
@@ -53,12 +53,22 @@ namespace OPMF.Actions
         }
 
         public static (IEnumerable<Entities.IMetadataChannel>, IEnumerable<Entities.IMetadataChannel>) SplitFromStatus(IEnumerable<Entities.IMetadataChannel> metadataChannels,
+                                                                                                                       Entities.MetadataStatus metadataStatus,
+                                                                                                                       Entities.MetadataStatus metadataStatus2)
+        {
+            IEnumerable<Entities.IMetadataChannel> toUpdateMetadataChannels = metadataChannels. Where(i => true);
+            IEnumerable<Entities.IMetadataChannel> toShowMetadataChannels = metadataChannels.Where(i => i.Metadata.Status == metadataStatus || i.Metadata.Status == metadataStatus2);
+
+            return (toShowMetadataChannels, toUpdateMetadataChannels);
+        }
+
+        public static (IEnumerable<Entities.IMetadataChannel>, IEnumerable<Entities.IMetadataChannel>) SplitFromStatus(IEnumerable<Entities.IMetadataChannel> metadataChannels,
                                                                                                                        Entities.MetadataStatus metadataStatus)
         {
-            IEnumerable<Entities.IMetadataChannel> notNewMetadataChannels = metadataChannels.Where(i => i.Metadata.Status != metadataStatus);
-            IEnumerable<Entities.IMetadataChannel> newMetadataChannels = metadataChannels.Where(i => !notNewMetadataChannels.Any(j => j.Metadata.Id == i.Metadata.Id));
+            IEnumerable<Entities.IMetadataChannel> toUpdateMetadataChannels = metadataChannels.Where(i => i.Metadata.Status != metadataStatus);
+            IEnumerable<Entities.IMetadataChannel> toShowMetadataChannels = metadataChannels.Where(i => !toUpdateMetadataChannels.Any(j => j.Metadata.Id == i.Metadata.Id));
 
-            return (newMetadataChannels, notNewMetadataChannels);
+            return (toShowMetadataChannels, toUpdateMetadataChannels);
         }
 
         public static void SaveMetadataChanges(IEnumerable<Entities.IMetadataChannel> metadataChannels)

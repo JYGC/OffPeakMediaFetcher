@@ -12,6 +12,7 @@ namespace OPMF.Database
         IEnumerable<TItem> GetReallyForDownload();
         IEnumerable<TItem> GetNew();
         IEnumerable<TItem> GetDownloaded();
+        IEnumerable<TItem> GetReallyForDownloadAndWait();
         IEnumerable<TItem> GetIgnored();
         void InsertNew(IEnumerable<TItem> items);
         void UpdateStatus(IEnumerable<TItem> items);
@@ -24,6 +25,11 @@ namespace OPMF.Database
         public IEnumerable<TItem> GetReallyForDownload()
         {
             return _Collection.Find(i => i.Status == MetadataStatus.ToDownload);
+        }
+
+        public IEnumerable<TItem> GetReallyForDownloadAndWait()
+        {
+            return _Collection.Find(i => i.Status == MetadataStatus.ToDownload || i.Status == MetadataStatus.Wait);
         }
 
         public IEnumerable<TItem> GetNew()

@@ -13,16 +13,19 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Content="[F1 key] - Mark as ignore" Grid.Column="0" />
             <Label Content="[F2 key] - Mark for download" Grid.Column="1" />
             <Label Content="[F3 key] - Mark as new" Grid.Column="2" />
+            <Label Content="[F4 key] - Mark as wait" Grid.Column="3" />
         </Grid>
         <Grid>
             <Grid.CommandBindings>
                 <CommandBinding x:Name="cb_Ignore" Executed="__cb_Ignore_Executed" />
                 <CommandBinding x:Name="cb_ToDownload" Executed="__cb_ToDownload_Executed" />
                 <CommandBinding x:Name="cb_BackToNew" Executed="__cb_BackToNew_Executed" />
+                <CommandBinding x:Name="cb_SetToWait" Executed="__cb_SetToWait_Executed" />
             </Grid.CommandBindings>
             <Commons:UCVideoBrowser x:Name="uc_VideoBrowser" />
         </Grid>
