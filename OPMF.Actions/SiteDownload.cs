@@ -57,7 +57,7 @@ namespace OPMF.Actions
             Console.WriteLine("fetching videos");
             using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
             {
-                List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(metadataDbAdapter.GetReallyForDownload());
+                List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(metadataDbAdapter.GetToDownload());
                 downloader.Download(ref metadatas);
                 metadataDbAdapter.UpdateStatus(metadatas);
             }

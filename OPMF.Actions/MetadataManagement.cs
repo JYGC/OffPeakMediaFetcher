@@ -39,7 +39,7 @@ namespace OPMF.Actions
 
         public static IEnumerable<Entities.IMetadataChannel> GetToDownloadAndWait()
         {
-            return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetReallyForDownloadAndWait());
+            return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetToDownloadAndWait());
         }
 
         public static IEnumerable<Entities.IMetadataChannel> GetDownloaded()

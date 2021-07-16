@@ -9,10 +9,10 @@ namespace OPMF.Database
 {
     public interface IMetadataDbAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IMetadata
     {
-        IEnumerable<TItem> GetReallyForDownload();
+        IEnumerable<TItem> GetToDownload();
         IEnumerable<TItem> GetNew();
         IEnumerable<TItem> GetDownloaded();
-        IEnumerable<TItem> GetReallyForDownloadAndWait();
+        IEnumerable<TItem> GetToDownloadAndWait();
         IEnumerable<TItem> GetIgnored();
         void InsertNew(IEnumerable<TItem> items);
         void UpdateStatus(IEnumerable<TItem> items);
@@ -22,12 +22,12 @@ namespace OPMF.Database
     {
         public MetadataDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
 
-        public IEnumerable<TItem> GetReallyForDownload()
+        public IEnumerable<TItem> GetToDownload()
         {
             return _Collection.Find(i => i.Status == MetadataStatus.ToDownload);
         }
 
-        public IEnumerable<TItem> GetReallyForDownloadAndWait()
+        public IEnumerable<TItem> GetToDownloadAndWait()
         {
             return _Collection.Find(i => i.Status == MetadataStatus.ToDownload || i.Status == MetadataStatus.Wait);
         }
