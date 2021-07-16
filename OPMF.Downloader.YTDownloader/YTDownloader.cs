@@ -51,6 +51,7 @@ namespace OPMF.Downloader.YTDownloader
 
             sanitizeredItemName = itemName.Replace("/", "");
             sanitizeredItemName = sanitizeredItemName.Replace("\"", "''");
+            sanitizeredItemName = sanitizeredItemName.Replace("%", "percent");
 
             return sanitizeredItemName;
         }

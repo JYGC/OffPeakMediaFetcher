@@ -6,6 +6,7 @@ namespace OPMF.Entities
     {
         New,
         ToDownload,
+        Wait,
         Ignore,
         Downloaded
     }

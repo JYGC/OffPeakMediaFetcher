@@ -12,6 +12,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         public RoutedCommand IgnoreMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand ToDownloadMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand BackToNewMetadata { get; set; } = new RoutedCommand();
+        public RoutedCommand SetToWaitMetadata { get; set; } = new RoutedCommand();
 
         public UCToDownload()
         {
@@ -23,8 +24,10 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         private void __PrepareChildUserControls()
         {
             uc_VideoBrowser.Btn_GetVideos.Content = "Get Download Queue";
-            uc_VideoBrowser.GetMetadataChannels = () => OPMF.Actions.MetadataManagement.GetToDownload().OrderBy(c => c.Channel.Name);
-            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => OPMF.Actions.MetadataManagement.SplitFromStatus(metadataChannels, OPMF.Entities.MetadataStatus.ToDownload);
+            uc_VideoBrowser.GetMetadataChannels = () => OPMF.Actions.MetadataManagement.GetToDownloadAndWait().OrderBy(c => c.Channel.Name);
+            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => OPMF.Actions.MetadataManagement.SplitFromStatus(metadataChannels,
+                                                                                                                    OPMF.Entities.MetadataStatus.ToDownload,
+                                                                                                                    OPMF.Entities.MetadataStatus.Wait);
             uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => OPMF.Actions.MetadataManagement.SaveMetadataChanges(notStatusMetadataChannels);
         }
 
@@ -36,6 +39,8 @@ namespace FetcherManager.Tabs.Videos.Subtabs
             ToDownloadMetadata.InputGestures.Add(new KeyGesture(Key.F2));
             cb_BackToNew.Command = BackToNewMetadata;
             BackToNewMetadata.InputGestures.Add(new KeyGesture(Key.F3));
+            cb_SetToWait.Command = SetToWaitMetadata;
+            SetToWaitMetadata.InputGestures.Add(new KeyGesture(Key.F4));
         }
 
         private void __cb_Ignore_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -51,6 +56,11 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         private void __cb_BackToNew_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.New;
+        }
+
+        private void __cb_SetToWait_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Wait;
         }
     }
 }

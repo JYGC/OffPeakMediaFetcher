@@ -31,3 +31,5 @@
 /OPMF.OSEnvironment.Windows/bin/Debug/netcoreapp3.1
 /OPMF.OSEnvironment.Windows/obj/Debug/netcoreapp3.1
 /OPMF.OSEnvironment.Windows/obj
+/.vs
+/.vscode
