@@ -32,6 +32,11 @@ namespace OPMF.Settings
             return Path.Join(GetLocalAppFolderPath(), "Databases");
         }
 
+        public static string GetDatabasePath()
+        {
+            return Path.Join(GetDatabaseFolderPath(), "OPMF.db");
+        }
+
         public static string GetBinFolderPath()
         {
             return Path.Join(GetLocalAppFolderPath(), "Bin");

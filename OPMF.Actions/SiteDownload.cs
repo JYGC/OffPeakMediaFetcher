@@ -14,10 +14,10 @@ namespace OPMF.Actions
 
             Console.WriteLine("saving channels to database");
             Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
-            using (Database.IChannelDbAdapter<Entities.IChannel> channelAdapter = new Database.YoutubeChannelDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
             {
-                channelAdapter.InsertOrUpdate(channels);
-            }
+                dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
+            });
         }
 
         public static void ImportChannels(string filePath)
@@ -25,29 +25,26 @@ namespace OPMF.Actions
             string opml = File.ReadAllText(filePath);
             SiteAdapter.Youtube.RssChannelImporter youtubeChannelImporter = new SiteAdapter.Youtube.RssChannelImporter(opml);
             IEnumerable<Entities.IChannel> channels = youtubeChannelImporter.ImportChannels();
-            using (Database.IChannelDbAdapter<Entities.IChannel> channelAdapter = new Database.YoutubeChannelDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
             {
-                channelAdapter.InsertOrUpdate(channels);
-            }
+                dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
+            });
         }
 
         public static void FetchMetadata()
         {
             SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
 
-            using (Database.IChannelDbAdapter<Entities.IChannel> channelDbAdapter = new Database.YoutubeChannelDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
             {
-                List<Entities.IChannel> channels = new List<Entities.IChannel>(channelDbAdapter.GetNotBacklisted());
+                List<Entities.IChannel> channels = new List<Entities.IChannel>(dbAdapter.YoutubeChannelDbCollection.GetNotBacklisted());
                 List<Entities.IMetadata> metadatas = siteAdapter.FetchMetadata(ref channels);
 
                 Console.WriteLine("saving metadata to database");
-                using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
-                {
-                    metadataDbAdapter.InsertNew(metadatas);
-                }
+                dbAdapter.YoutubeMetadataDbCollection.InsertNew(metadatas);
                 Console.WriteLine("updating channels");
-                channelDbAdapter.UpdateLastCheckedOutAndActivity(channels);
-            }
+                dbAdapter.YoutubeChannelDbCollection.UpdateLastCheckedOutAndActivity(channels);
+            });
         }
 
         public static void FetchVideos()
@@ -55,12 +52,12 @@ namespace OPMF.Actions
             Downloader.IDownloader<Entities.IMetadata> downloader = new Downloader.YTDownloader.YTDownloader();
 
             Console.WriteLine("fetching videos");
-            using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
             {
-                List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(metadataDbAdapter.GetToDownload());
+                List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(dbAdapter.YoutubeMetadataDbCollection.GetToDownload());
                 downloader.Download(ref metadatas);
-                metadataDbAdapter.UpdateStatus(metadatas);
-            }
+                dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
+            });
             FolderSetup.EstablishVideoOutputFolder();
             FileOperations.MoveAllInFolder(Settings.ReadonlySettings.GetDownloadFolderPath(),
                                            Settings.ConfigHelper.Config.VideoOutputFolderPath,
