@@ -6,6 +6,9 @@
         IChannel Channel { get; set; }
     }
 
+    /// <summary>
+    /// This is needed for VideoBrowser DataGrid to show video with channel name.
+    /// </summary>
     public class MetadataChannel : IMetadataChannel
     {
         public IPropertyChangedMetadata Metadata { get; set; }

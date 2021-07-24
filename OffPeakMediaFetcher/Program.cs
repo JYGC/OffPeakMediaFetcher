@@ -5,8 +5,9 @@
         static void Main(string[] args)
         {
             OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
-            OPMF.Settings.ConfigHelper.EstablishConfig();
+            OPMF.Settings.ConfigHelper.ReadonlySettings = new OPMF.Settings.ReadonlySettings();
             OPMF.Actions.FolderSetup.EstablishFolders();
+            OPMF.Settings.ConfigHelper.EstablishConfig();
 
             if (args.Length == 1)
             {
@@ -21,10 +22,6 @@
                 else if (args[0] == "updatechannels")
                 {
                     //OPMF.Actions.SiteDownload.ImportChannels();
-                }
-                else if (args[0] == "test")
-                {
-                    //OPMF.Tests.Tests
                 }
                 else
                 {

@@ -18,7 +18,7 @@ namespace OPMF.Downloader.YTDownloader
             __youtubeDL.Options.GeneralOptions.Update = Settings.ConfigHelper.Config.YoutubeDL.CheckForBinaryUpdates;
             __youtubeDL.Options.SubtitleOptions.AllSubs = Settings.ConfigHelper.Config.YoutubeDL.GetSubtitles;
             __youtubeDL.Options.VideoFormatOptions.Format = NYoutubeDL.Helpers.Enums.VideoFormat.best;
-            __youtubeDL.YoutubeDlPath = Settings.ReadonlySettings.GetYoutubeDLPath();
+            __youtubeDL.YoutubeDlPath = Settings.ConfigHelper.ReadonlySettings.GetYoutubeDLPath();
 
             __youtubeDL.StandardOutputEvent += (sender, output) => Console.WriteLine(output);
             __youtubeDL.StandardErrorEvent += (sender, errorOutput) => __downloadError = errorOutput;
@@ -30,7 +30,7 @@ namespace OPMF.Downloader.YTDownloader
             {
                 Console.WriteLine("Downloading: " + item.Title);
                 __downloadError = null;
-                __youtubeDL.Options.FilesystemOptions.Output = Path.Join(Settings.ReadonlySettings.GetDownloadFolderPath(),
+                __youtubeDL.Options.FilesystemOptions.Output = Path.Join(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
                                                                          __ItemNameSanitizer(item.Title) + "." + Settings.ConfigHelper.Config.YoutubeDL.VideoExtension);
                 __youtubeDL.Download(item.Url);
                 

@@ -8,7 +8,7 @@ namespace OPMF.Database
         // --- Static object ---
         public static void AccessDbAdapter(Action<DatabaseAdapter> DbAction)
         {
-            using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ReadonlySettings.GetDatabasePath()))
+            using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
             {
                 DbAction(databaseAdapter);
             }
@@ -47,7 +47,7 @@ namespace OPMF.Database
 
         public void MigrateData()
         {
-            DatabaseAdapter newDatabaseAdapter = new DatabaseAdapter(Settings.ReadonlySettings.GetDatabasePath() + ".new");
+            DatabaseAdapter newDatabaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath() + ".new");
             newDatabaseAdapter.YoutubeMetadataDbCollection.InsertBulk(__youtubeMetadataDbCollection.GetAll());
             newDatabaseAdapter.YoutubeChannelDbCollection.InsertBulk(__youtubeChannelDbCollection.GetAll());
         }

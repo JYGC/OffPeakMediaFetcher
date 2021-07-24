@@ -5,6 +5,9 @@ namespace OPMF.Entities
 {
     public interface IPropertyChangedMetadata : IMetadata, INotifyPropertyChanged { }
 
+    /// <summary>
+    /// Need to inherit from INotifyPropertyChanged so DataGrid rows can change when states are updated
+    /// </summary>
     public class PropertyChangedMetadata : Metadata, IPropertyChangedMetadata
     {
         private MetadataStatus __status;

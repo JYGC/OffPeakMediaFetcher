@@ -24,10 +24,10 @@
 /OPMF.OSEnvironment/obj/Debug/netcoreapp3.1
 /OPMF.OSEnvironment/obj
 /OPMF.OSEnvironment/bin/Debug/netcoreapp3.1
-/OPMF.SiteAdapter.Youtube.Tests/bin/Debug/netcoreapp3.1
-/OPMF.SiteAdapter.Youtube.Tests/obj/Debug/netcoreapp3.1
-/OPMF.SiteAdapter.Youtube.Tests/obj/Release/netcoreapp3.1
-/OPMF.SiteAdapter.Youtube.Tests/obj
+/OPMF.Tests/bin/Debug/netcoreapp3.1
+/OPMF.Tests/obj/Debug/netcoreapp3.1
+/OPMF.Tests/obj/Release/netcoreapp3.1
+/OPMF.Tests/obj
 /OPMF.OSEnvironment.Windows/bin/Debug/netcoreapp3.1
 /OPMF.OSEnvironment.Windows/obj/Debug/netcoreapp3.1
 /OPMF.OSEnvironment.Windows/obj

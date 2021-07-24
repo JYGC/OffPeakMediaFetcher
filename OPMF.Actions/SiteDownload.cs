@@ -59,7 +59,7 @@ namespace OPMF.Actions
                 dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
             });
             FolderSetup.EstablishVideoOutputFolder();
-            FileOperations.MoveAllInFolder(Settings.ReadonlySettings.GetDownloadFolderPath(),
+            FileOperations.MoveAllInFolder(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
                                            Settings.ConfigHelper.Config.VideoOutputFolderPath,
                                            new string[]
                                            { 
