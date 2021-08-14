@@ -14,7 +14,7 @@ namespace OPMF.Actions
 
             Console.WriteLine("saving channels to database");
             Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
             });
@@ -25,7 +25,7 @@ namespace OPMF.Actions
             string opml = File.ReadAllText(filePath);
             SiteAdapter.Youtube.RssChannelImporter youtubeChannelImporter = new SiteAdapter.Youtube.RssChannelImporter(opml);
             IEnumerable<Entities.IChannel> channels = youtubeChannelImporter.ImportChannels();
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
             });
@@ -35,7 +35,7 @@ namespace OPMF.Actions
         {
             SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
 
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 List<Entities.IChannel> channels = new List<Entities.IChannel>(dbAdapter.YoutubeChannelDbCollection.GetNotBacklisted());
                 List<Entities.IMetadata> metadatas = siteAdapter.FetchMetadata(ref channels);
@@ -52,7 +52,7 @@ namespace OPMF.Actions
             Downloader.IDownloader<Entities.IMetadata> downloader = new Downloader.YTDownloader.YTDownloader();
 
             Console.WriteLine("fetching videos");
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(dbAdapter.YoutubeMetadataDbCollection.GetToDownload());
                 downloader.Download(ref metadatas);

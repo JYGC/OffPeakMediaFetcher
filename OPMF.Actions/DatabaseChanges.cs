@@ -9,7 +9,7 @@ namespace OPMF.Actions
         // TODO: Implement database migration
         public static void Migrate()
         {
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 dbAdapter.MigrateData();
             });

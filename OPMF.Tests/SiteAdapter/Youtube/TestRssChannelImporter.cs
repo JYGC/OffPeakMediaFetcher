@@ -7,7 +7,7 @@ namespace OPMF.Tests.SiteAdapter.Youtube
 {
     public class TestRssChannelImporter : IClassFixture<SetupFixture>
     {
-        private string __fiveChannelsXml = @"<opml version=""1.1"">
+        private readonly string __fiveChannelsXml = @"<opml version=""1.1"">
 <body>
 <outline text=""Patrick"" title=""Patrick"" type=""rss"" xmlUrl=""https://www.youtube.com/feeds/videos.xml?channel_id=UC-EREEErQQqgYNyNB4YGQnQ"" />
 <outline text=""Violineest"" title=""Violineest"" type=""rss"" xmlUrl=""https://www.youtube.com/feeds/videos.xml?channel_id=UC-E_nLi_776jj2gvKVgs0EQ"" />
@@ -16,7 +16,7 @@ namespace OPMF.Tests.SiteAdapter.Youtube
 <outline text=""Ann Lieven"" title=""Ann Lieven"" type=""rss"" xmlUrl=""https://www.youtube.com/feeds/videos.xml?channel_id=UC-jjYbFILVe9B6ab-RGOxpw"" />
 </body>
 </opml>";
-        private IEnumerable<IChannel> __fiveChannels = new IChannel[]
+        private readonly IEnumerable<IChannel> __fiveChannels = new IChannel[]
         {
             new YoutubeChannel
             {

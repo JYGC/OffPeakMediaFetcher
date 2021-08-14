@@ -11,7 +11,7 @@ namespace OPMF.Actions
         {
             IEnumerable<Entities.IPropertyChangeChannel> channels = new Entities.IPropertyChangeChannel[] { };
 
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 IEnumerable<Entities.IChannel> rawChannels = dbAdapter.YoutubeChannelDbCollection.GetAll();
                 foreach (Entities.IChannel rawChannel in rawChannels)
@@ -28,7 +28,7 @@ namespace OPMF.Actions
 
         public static void UpdateChannelSettings(IEnumerable<Entities.IChannel> channels)
         {
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 dbAdapter.YoutubeChannelDbCollection.UpdateBlackListStatus(channels);
             });

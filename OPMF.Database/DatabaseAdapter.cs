@@ -1,5 +1,7 @@
 ﻿using LiteDB;
 using System;
+using System.IO;
+using System.Threading;
 
 namespace OPMF.Database
 {
@@ -8,13 +10,32 @@ namespace OPMF.Database
         // --- Static object ---
         public static void AccessDbAdapter(Action<DatabaseAdapter> DbAction)
         {
-            using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
+            bool retryAccessingDB = true;
+            while (retryAccessingDB)
             {
-                DbAction(databaseAdapter);
-            }
+                try
+                {
+                    using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
+                    {
+                        DbAction(databaseAdapter);
+                    }
+                    retryAccessingDB = false;
+                }
+                catch (IOException e)
+                {
+                    if (e.Message == @"The process cannot access the file 'C:\Users\Junying\AppData\Local\OffPeakMediaFetcher\Test\Databases\OPMF.db' because it is being used by another process.")
+                    {
+                        Thread.Sleep(500);
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
         }
+    }
 
-        // --- Dynamics objects ---
+        // --- Dynamic objects ---
         private string __dbPath;
         private LiteDatabase __db;
 

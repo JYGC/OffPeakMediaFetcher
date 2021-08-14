@@ -12,7 +12,7 @@ namespace OPMF.Actions
         {
             IEnumerable<Entities.IMetadataChannel> metadataChannels = new Entities.IMetadataChannel[] { };
 
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 IEnumerable<Entities.IMetadata> metadatas = metadataDbFunc(dbAdapter.YoutubeMetadataDbCollection);
                 foreach (Entities.IMetadata metadata in metadatas)
@@ -74,7 +74,7 @@ namespace OPMF.Actions
         {
             IEnumerable<Entities.IMetadata> metadatas = metadataChannels.Select(i => i.Metadata);
 
-            Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
             });
