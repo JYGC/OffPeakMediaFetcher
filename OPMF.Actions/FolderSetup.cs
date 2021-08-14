@@ -20,22 +20,22 @@ namespace OPMF.Actions
         /// </summary>
         private static void __EstablishAppFolder()
         {
-            __EstablishFolder(Settings.ReadonlySettings.GetLocalAppFolderPath());
+            __EstablishFolder(Settings.ConfigHelper.ReadonlySettings.GetLocalAppFolderPath());
         }
 
         private static void __EstablishDownloadFolder()
         {
-            __EstablishFolder(Settings.ReadonlySettings.GetDownloadFolderPath());
+            __EstablishFolder(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath());
         }
 
         private static void __EstablishDatabaseFolder()
         {
-            __EstablishFolder(Settings.ReadonlySettings.GetDatabaseFolderPath());
+            __EstablishFolder(Settings.ConfigHelper.ReadonlySettings.GetDatabaseFolderPath());
         }
 
         private static void __EstablishBinFolder()
         {
-            __EstablishFolder(Settings.ReadonlySettings.GetBinFolderPath());
+            __EstablishFolder(Settings.ConfigHelper.ReadonlySettings.GetBinFolderPath());
         }
 
         public static void EstablishFolders()

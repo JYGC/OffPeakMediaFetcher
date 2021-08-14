@@ -10,12 +10,12 @@ namespace OPMF.Downloader.YTDownloader
 
         public static void EstablishYoutubeDLExec()
         {
-            if (!File.Exists(Settings.ReadonlySettings.GetYoutubeDLPath()))
+            if (!File.Exists(Settings.ConfigHelper.ReadonlySettings.GetYoutubeDLPath()))
             {
                 Console.WriteLine("downloading youtube-dl binary");
                 using (WebClient client = new WebClient())
                 {
-                    client.DownloadFile(__youtubeDLUrl, Settings.ReadonlySettings.GetYoutubeDLPath());
+                    client.DownloadFile(__youtubeDLUrl, Settings.ConfigHelper.ReadonlySettings.GetYoutubeDLPath());
                 }
             }
         }

@@ -1,68 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LiteDB;
+using System;
 using System.IO;
-using System.Linq;
-using LiteDB;
+using System.Threading;
 
 namespace OPMF.Database
 {
-    public interface IDatabaseAdapter : IDisposable
+    public class DatabaseAdapter : IDisposable
     {
-        void MigrateData();
+        // --- Static object ---
+        public static void AccessDbAdapter(Action<DatabaseAdapter> DbAction)
+        {
+            bool retryAccessingDB = true;
+            while (retryAccessingDB)
+            {
+                try
+                {
+                    using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
+                    {
+                        DbAction(databaseAdapter);
+                    }
+                    retryAccessingDB = false;
+                }
+                catch (IOException e)
+                {
+                    if (e.Message == @"The process cannot access the file 'C:\Users\Junying\AppData\Local\OffPeakMediaFetcher\Test\Databases\OPMF.db' because it is being used by another process.")
+                    {
+                        Thread.Sleep(500);
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+        }
     }
 
-    public class DatabaseAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IId
-    {
-        protected string _KeyName { get; } = "_id";
-
+        // --- Dynamic objects ---
+        private string __dbPath;
         private LiteDatabase __db;
 
-        private ILiteCollection<TItem> __collection;
-
-        private string __dbPath;
-
-        protected LiteDatabase _Db
+        // Collections
+        private YoutubeMetadataDbCollection __youtubeMetadataDbCollection = null;
+        public YoutubeMetadataDbCollection YoutubeMetadataDbCollection
         {
             get
             {
-                return __db;
+                return __youtubeMetadataDbCollection;
             }
         }
-
-        protected ILiteCollection<TItem> _Collection
+        private YoutubeChannelDbCollection __youtubeChannelDbCollection = null;
+        public YoutubeChannelDbCollection YoutubeChannelDbCollection
         {
             get
             {
-                return __collection;
+                return __youtubeChannelDbCollection;
             }
         }
 
-        public DatabaseAdapter(string dbName, string collectionName)
+        public DatabaseAdapter(string dbPath)
         {
-            __dbPath = Path.Join(Settings.ReadonlySettings.GetDatabaseFolderPath(), dbName);
+            __dbPath = dbPath;
             __db = new LiteDatabase(__dbPath);
-            __collection = __db.GetCollection<TItem>(collectionName);
+
+            __youtubeMetadataDbCollection = new YoutubeMetadataDbCollection(__db);
+            __youtubeChannelDbCollection = new YoutubeChannelDbCollection(__db);
         }
 
         public void MigrateData()
         {
-            LiteDatabase newDb = new LiteDatabase(__dbPath + ".new");
-            ILiteCollection<TItem> newCollection = newDb.GetCollection<TItem>();
-            newCollection.InsertBulk(__collection.FindAll());
-        }
-
-        protected IEnumerable<TItem> _UpdateFields(IEnumerable<TItem> items, Action<TItem, TItem> UpdateFields)
-        {
-            IEnumerable<string> itemIds = items.Select(i => i.Id);
-            List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList(); // dbToUpdate must be list or it won't update in foreach loop
-            foreach (TItem dbItem in dbToUpdate)
-            {
-                TItem item = items.First(i => i.Id == dbItem.Id);
-                UpdateFields(item, dbItem);
-            }
-            _Collection.Update(dbToUpdate);
-
-            return dbToUpdate;
+            DatabaseAdapter newDatabaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath() + ".new");
+            newDatabaseAdapter.YoutubeMetadataDbCollection.InsertBulk(__youtubeMetadataDbCollection.GetAll());
+            newDatabaseAdapter.YoutubeChannelDbCollection.InsertBulk(__youtubeChannelDbCollection.GetAll());
         }
 
         public void Dispose()

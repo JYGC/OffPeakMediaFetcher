@@ -8,14 +8,13 @@ namespace OPMF.Actions
     public static class MetadataManagement
     {
         private static IEnumerable<Entities.IMetadataChannel> _GetMetadataChannels(
-            Func<Database.IMetadataDbAdapter<Entities.IMetadata>, IEnumerable<Entities.IMetadata>> metadataDbFunc)
+            Func<Database.IMetadataDbCollection<Entities.IMetadata>, IEnumerable<Entities.IMetadata>> metadataDbFunc)
         {
             IEnumerable<Entities.IMetadataChannel> metadataChannels = new Entities.IMetadataChannel[] { };
 
-            using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
-            using (Database.IChannelDbAdapter<Entities.IChannel> channelDbAdapter = new Database.YoutubeChannelDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
-                IEnumerable<Entities.IMetadata> metadatas = metadataDbFunc(metadataDbAdapter);
+                IEnumerable<Entities.IMetadata> metadatas = metadataDbFunc(dbAdapter.YoutubeMetadataDbCollection);
                 foreach (Entities.IMetadata metadata in metadatas)
                 {
                     metadataChannels = metadataChannels.Concat(new Entities.IMetadataChannel[]
@@ -23,11 +22,11 @@ namespace OPMF.Actions
                         new Entities.MetadataChannel
                         {
                             Metadata = new Entities.PropertyChangedMetadata(metadata)
-                            , Channel = channelDbAdapter.GetBySiteId(metadata.ChannelSiteId)
+                            , Channel = dbAdapter.YoutubeChannelDbCollection.GetBySiteId(metadata.ChannelSiteId)
                         }
                     });
                 }
-            }
+            });
 
             return metadataChannels;
         }
@@ -75,10 +74,10 @@ namespace OPMF.Actions
         {
             IEnumerable<Entities.IMetadata> metadatas = metadataChannels.Select(i => i.Metadata);
 
-            using (Database.IMetadataDbAdapter<Entities.IMetadata> metadataDbAdapter = new Database.YoutubeMetadataDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
-                metadataDbAdapter.UpdateStatus(metadatas);
-            }
+                dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
+            });
         }
     }
 }

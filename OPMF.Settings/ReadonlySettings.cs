@@ -3,43 +3,68 @@ using System.IO;
 
 namespace OPMF.Settings
 {
-    public static class ReadonlySettings
+    public interface IReadonlySettings
     {
-        private static string __appFolderName = "OffPeakMediaFetcher";
+        string GetLocalAppFolderPath();
+        string GetCredentialPath();
+        string GetConfigFilePath();
+        string GetDownloadFolderPath();
+        string GetDatabaseFolderPath();
+        string GetDatabasePath();
+        string GetBinFolderPath();
+        string GetYoutubeDLPath();
+    }
 
-        public static string GetLocalAppFolderPath()
+    public class ReadonlySettings : IReadonlySettings
+    {
+        protected string _appFolderName = "OffPeakMediaFetcher";
+
+        public string GetLocalAppFolderPath()
         {
-            return Path.Join(OSCompat.EnvironmentHelper.Environment.GetUserLocalAppFolderPath(), __appFolderName);
+            return Path.Join(OSCompat.EnvironmentHelper.Environment.GetUserLocalAppFolderPath(), _appFolderName);
         }
 
-        public static string GetCredentialPath()
+        public string GetCredentialPath()
         {
             return Path.Join(GetLocalAppFolderPath(), "Token.json");
         }
 
-        public static string GetConfigFilePath()
+        public string GetConfigFilePath()
         {
             return Path.Join(GetLocalAppFolderPath(), "config.json");
         }
 
-        public static string GetDownloadFolderPath()
+        public string GetDownloadFolderPath()
         {
             return Path.Join(GetLocalAppFolderPath(), "Downloads");
         }
 
-        public static string GetDatabaseFolderPath()
+        public string GetDatabaseFolderPath()
         {
             return Path.Join(GetLocalAppFolderPath(), "Databases");
         }
 
-        public static string GetBinFolderPath()
+        public string GetDatabasePath()
+        {
+            return Path.Join(GetDatabaseFolderPath(), "OPMF.db");
+        }
+
+        public string GetBinFolderPath()
         {
             return Path.Join(GetLocalAppFolderPath(), "Bin");
         }
 
-        public static string GetYoutubeDLPath()
+        public string GetYoutubeDLPath()
         {
             return Path.Join(GetBinFolderPath(), "youtube-dl.exe");
+        }
+    }
+
+    public class ReadOnlyTestSettings : ReadonlySettings
+    {
+        public ReadOnlyTestSettings()
+        {
+            _appFolderName = Path.Join(_appFolderName, "Test");
         }
     }
 }

@@ -6,14 +6,13 @@ namespace OPMF.Actions
 {
     public class DatabaseChanges
     {
+        // TODO: Implement database migration
         public static void Migrate()
         {
-            using (var channelDbAdapter = new Database.YoutubeChannelDbAdapter())
-            using (var videoInfoDbAdapter = new Database.YoutubeMetadataDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
-                channelDbAdapter.MigrateData();
-                videoInfoDbAdapter.MigrateData();
-            }
+                dbAdapter.MigrateData();
+            });
         }
     }
 }

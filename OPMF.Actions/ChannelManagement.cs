@@ -11,9 +11,9 @@ namespace OPMF.Actions
         {
             IEnumerable<Entities.IPropertyChangeChannel> channels = new Entities.IPropertyChangeChannel[] { };
 
-            using (Database.IChannelDbAdapter<Entities.IChannel> channelDbAdapter = new Database.YoutubeChannelDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
-                IEnumerable<Entities.IChannel> rawChannels = channelDbAdapter.GetAll();
+                IEnumerable<Entities.IChannel> rawChannels = dbAdapter.YoutubeChannelDbCollection.GetAll();
                 foreach (Entities.IChannel rawChannel in rawChannels)
                 {
                     channels = channels.Concat(new Entities.IPropertyChangeChannel[]
@@ -21,17 +21,17 @@ namespace OPMF.Actions
                         new Entities.PropertyChangeChannel(rawChannel)
                     });
                 }
-            }
+            });
 
             return channels;
         }
 
         public static void UpdateChannelSettings(IEnumerable<Entities.IChannel> channels)
         {
-            using (Database.IChannelDbAdapter<Entities.IChannel> channelDbAdapter = new Database.YoutubeChannelDbAdapter())
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
-                channelDbAdapter.UpdateBlackListStatus(channels);
-            }
+                dbAdapter.YoutubeChannelDbCollection.UpdateBlackListStatus(channels);
+            });
         }
     }
 }

@@ -11,6 +11,8 @@ namespace OPMF.Settings
     {
         private static AppConfig __config;
 
+        public static IReadonlySettings ReadonlySettings { get; set; }
+
         public static AppConfig Config
         {
             get

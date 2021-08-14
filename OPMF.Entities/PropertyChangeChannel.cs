@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace OPMF.Entities
 {
     public interface IPropertyChangeChannel : IChannel, INotifyPropertyChanged { }
 
+    /// <summary>
+    /// Need to inherit from INotifyPropertyChanged so DataGrid rows can change when states are updated
+    /// </summary>
     public class PropertyChangeChannel : Channel, IPropertyChangeChannel
     {
         private bool __blackListed;

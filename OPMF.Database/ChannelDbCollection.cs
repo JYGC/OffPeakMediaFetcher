@@ -6,7 +6,7 @@ using LiteDB;
 
 namespace OPMF.Database
 {
-    public interface IChannelDbAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IChannel
+    public interface IChannelDbCollection<TItem> : IDatabaseCollection where TItem : Entities.IChannel
     {
         IEnumerable<TItem> GetAll();
         IEnumerable<TItem> GetNotBacklisted();
@@ -17,14 +17,9 @@ namespace OPMF.Database
         void UpdateBlackListStatus(IEnumerable<TItem> items);
     }
 
-    public class ChannelDbAdapter<TItem> : DatabaseAdapter<TItem>, IChannelDbAdapter<TItem> where TItem : Entities.IChannel
+    public class ChannelDbCollection<TItem> : DatabaseCollection<TItem>, IChannelDbCollection<TItem> where TItem : Entities.IChannel
     {
-        public ChannelDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
-
-        public IEnumerable<TItem> GetAll()
-        {
-            return _Collection.FindAll();
-        }
+        public ChannelDbCollection(LiteDatabase db, string collectionName) : base(db, collectionName) { }
 
         public IEnumerable<TItem> GetNotBacklisted()
         {

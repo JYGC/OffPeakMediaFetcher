@@ -7,7 +7,7 @@ using OPMF.Entities;
 
 namespace OPMF.Database
 {
-    public interface IMetadataDbAdapter<TItem> : IDatabaseAdapter where TItem : Entities.IMetadata
+    public interface IMetadataDbCollection<TItem> : IDatabaseCollection where TItem : Entities.IMetadata
     {
         IEnumerable<TItem> GetToDownload();
         IEnumerable<TItem> GetNew();
@@ -18,9 +18,9 @@ namespace OPMF.Database
         void UpdateStatus(IEnumerable<TItem> items);
     }
 
-    public class MetadataDbAdapter<TItem> : DatabaseAdapter<TItem>, IMetadataDbAdapter<TItem> where TItem : IMetadata
+    public class MetadataDbCollection<TItem> : DatabaseCollection<TItem>, IMetadataDbCollection<TItem> where TItem : IMetadata
     {
-        public MetadataDbAdapter(string dbName, string collectionName) : base(dbName, collectionName) { }
+        public MetadataDbCollection(LiteDatabase db, string collectionName) : base(db, collectionName) { }
 
         public IEnumerable<TItem> GetToDownload()
         {

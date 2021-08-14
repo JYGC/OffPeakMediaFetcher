@@ -23,13 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Downloader", "OPMF.Dow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Downloader.YTDownloader", "OPMF.Downloader.YTDownloader\OPMF.Downloader.YTDownloader.csproj", "{DA23650E-B317-4709-9F31-D59D3F186486}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.SiteAdapter.Youtube.Tests", "OPMF.SiteAdapter.Youtube.Tests\OPMF.SiteAdapter.Youtube.Tests.csproj", "{05876989-37A7-4D53-8AC9-D9545593493B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Tests", "OPMF.Tests\OPMF.Tests.csproj", "{05876989-37A7-4D53-8AC9-D9545593493B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPMF.OSEnvironment", "OPMF.OSEnvironment\OPMF.OSEnvironment.csproj", "{DD360C1C-AE17-40A1-AB8C-9ABC0B40BA87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.OSEnvironment", "OPMF.OSEnvironment\OPMF.OSEnvironment.csproj", "{DD360C1C-AE17-40A1-AB8C-9ABC0B40BA87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPMF.OSEnvironment.Windows", "OPMF.OSEnvironment.Windows\OPMF.OSEnvironment.Windows.csproj", "{ECFCBBEA-62DF-4484-AA97-E568349DAF6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.OSEnvironment.Windows", "OPMF.OSEnvironment.Windows\OPMF.OSEnvironment.Windows.csproj", "{ECFCBBEA-62DF-4484-AA97-E568349DAF6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OPMF.OSCompat", "OPMF.OSCompat\OPMF.OSCompat.csproj", "{17E8DE5F-0F9F-492F-A80B-F75CFD2B6E9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.OSCompat", "OPMF.OSCompat\OPMF.OSCompat.csproj", "{17E8DE5F-0F9F-492F-A80B-F75CFD2B6E9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
