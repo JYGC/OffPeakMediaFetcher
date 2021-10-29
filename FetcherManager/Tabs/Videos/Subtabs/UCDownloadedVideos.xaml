@@ -12,14 +12,17 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Content="[F1 key] - Mark for download again" Grid.Column="0" />
             <Label Content="[F2 key] - Mark as downloaded" Grid.Column="1" />
+            <Label Content="[F3 key] - Mark as wait" Grid.Column="2" />
         </Grid>
         <Grid>
             <Grid.CommandBindings>
                 <CommandBinding x:Name="cb_ToDownload" Executed="__cb_ToDownload_Executed" />
                 <CommandBinding x:Name="cb_BackToDownloaded" Executed="__cb_BackToDownloaded_Executed" />
+                <CommandBinding x:Name="cb_SetToWait" Executed="__cb_SetToWait_Executed" />
             </Grid.CommandBindings>
             <Commons:UCVideoBrowser x:Name="uc_VideoBrowser" />
         </Grid>
