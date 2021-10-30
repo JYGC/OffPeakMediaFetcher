@@ -32,8 +32,11 @@ namespace OPMF.Database
                         throw e;
                     }
                 }
+            }
         }
-    }
+
+        // --- Flags ---
+        private const string CONNECTION = "shared";
 
         // --- Dynamic objects ---
         private string __dbPath;
@@ -60,7 +63,7 @@ namespace OPMF.Database
         public DatabaseAdapter(string dbPath)
         {
             __dbPath = dbPath;
-            __db = new LiteDatabase(__dbPath);
+            __db = new LiteDatabase(string.Format(@"Filename={0};connection={1}", __dbPath, CONNECTION));
 
             __youtubeMetadataDbCollection = new YoutubeMetadataDbCollection(__db);
             __youtubeChannelDbCollection = new YoutubeChannelDbCollection(__db);
