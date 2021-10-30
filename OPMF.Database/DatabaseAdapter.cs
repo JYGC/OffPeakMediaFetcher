@@ -7,34 +7,6 @@ namespace OPMF.Database
 {
     public class DatabaseAdapter : IDisposable
     {
-        // --- Static object ---
-        public static void AccessDbAdapter(Action<DatabaseAdapter> DbAction)
-        {
-            bool retryAccessingDB = true;
-            while (retryAccessingDB)
-            {
-                try
-                {
-                    using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
-                    {
-                        DbAction(databaseAdapter);
-                    }
-                    retryAccessingDB = false;
-                }
-                catch (IOException e)
-                {
-                    if (e.Message == @"The process cannot access the file 'C:\Users\Junying\AppData\Local\OffPeakMediaFetcher\Test\Databases\OPMF.db' because it is being used by another process.")
-                    {
-                        Thread.Sleep(500);
-                    }
-                    else
-                    {
-                        throw e;
-                    }
-                }
-            }
-        }
-
         // --- Flags ---
         private const string CONNECTION = "shared";
 
@@ -79,6 +51,34 @@ namespace OPMF.Database
         public void Dispose()
         {
             __db.Dispose();
+        }
+
+        // --- Static object ---
+        public static void AccessDbAdapter(Action<DatabaseAdapter> DbAction)
+        {
+            bool retryAccessingDB = true;
+            while (retryAccessingDB)
+            {
+                try
+                {
+                    using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
+                    {
+                        DbAction(databaseAdapter);
+                    }
+                    retryAccessingDB = false;
+                }
+                catch (IOException e)
+                {
+                    if (e.Message == @"The process cannot access the file 'C:\Users\Junying\AppData\Local\OffPeakMediaFetcher\Test\Databases\OPMF.db' because it is being used by another process.")
+                    {
+                        Thread.Sleep(500);
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
         }
     }
 }
