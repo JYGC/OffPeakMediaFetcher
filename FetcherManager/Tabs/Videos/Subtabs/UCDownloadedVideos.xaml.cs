@@ -13,6 +13,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         public RoutedCommand ToDownloadMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand BackToDownloadedMetadata { get; set; } = new RoutedCommand();
+        public RoutedCommand SetToWaitMetadata { get; set; } = new RoutedCommand();
 
         public UCDownloadedVideos()
         {
@@ -35,6 +36,8 @@ namespace FetcherManager.Tabs.Videos.Subtabs
             ToDownloadMetadata.InputGestures.Add(new KeyGesture(Key.F1));
             cb_BackToDownloaded.Command = BackToDownloadedMetadata;
             BackToDownloadedMetadata.InputGestures.Add(new KeyGesture(Key.F2));
+            cb_SetToWait.Command = SetToWaitMetadata;
+            SetToWaitMetadata.InputGestures.Add(new KeyGesture(Key.F3));
         }
 
         private void __cb_ToDownload_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -45,6 +48,11 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         private void __cb_BackToDownloaded_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Downloaded;
+        }
+
+        private void __cb_SetToWait_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Wait;
         }
     }
 }
