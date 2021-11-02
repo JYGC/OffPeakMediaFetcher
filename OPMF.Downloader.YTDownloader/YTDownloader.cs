@@ -23,8 +23,10 @@ namespace OPMF.Downloader.YTDownloader
         {
             private YoutubeDL __youtubeDL;
             private string __downloadError;
+            private string __title;
 
             public bool NotDownloading { get; set; } = true;
+            public int ScreenPosition { get; set; }
 
             public DownloadInstance()
             {
@@ -33,7 +35,18 @@ namespace OPMF.Downloader.YTDownloader
                 __youtubeDL.Options.VideoFormatOptions.Format = NYoutubeDL.Helpers.Enums.VideoFormat.best;
                 __youtubeDL.YoutubeDlPath = Settings.ConfigHelper.ReadonlySettings.GetYoutubeDLPath();
 
-                __youtubeDL.StandardOutputEvent += (sender, output) => Console.WriteLine(output);
+                __youtubeDL.StandardOutputEvent += (sender, output) =>
+                {
+                    if (output.StartsWith("[download]"))
+                    {
+                        WriteOnLine(ScreenPosition, string.Format("{0} Video: {1}...", output, __title.Substring(0, 40)));
+                    }
+                    else
+                    {
+                        // Error log here
+                        WriteOnLine(ScreenPosition, "An error has occured. See error log...");
+                    }
+                };
                 __youtubeDL.StandardErrorEvent += (sender, errorOutput) => __downloadError = errorOutput;
             }
 
@@ -43,18 +56,13 @@ namespace OPMF.Downloader.YTDownloader
                 __downloadError = null;
                 __youtubeDL.Options.FilesystemOptions.Output = Path.Join(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
                                                                          __ItemNameSanitizer(metadata.Title) + "." + Settings.ConfigHelper.Config.YoutubeDL.VideoExtension);
-
                 Thread thread = new Thread(() =>
                 {
-                    Console.WriteLine("Downloading: " + metadata.Title);
+                    __title = metadata.Title;
                     __youtubeDL.Download(metadata.Url);
                     if (string.IsNullOrEmpty(__downloadError))
                     {
                         metadata.Status = Entities.MetadataStatus.Downloaded;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Error: " + __downloadError);
                     }
                     NotDownloading = true;
                 });
@@ -77,7 +85,7 @@ namespace OPMF.Downloader.YTDownloader
             List<DownloadInstance> instances = new List<DownloadInstance>();
             for (int i = 0; i < numOfInstances; i++)
             {
-                instances.Add(new DownloadInstance());
+                instances.Add(new DownloadInstance() { ScreenPosition = i });
             }
 
             int currentMetadataIndex = 0;
@@ -95,12 +103,21 @@ namespace OPMF.Downloader.YTDownloader
                         }
                         else
                         {
+                            WriteOnLine(instances[i].ScreenPosition, "download instance not needed. removed...");
                             instances.Remove(instances[i]);
                         }
                     }
                 }
                 Thread.Sleep(5000);
             }
+        }
+
+        public static void WriteOnLine(int position, string message)
+        {
+            Console.SetCursorPosition(0, position);
+            Console.WriteLine(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, position);
+            Console.WriteLine(message);
         }
     }
 }
