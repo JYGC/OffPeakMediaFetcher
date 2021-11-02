@@ -55,7 +55,7 @@ namespace OPMF.Actions
             Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(dbAdapter.YoutubeMetadataDbCollection.GetToDownload());
-                downloader.Download(ref metadatas);
+                downloader.Download(metadatas);
                 dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
             });
             FolderSetup.EstablishVideoOutputFolder();
