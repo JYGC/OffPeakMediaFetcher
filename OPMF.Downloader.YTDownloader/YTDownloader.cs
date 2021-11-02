@@ -81,7 +81,7 @@ namespace OPMF.Downloader.YTDownloader
 
         public void Download(List<Entities.IMetadata> items)
         {
-            int numOfInstances = 5;
+            int numOfInstances = Settings.ConfigHelper.Config.YoutubeDL.NumberOfParallelDownloads;
             List<DownloadInstance> instances = new List<DownloadInstance>();
             for (int i = 0; i < numOfInstances; i++)
             {
