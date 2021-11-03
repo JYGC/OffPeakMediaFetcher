@@ -11,26 +11,22 @@
 
             if (args.Length == 1)
             {
-                if (args[0] == "videos")
+                switch (args[0])
                 {
-                    OPMF.Actions.SiteDownload.FetchVideos();
-                }
-                else if (args[0] == "metadata")
-                {
-                    OPMF.Actions.SiteDownload.FetchMetadata();
-                }
-                else if (args[0] == "updatechannels")
-                {
-                    //OPMF.Actions.SiteDownload.ImportChannels();
-                }
-                else
-                {
-                    System.Console.WriteLine("Invalid argument.");
+                    case "videos":
+                        OPMF.Actions.SiteDownload.FetchVideos();
+                        break;
+                    case "metadata":
+                        OPMF.Actions.SiteDownload.FetchMetadata();
+                        break;
+                    default:
+                        System.Console.WriteLine("Invalid argument.");
+                        break;
                 }
             }
             else
             {
-                System.Console.WriteLine("Argument required.");
+                System.Console.WriteLine("Single argument required.");
             }
         }
     }
