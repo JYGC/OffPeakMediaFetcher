@@ -81,9 +81,9 @@ namespace OPMF.Downloader.YTDownloader
 
         public void Download(List<Entities.IMetadata> items)
         {
-            int numOfInstances = Settings.ConfigHelper.Config.YoutubeDL.NumberOfParallelDownloads;
+            // Create download instance
             List<DownloadInstance> instances = new List<DownloadInstance>();
-            for (int i = 0; i < numOfInstances; i++)
+            for (int i = 0; i < Settings.ConfigHelper.Config.YoutubeDL.NumberOfParallelDownloads; i++)
             {
                 instances.Add(new DownloadInstance() { ScreenPosition = i });
             }
@@ -94,6 +94,7 @@ namespace OPMF.Downloader.YTDownloader
                 // Needs to decrement as we are removing elements from instances
                 for (int i = instances.Count - 1; i >= 0; i--)
                 {
+                    // Leave instances alone that are still downloading
                     if (instances[i].NotDownloading)
                     {
                         if (currentMetadataIndex < items.Count)
@@ -103,6 +104,7 @@ namespace OPMF.Downloader.YTDownloader
                         }
                         else
                         {
+                            // When there is no more videos to download, remove instances that are not downloading
                             WriteOnLine(instances[i].ScreenPosition, "download instance not needed. removed...");
                             instances.Remove(instances[i]);
                         }
