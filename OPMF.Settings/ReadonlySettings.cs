@@ -13,6 +13,7 @@ namespace OPMF.Settings
         string GetDatabasePath();
         string GetBinFolderPath();
         string GetYoutubeDLPath();
+        string GetTextLogFile();
     }
 
     public class ReadonlySettings : IReadonlySettings
@@ -57,6 +58,11 @@ namespace OPMF.Settings
         public string GetYoutubeDLPath()
         {
             return Path.Join(GetBinFolderPath(), "youtube-dl.exe");
+        }
+
+        public string GetTextLogFile()
+        {
+            return Path.Join(GetLocalAppFolderPath(), "log.txt");
         }
     }
 

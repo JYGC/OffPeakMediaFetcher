@@ -37,15 +37,7 @@ namespace OPMF.Downloader.YTDownloader
 
                 __youtubeDL.StandardOutputEvent += (sender, output) =>
                 {
-                    if (output.StartsWith("[download]"))
-                    {
-                        WriteOnLine(ScreenPosition, string.Format("{0} Video: {1}...", output, __title.Substring(0, 40)));
-                    }
-                    else
-                    {
-                        // Error log here
-                        WriteOnLine(ScreenPosition, "An error has occured. See error log...");
-                    }
+                    WriteOnLine(ScreenPosition, output.StartsWith("[download]") ? string.Format("{0} Video: {1}...", output, __title.Substring(0, 40)) : output);
                 };
                 __youtubeDL.StandardErrorEvent += (sender, errorOutput) => __downloadError = errorOutput;
             }
@@ -63,6 +55,11 @@ namespace OPMF.Downloader.YTDownloader
                     if (string.IsNullOrEmpty(__downloadError))
                     {
                         metadata.Status = Entities.MetadataStatus.Downloaded;
+                    }
+                    else
+                    {
+                        Logging.TextLog.GetCurrent().LogError(__downloadError);
+                        WriteOnLine(ScreenPosition, "An error has occured. See error log...");
                     }
                     NotDownloading = true;
                 });
