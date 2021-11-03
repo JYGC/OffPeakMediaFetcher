@@ -21,6 +21,8 @@ namespace OPMF.Downloader.YTDownloader
 
         private class DownloadInstance
         {
+            private const int TITLE_DISPLAY_LENGTH = 40;
+
             private YoutubeDL __youtubeDL;
             private string __downloadError;
             private string __title;
@@ -37,9 +39,14 @@ namespace OPMF.Downloader.YTDownloader
 
                 __youtubeDL.StandardOutputEvent += (sender, output) =>
                 {
-                    WriteOnLine(ScreenPosition, output.StartsWith("[download]") ? string.Format("{0} Video: {1}...", output, __title.Substring(0, 40)) : output);
+                    WriteOnLine(ScreenPosition, output.StartsWith("[download]") ? string.Format("{0} Video: {1}...", output, __TruncateStrIfTooLong(__title)) : output);
                 };
                 __youtubeDL.StandardErrorEvent += (sender, errorOutput) => __downloadError = errorOutput;
+            }
+
+            private string __TruncateStrIfTooLong(string str)
+            {
+                return str.Length <= TITLE_DISPLAY_LENGTH ? str : str.Substring(0, TITLE_DISPLAY_LENGTH);
             }
 
             public void Download(Entities.IMetadata metadata)

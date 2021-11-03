@@ -32,3 +32,4 @@
 /.vscode
 /OPMF.Logging/bin/Debug/netcoreapp3.1
 /OPMF.Logging/obj
+/OPMF.Logging/bin/Release/netcoreapp3.1
