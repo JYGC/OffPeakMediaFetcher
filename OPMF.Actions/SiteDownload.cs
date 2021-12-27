@@ -35,15 +35,19 @@ namespace OPMF.Actions
         {
             SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
 
-            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            List<Entities.IChannel> channels = null;
+            Console.WriteLine("getting channels");
+            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
             {
-                List<Entities.IChannel> channels = new List<Entities.IChannel>(dbAdapter.YoutubeChannelDbCollection.GetNotBacklisted());
-                List<Entities.IMetadata> metadatas = siteAdapter.FetchMetadata(ref channels);
-
-                Console.WriteLine("saving metadata to database");
-                dbAdapter.YoutubeMetadataDbCollection.InsertNew(metadatas);
+                channels = new List<Entities.IChannel>(dbConn.YoutubeChannelDbCollection.GetNotBacklisted());
+            });
+            List<Entities.IMetadata> metadatas = siteAdapter.FetchMetadata(ref channels);
+            Console.WriteLine("saving metadata to database");
+            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+            {
+                dbConn.YoutubeMetadataDbCollection.InsertNew(metadatas);
                 Console.WriteLine("updating channels");
-                dbAdapter.YoutubeChannelDbCollection.UpdateLastCheckedOutAndActivity(channels);
+                dbConn.YoutubeChannelDbCollection.UpdateLastCheckedOutAndActivity(channels);
             });
         }
 
@@ -52,11 +56,15 @@ namespace OPMF.Actions
             Downloader.IDownloader<Entities.IMetadata> downloader = new Downloader.YTDownloader.YTDownloader();
 
             Console.WriteLine("fetching videos");
-            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            List<Entities.IMetadata> metadatas = null;
+            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
             {
-                List<Entities.IMetadata> metadatas = new List<Entities.IMetadata>(dbAdapter.YoutubeMetadataDbCollection.GetToDownload());
-                downloader.Download(metadatas);
-                dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
+                metadatas = new List<Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload());
+            });
+            downloader.Download(metadatas);
+            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+            {
+                dbConn.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
             });
             FolderSetup.EstablishVideoOutputFolder();
             FileOperations.MoveAllInFolder(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),

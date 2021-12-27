@@ -5,7 +5,7 @@
         static void Main(string[] args)
         {
             OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
-            OPMF.Settings.ConfigHelper.ReadonlySettings = new OPMF.Settings.ReadonlySettings();
+            OPMF.Settings.ConfigHelper.InitReadonlySettings();
             OPMF.Actions.FolderSetup.EstablishFolders();
             OPMF.Settings.ConfigHelper.EstablishConfig();
 

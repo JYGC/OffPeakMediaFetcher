@@ -66,11 +66,19 @@ namespace OPMF.Settings
         }
     }
 
+    public class ReadOnlyDevSettings : ReadonlySettings
+    {
+        public ReadOnlyDevSettings()
+        {
+            _appFolderName = string.Join("", _appFolderName, "Dev");
+        }
+    }
+
     public class ReadOnlyTestSettings : ReadonlySettings
     {
         public ReadOnlyTestSettings()
         {
-            _appFolderName = Path.Join(_appFolderName, "Test");
+            _appFolderName = string.Join("", _appFolderName, "Test");
         }
     }
 }

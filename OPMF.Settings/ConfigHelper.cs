@@ -11,14 +11,22 @@ namespace OPMF.Settings
     {
         private static AppConfig __config;
 
-        public static IReadonlySettings ReadonlySettings { get; set; }
-
         public static AppConfig Config
         {
             get
             {
                 return __config;
             }
+        }
+
+        public static IReadonlySettings ReadonlySettings { get; set; }
+        public static void InitReadonlySettings()
+        {
+#if DEBUG
+            ReadonlySettings = new ReadOnlyDevSettings();
+#else
+            ReadonlySettings = new ReadonlySettings();
+#endif
         }
 
         /// <summary>
