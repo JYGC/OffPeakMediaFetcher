@@ -15,7 +15,7 @@ namespace FetcherManager
         public MainWindow()
         {
             OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
-            OPMF.Settings.ConfigHelper.ReadonlySettings = new OPMF.Settings.ReadonlySettings();
+            OPMF.Settings.ConfigHelper.InitReadonlySettings();
             OPMF.Settings.ConfigHelper.EstablishConfig();
 
             InitializeComponent();
