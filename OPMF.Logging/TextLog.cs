@@ -13,6 +13,10 @@ namespace OPMF.Logging
             fileStream = File.Exists(textFileLogPath) ? File.AppendText(textFileLogPath) : File.CreateText(textFileLogPath);
         }
 
+        /// <summary>
+        /// Fallback ...
+        /// </summary>
+        /// <param name="error"></param>
         public void LogError(string error)
         {
             fileStream.WriteLine($"\r\nDATETIME: {DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}");
