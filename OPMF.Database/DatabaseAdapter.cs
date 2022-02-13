@@ -1,6 +1,5 @@
 ﻿using LiteDB;
 using System;
-using System.IO;
 using System.Threading;
 
 namespace OPMF.Database
@@ -31,6 +30,14 @@ namespace OPMF.Database
                 return __youtubeChannelDbCollection;
             }
         }
+        private OPMFLogDbCollection __oPMFLogDbCollection = null;
+        public OPMFLogDbCollection OPMFLogDbCollection
+        {
+            get
+            {
+                return __oPMFLogDbCollection;
+            }
+        }
 
         public DatabaseAdapter(string dbPath)
         {
@@ -39,6 +46,7 @@ namespace OPMF.Database
 
             __youtubeMetadataDbCollection = new YoutubeMetadataDbCollection(__db);
             __youtubeChannelDbCollection = new YoutubeChannelDbCollection(__db);
+            __oPMFLogDbCollection = new OPMFLogDbCollection(__db);
         }
 
         public void MigrateData()
@@ -46,6 +54,7 @@ namespace OPMF.Database
             DatabaseAdapter newDatabaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath() + ".new");
             newDatabaseAdapter.YoutubeMetadataDbCollection.InsertBulk(__youtubeMetadataDbCollection.GetAll());
             newDatabaseAdapter.YoutubeChannelDbCollection.InsertBulk(__youtubeChannelDbCollection.GetAll());
+            newDatabaseAdapter.OPMFLogDbCollection.InsertBulk(__oPMFLogDbCollection.GetAll());
         }
 
         public void Dispose()
@@ -56,28 +65,17 @@ namespace OPMF.Database
         // --- Static object ---
         public static void AccessDbAdapter(Action<DatabaseAdapter> DbAction)
         {
-            bool retryAccessingDB = true;
-            while (retryAccessingDB)
+            try
             {
-                try
+                using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
                 {
-                    using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
-                    {
-                        DbAction(databaseAdapter);
-                    }
-                    retryAccessingDB = false;
+                    DbAction(databaseAdapter);
                 }
-                catch (IOException e)
-                {
-                    if (e.Message == @"The process cannot access the file 'C:\Users\Junying\AppData\Local\OffPeakMediaFetcher\Test\Databases\OPMF.db' because it is being used by another process.")
-                    {
-                        Thread.Sleep(500);
-                    }
-                    else
-                    {
-                        throw e;
-                    }
-                }
+            }
+            catch (Exception e)
+            {
+                TextLogging.TextLog.GetCurrent().LogError(e.ToString());
+                throw e;
             }
         }
     }

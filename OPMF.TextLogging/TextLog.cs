@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace OPMF.Logging
+namespace OPMF.TextLogging
 {
-    public sealed class TextLog
+    public class TextLog
     {
         private StreamWriter fileStream;
 

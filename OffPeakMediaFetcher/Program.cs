@@ -19,6 +19,24 @@
                     case "metadata":
                         OPMF.Actions.SiteDownload.FetchMetadata();
                         break;
+                    case "testerrorlog":
+                        System.Collections.Generic.List<System.Exception> stuff = new System.Collections.Generic.List<System.Exception>
+                        {
+                            new System.Exception("Exp 1"),
+                            new System.Exception("Exp 2"),
+                            new System.Exception("Exp 3")
+                        };
+                        OPMF.Logging.Logger.GetCurrent().LogInfoOrWarning(new OPMF.Entities.OPMFLog
+                        {
+                            Message = "Warning message",
+                            Type = OPMF.Entities.OPMFLogType.Info,
+                            Variables = new System.Collections.Generic.Dictionary<string, object>
+                            {
+                                { "metadata.Title", "The Time" },
+                                { "metadata.Url", stuff }
+                            } // continue with: LiteDB.LiteException: Invalid BSON data type 'Null' on field '_id'.
+                        });
+                        break;
                     default:
                         System.Console.WriteLine("Invalid argument.");
                         break;

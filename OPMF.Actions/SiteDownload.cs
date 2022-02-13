@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace OPMF.Actions
 {
@@ -8,27 +9,56 @@ namespace OPMF.Actions
     {
         public static void ImportChannels()
         {
-            SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
-
-            List<Entities.IChannel> channels = siteAdapter.ImportChannels();
-
-            Console.WriteLine("saving channels to database");
-            Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
-            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = null;
+            List<Entities.IChannel> channels = null;
+            try
             {
-                dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
-            });
+                siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
+                channels = siteAdapter.ImportChannels();
+
+                Console.WriteLine("saving channels to database");
+                Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
+                Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+                {
+                        dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
+                });
+            }
+            catch (Exception e)
+            {
+                Logging.Logger.GetCurrent().LogError(new Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "channels", string.Join("\n", channels) }
+                    }
+                });
+            }
         }
 
         public static void ImportChannels(string filePath)
         {
-            string opml = File.ReadAllText(filePath);
-            SiteAdapter.Youtube.RssChannelImporter youtubeChannelImporter = new SiteAdapter.Youtube.RssChannelImporter(opml);
-            IEnumerable<Entities.IChannel> channels = youtubeChannelImporter.ImportChannels();
-            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            string opml = null;
+            IEnumerable<Entities.IChannel> channels = null;
+            try
             {
-                dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
-            });
+                opml = File.ReadAllText(filePath);
+                SiteAdapter.Youtube.RssChannelImporter youtubeChannelImporter = new SiteAdapter.Youtube.RssChannelImporter(opml);
+                channels = youtubeChannelImporter.ImportChannels();
+                Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+                {
+                    dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
+                });
+            }
+            catch (Exception e)
+            {
+                Logging.Logger.GetCurrent().LogError(new Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "opml", string.Join("\n", opml) }
+                    }
+                });
+            }
         }
 
         public static void FetchMetadata()
