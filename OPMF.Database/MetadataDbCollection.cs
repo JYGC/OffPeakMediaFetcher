@@ -70,7 +70,7 @@ namespace OPMF.Database
 
                 _Db.Commit();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _Db.Rollback();
                 throw e;

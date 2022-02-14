@@ -72,12 +72,26 @@ namespace OPMF.Actions
 
         public static void SaveMetadataChanges(IEnumerable<Entities.IMetadataChannel> metadataChannels)
         {
-            IEnumerable<Entities.IMetadata> metadatas = metadataChannels.Select(i => i.Metadata);
-
-            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            try
             {
-                dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
-            });
+                IEnumerable<Entities.IMetadata> metadatas = metadataChannels.Select(i => i.Metadata);
+
+                Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+                {
+                    dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
+                });
+            }
+            catch (Exception e)
+            {
+                Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "metadataChannels", metadataChannels }
+                    }
+                });
+                throw e;
+            }
         }
     }
 }

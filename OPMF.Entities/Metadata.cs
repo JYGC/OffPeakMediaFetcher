@@ -11,7 +11,7 @@ namespace OPMF.Entities
         Downloaded
     }
 
-    public interface IMetadata : IId
+    public interface IMetadata : IStringId
     {
         string SiteId { get; set; }
         string Url { get; set; }

@@ -4,29 +4,37 @@
     {
         static void Main(string[] args)
         {
-            OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
-            OPMF.Settings.ConfigHelper.InitReadonlySettings();
-            OPMF.Actions.FolderSetup.EstablishFolders();
-            OPMF.Settings.ConfigHelper.EstablishConfig();
-
-            if (args.Length == 1)
+            try
             {
-                switch (args[0])
+                OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
+                OPMF.Settings.ConfigHelper.InitReadonlySettings();
+                OPMF.Actions.FolderSetup.EstablishFolders();
+                OPMF.Settings.ConfigHelper.EstablishConfig();
+
+                if (args.Length == 1)
                 {
-                    case "videos":
-                        OPMF.Actions.SiteDownload.FetchVideos();
-                        break;
-                    case "metadata":
-                        OPMF.Actions.SiteDownload.FetchMetadata();
-                        break;
-                    default:
-                        System.Console.WriteLine("Invalid argument.");
-                        break;
+                    switch (args[0])
+                    {
+                        case "videos":
+                            OPMF.Actions.SiteDownload.FetchVideos();
+                            break;
+                        case "metadata":
+                            OPMF.Actions.SiteDownload.FetchMetadata();
+                            break;
+                        default:
+                            throw new System.Exception("Invalid argument.");
+                            // break; - code will never reach this
+                    }
+                }
+                else
+                {
+                    throw new System.Exception("Single argument required.");
                 }
             }
-            else
+            catch (System.Exception e)
             {
-                System.Console.WriteLine("Single argument required.");
+                OPMF.Logging.Logger.GetCurrent().LogEntry(new OPMF.Entities.OPMFError(e));
+                System.Console.WriteLine(e.Message);
             }
         }
     }

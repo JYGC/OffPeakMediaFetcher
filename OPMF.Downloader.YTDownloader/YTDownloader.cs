@@ -65,7 +65,16 @@ namespace OPMF.Downloader.YTDownloader
                     }
                     else
                     {
-                        Logging.TextLog.GetCurrent().LogError(__downloadError);
+                        Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFLog
+                        {
+                            Message = __downloadError,
+                            Type = Entities.OPMFLogType.Warning,
+                            Variables = new Dictionary<string, object>
+                            {
+                                { "metadata.Title", __title },
+                                { "metadata.Url", metadata.Url }
+                            }
+                        });
                         WriteOnLine(ScreenPosition, "An error has occured. See error log...");
                     }
                     NotDownloading = true;

@@ -7,7 +7,7 @@ namespace OPMF.Database
 {
     public interface IDatabaseCollection { }
 
-    public class DatabaseCollection<TItem> : IDatabaseCollection where TItem : Entities.IId
+    public class DatabaseCollection<TItem> : IDatabaseCollection where TItem : Entities.IStringId
     {
         protected string _KeyName { get; } = "_id";
 
