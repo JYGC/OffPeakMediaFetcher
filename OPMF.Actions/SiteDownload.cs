@@ -7,7 +7,7 @@ namespace OPMF.Actions
 {
     public static class SiteDownload
     {
-        public static void ImportChannels()
+        public static void ImportChannels() // Test this
         {
             SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = null;
             List<Entities.IChannel> channels = null;
@@ -25,11 +25,11 @@ namespace OPMF.Actions
             }
             catch (Exception e)
             {
-                Logging.Logger.GetCurrent().LogError(new Entities.OPMFError(e)
+                Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFError(e)
                 {
                     Variables = new Dictionary<string, object>
                     {
-                        { "channels", string.Join("\n", channels) }
+                        { "channels", channels }
                     }
                 });
             }
@@ -51,11 +51,12 @@ namespace OPMF.Actions
             }
             catch (Exception e)
             {
-                Logging.Logger.GetCurrent().LogError(new Entities.OPMFError(e)
+                Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFError(e)
                 {
                     Variables = new Dictionary<string, object>
                     {
-                        { "opml", string.Join("\n", opml) }
+                        { "opml", opml },
+                        { "channels", channels }
                     }
                 });
             }
@@ -63,47 +64,77 @@ namespace OPMF.Actions
 
         public static void FetchMetadata()
         {
-            SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
-
             List<Entities.IChannel> channels = null;
-            Console.WriteLine("getting channels");
-            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+            List<Entities.IMetadata> metadatas = null;
+            try
             {
-                channels = new List<Entities.IChannel>(dbConn.YoutubeChannelDbCollection.GetNotBacklisted());
-            });
-            List<Entities.IMetadata> metadatas = siteAdapter.FetchMetadata(ref channels);
-            Console.WriteLine("saving metadata to database");
-            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
+
+                Console.WriteLine("getting channels");
+                Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                {
+                    channels = new List<Entities.IChannel>(dbConn.YoutubeChannelDbCollection.GetNotBacklisted());
+                });
+                metadatas = siteAdapter.FetchMetadata(ref channels);
+                Console.WriteLine("saving metadata to database");
+                Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                {
+                    dbConn.YoutubeMetadataDbCollection.InsertNew(metadatas);
+                    Console.WriteLine("updating channels");
+                    dbConn.YoutubeChannelDbCollection.UpdateLastCheckedOutAndActivity(channels);
+                });
+            }
+            catch (Exception e)
             {
-                dbConn.YoutubeMetadataDbCollection.InsertNew(metadatas);
-                Console.WriteLine("updating channels");
-                dbConn.YoutubeChannelDbCollection.UpdateLastCheckedOutAndActivity(channels);
-            });
+                Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "channels", channels },
+                        { "metadatas", metadatas }
+                    }
+                });
+                throw e;
+            }
         }
 
         public static void FetchVideos()
         {
-            Downloader.IDownloader<Entities.IMetadata> downloader = new Downloader.YTDownloader.YTDownloader();
-
-            Console.WriteLine("fetching videos");
             List<Entities.IMetadata> metadatas = null;
-            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+            try
             {
-                metadatas = new List<Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload());
-            });
-            downloader.Download(metadatas);
-            Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                Downloader.IDownloader<Entities.IMetadata> downloader = new Downloader.YTDownloader.YTDownloader();
+
+                Console.WriteLine("fetching videos");
+                Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                {
+                    metadatas = new List<Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload());
+                });
+                downloader.Download(metadatas);
+                Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                {
+                    dbConn.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
+                });
+                FolderSetup.EstablishVideoOutputFolder();
+                FileOperations.MoveAllInFolder(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
+                                               Settings.ConfigHelper.Config.VideoOutputFolderPath,
+                                               new string[]
+                                               {
+                                                   Settings.ConfigHelper.Config.YoutubeDL.VideoExtension
+                                                   , Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
+                                               });
+            }
+            catch (Exception e)
             {
-                dbConn.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
-            });
-            FolderSetup.EstablishVideoOutputFolder();
-            FileOperations.MoveAllInFolder(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
-                                           Settings.ConfigHelper.Config.VideoOutputFolderPath,
-                                           new string[]
-                                           { 
-                                               Settings.ConfigHelper.Config.YoutubeDL.VideoExtension
-                                               , Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
-                                           });
+                Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "metadatas", metadatas }
+                    }
+                });
+                throw e;
+            }
         }
     }
 }

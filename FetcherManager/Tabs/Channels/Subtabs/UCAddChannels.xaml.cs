@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -16,14 +17,22 @@ namespace FetcherManager.Tabs.Channels.Subtabs
 
         private void __btn_ImportYoutubeXml_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                LoadingDialog loadingDialog = new LoadingDialog("Importing channels...", () =>
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == true)
                 {
-                    OPMF.Actions.SiteDownload.ImportChannels(openFileDialog.FileName);
-                });
-                loadingDialog.Show();
+                    LoadingDialog loadingDialog = new LoadingDialog("Importing channels...", () =>
+                    {
+                        OPMF.Actions.SiteDownload.ImportChannels(openFileDialog.FileName);
+                    });
+                    loadingDialog.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                MessageBox.Show(ex.Message, "Error");
             }
         }
     }

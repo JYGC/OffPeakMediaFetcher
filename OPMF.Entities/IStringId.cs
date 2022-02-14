@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OPMF.Entities
 {
-    public interface IId
+    public interface IStringId
     {
         public string Id { get; set; }
     }

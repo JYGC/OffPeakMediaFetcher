@@ -65,7 +65,7 @@ namespace OPMF.Downloader.YTDownloader
                     }
                     else
                     {
-                        Logging.Logger.GetCurrent().LogInfoOrWarning(new Entities.OPMFLog
+                        Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFLog
                         {
                             Message = __downloadError,
                             Type = Entities.OPMFLogType.Warning,

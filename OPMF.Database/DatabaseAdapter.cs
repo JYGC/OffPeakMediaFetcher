@@ -7,7 +7,7 @@ namespace OPMF.Database
     public class DatabaseAdapter : IDisposable
     {
         // --- Flags ---
-        private const string CONNECTION = "shared";
+        private const string __CONNECTION = "shared";
 
         // --- Dynamic objects ---
         private string __dbPath;
@@ -42,7 +42,7 @@ namespace OPMF.Database
         public DatabaseAdapter(string dbPath)
         {
             __dbPath = dbPath;
-            __db = new LiteDatabase(string.Format(@"Filename={0};connection={1}", __dbPath, CONNECTION));
+            __db = new LiteDatabase(string.Format(@"Filename={0};connection={1}", __dbPath, __CONNECTION));
 
             __youtubeMetadataDbCollection = new YoutubeMetadataDbCollection(__db);
             __youtubeChannelDbCollection = new YoutubeChannelDbCollection(__db);
@@ -74,7 +74,7 @@ namespace OPMF.Database
             }
             catch (Exception e)
             {
-                TextLogging.TextLog.GetCurrent().LogError(e.ToString());
+                TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
                 throw e;
             }
         }

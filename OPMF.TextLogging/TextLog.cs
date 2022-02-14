@@ -17,7 +17,7 @@ namespace OPMF.TextLogging
         /// Fallback ...
         /// </summary>
         /// <param name="error"></param>
-        public void LogError(string error)
+        public void LogEntry(string error)
         {
             fileStream.WriteLine($"\r\nDATETIME: {DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}");
             fileStream.WriteLine("ERROR:");

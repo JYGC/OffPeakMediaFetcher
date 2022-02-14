@@ -5,15 +5,7 @@ namespace OPMF.Logging
 {
     public class Logger
     {
-        public void LogError(OPMFError oPMFError)
-        {
-            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
-            {
-                dbAdapter.OPMFLogDbCollection.InsertBulk(new List<OPMFError> { oPMFError });
-            });
-        }
-
-        public void LogInfoOrWarning(IOPMFLog oPMFLog)
+        public void LogEntry(IOPMFLog oPMFLog)
         {
             Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {

@@ -10,11 +10,11 @@ namespace OPMF.Entities
         Error
     }
 
-    public interface IOPMFLog : IId
+    public interface IOPMFLog : IStringId
     {
         string Message { get; set; }
         OPMFLogType Type { get; set; }
-        Dictionary<string, Object> Variables { get; set; }
+        Dictionary<string, object> Variables { get; set; }
         DateTime DateCreated { get; set; }
     }
 
@@ -25,6 +25,11 @@ namespace OPMF.Entities
         public OPMFLogType Type { get; set; }
         public Dictionary<string, object> Variables { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
+
+        public OPMFLog()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
     }
 
     public class OPMFError : OPMFLog
