@@ -87,7 +87,10 @@ namespace OPMF.Downloader.YTDownloader
         {
             // Create download instance
             List<DownloadInstance> instances = new List<DownloadInstance>();
-            for (int i = 0; i < Settings.ConfigHelper.Config.YoutubeDL.NumberOfParallelDownloads; i++)
+            int noOfInstances = (
+                items.Count < Settings.ConfigHelper.Config.YoutubeDL.MaxNoOfParallelDownloads
+            ) ? items.Count : Settings.ConfigHelper.Config.YoutubeDL.MaxNoOfParallelDownloads;
+            for (int i = 0; i < noOfInstances; i++)
             {
                 instances.Add(new DownloadInstance() { ScreenPosition = i });
             }
