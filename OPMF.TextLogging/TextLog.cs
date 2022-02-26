@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-namespace OPMF.Logging
+namespace OPMF.TextLogging
 {
-    public sealed class TextLog
+    public class TextLog
     {
         private StreamWriter fileStream;
 
@@ -13,7 +13,11 @@ namespace OPMF.Logging
             fileStream = File.Exists(textFileLogPath) ? File.AppendText(textFileLogPath) : File.CreateText(textFileLogPath);
         }
 
-        public void LogError(string error)
+        /// <summary>
+        /// Fallback ...
+        /// </summary>
+        /// <param name="error"></param>
+        public void LogEntry(string error)
         {
             fileStream.WriteLine($"\r\nDATETIME: {DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}");
             fileStream.WriteLine("ERROR:");

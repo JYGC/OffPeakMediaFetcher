@@ -80,6 +80,17 @@ namespace OPMF.SiteAdapter.Youtube
                                               "object json:\n" +
                                               JsonConvert.SerializeObject(activity) + "\n" +
                                               "skipping channel");
+                            Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFLog
+                            {
+                                Message = "skipping channel: " + e.Message,
+                                Variables = new Dictionary<string, object>
+                                {
+                                    { "activity object json", JsonConvert.SerializeObject(activity) },
+                                    { "exception thrown", e },
+                                    { "nextPageToken", nextPageToken }
+                                },
+                                Type = Entities.OPMFLogType.Info
+                            });
                         }
                     }
                     nextPageToken = request.PageToken = response.NextPageToken;

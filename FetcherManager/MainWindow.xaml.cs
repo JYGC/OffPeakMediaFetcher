@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows;
 
 namespace FetcherManager
 {
@@ -14,11 +9,19 @@ namespace FetcherManager
     {
         public MainWindow()
         {
-            OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
-            OPMF.Settings.ConfigHelper.InitReadonlySettings();
-            OPMF.Settings.ConfigHelper.EstablishConfig();
+            try
+            {
+                OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
+                OPMF.Settings.ConfigHelper.InitReadonlySettings();
+                OPMF.Settings.ConfigHelper.EstablishConfig();
 
-            InitializeComponent();
+                InitializeComponent();
+            }
+            catch (System.Exception e)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                MessageBox.Show(e.Message, "Error");
+            }
         }
     }
 }

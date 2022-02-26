@@ -2,7 +2,7 @@
 
 namespace OPMF.Entities
 {
-    public interface IChannel : IId
+    public interface IChannel : IStringId
     {
         string SiteId { get; set; }
         string Url { get; set; }
