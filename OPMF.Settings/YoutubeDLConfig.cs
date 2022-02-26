@@ -6,6 +6,6 @@
         public bool GetSubtitles { get; set; } = false;
         public string VideoExtension { get; set; } = "mp4";
         public string SubtitleExtension { get; set; } = "vtt";
-        public int NumberOfParallelDownloads { get; set; } = 5;
+        public int MaxNoOfParallelDownloads { get; set; } = 5;
     }
 }
