@@ -87,8 +87,7 @@ namespace FetcherManager.Commons
         {
             try
             {
-                OPMF.Entities.IMetadataChannel selectedMetadataChannel = dg_Videos.SelectedItem as OPMF.Entities.IMetadataChannel;
-                if (selectedMetadataChannel != null) // prevent crashing when selected item is deleted
+                if (dg_Videos.SelectedItem is OPMF.Entities.IMetadataChannel selectedMetadataChannel) // prevent crashing when selected item is deleted
                 {
                     lbl_Title.Content = selectedMetadataChannel.Metadata.Title;
                     lbl_Channel.Content = selectedMetadataChannel.Channel.Name;

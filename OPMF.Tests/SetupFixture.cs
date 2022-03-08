@@ -7,7 +7,6 @@ namespace OPMF.Tests
     {
         public SetupFixture()
         {
-            OSCompat.EnvironmentHelper.EstablishEnvironment();
             Settings.ConfigHelper.ReadonlySettings = new Settings.ReadOnlyTestSettings();
             Actions.FolderSetup.EstablishFolders();
             Settings.ConfigHelper.EstablishConfig();

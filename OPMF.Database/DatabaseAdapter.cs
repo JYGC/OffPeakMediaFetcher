@@ -10,11 +10,11 @@ namespace OPMF.Database
         private const string __CONNECTION = "shared";
 
         // --- Dynamic objects ---
-        private string __dbPath;
-        private LiteDatabase __db;
+        private readonly string __dbPath;
+        private readonly LiteDatabase __db;
 
         // Collections
-        private YoutubeMetadataDbCollection __youtubeMetadataDbCollection = null;
+        private readonly YoutubeMetadataDbCollection __youtubeMetadataDbCollection = null;
         public YoutubeMetadataDbCollection YoutubeMetadataDbCollection
         {
             get
@@ -22,7 +22,7 @@ namespace OPMF.Database
                 return __youtubeMetadataDbCollection;
             }
         }
-        private YoutubeChannelDbCollection __youtubeChannelDbCollection = null;
+        private readonly YoutubeChannelDbCollection __youtubeChannelDbCollection = null;
         public YoutubeChannelDbCollection YoutubeChannelDbCollection
         {
             get
@@ -30,7 +30,7 @@ namespace OPMF.Database
                 return __youtubeChannelDbCollection;
             }
         }
-        private OPMFLogDbCollection __oPMFLogDbCollection = null;
+        private readonly OPMFLogDbCollection __oPMFLogDbCollection = null;
         public OPMFLogDbCollection OPMFLogDbCollection
         {
             get
@@ -67,10 +67,8 @@ namespace OPMF.Database
         {
             try
             {
-                using (DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath()))
-                {
-                    DbAction(databaseAdapter);
-                }
+                using DatabaseAdapter databaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath());
+                DbAction(databaseAdapter);
             }
             catch (Exception e)
             {

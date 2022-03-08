@@ -6,7 +6,6 @@
         {
             try
             {
-                OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
                 OPMF.Settings.ConfigHelper.InitReadonlySettings();
                 OPMF.Actions.FolderSetup.EstablishFolders();
                 OPMF.Settings.ConfigHelper.EstablishConfig();

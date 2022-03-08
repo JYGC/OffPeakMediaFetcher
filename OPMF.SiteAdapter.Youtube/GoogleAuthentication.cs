@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 
 using Google.Apis.Auth.OAuth2;
@@ -13,7 +14,9 @@ namespace OPMF.SiteAdapter.Youtube
         {
             UserCredential credential;
 
-            using (FileStream stream = new FileStream(Path.Join(OSCompat.EnvironmentHelper.Environment.GetProgramFolderPath(), Settings.ConfigHelper.Config.GoogleClientSecretPath), FileMode.Open, FileAccess.Read))
+            Uri location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
+            FileInfo execFileInfo = new FileInfo(location.AbsolutePath);
+            using (FileStream stream = new FileStream(Path.Join(execFileInfo.Directory.FullName, Settings.ConfigHelper.Config.GoogleClientSecretPath), FileMode.Open, FileAccess.Read))
             {
                 // The file token.json stores the user's access and refresh tokens, and is created
                 // automatically when the authorization flow completes for the first time.

@@ -90,8 +90,7 @@ namespace FetcherManager.Tabs.Channels.Subtabs
         {
             try
             {
-                OPMF.Entities.IPropertyChangeChannel selectedChannel = dg_Channels.SelectedItem as OPMF.Entities.IPropertyChangeChannel;
-                if (selectedChannel != null)
+                if (dg_Channels.SelectedItem is OPMF.Entities.IPropertyChangeChannel selectedChannel) // IDE0019
                 {
                     lbl_ChannelName.Content = selectedChannel.Name;
                     hl_Url.NavigateUri = new Uri(selectedChannel.Url);

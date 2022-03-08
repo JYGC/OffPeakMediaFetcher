@@ -22,7 +22,7 @@ namespace OPMF.Settings
 
         public string GetLocalAppFolderPath()
         {
-            return Path.Join(OSCompat.EnvironmentHelper.Environment.GetUserLocalAppFolderPath(), _appFolderName);
+            return Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), _appFolderName);
         }
 
         public string GetCredentialPath()

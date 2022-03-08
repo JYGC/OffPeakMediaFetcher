@@ -11,7 +11,6 @@ namespace FetcherManager
         {
             try
             {
-                OPMF.OSCompat.EnvironmentHelper.EstablishEnvironment();
                 OPMF.Settings.ConfigHelper.InitReadonlySettings();
                 OPMF.Settings.ConfigHelper.EstablishConfig();
 

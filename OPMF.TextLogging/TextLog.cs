@@ -5,7 +5,7 @@ namespace OPMF.TextLogging
 {
     public class TextLog
     {
-        private StreamWriter fileStream;
+        private readonly StreamWriter fileStream;
 
         private TextLog()
         {
