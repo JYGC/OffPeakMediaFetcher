@@ -13,7 +13,6 @@ namespace OPMF.SiteAdapter.Youtube
     public class YoutubeAdapter : ISiteAdapter<Entities.IChannel, Entities.IMetadata>
     {
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
-        private readonly int __maxResultsPerResponse = 50;
         private readonly string __videoInfoParts = "snippet,contentDetails";
         private readonly string __channelParts = "snippet";
         private readonly string __urlSaffolding = "https://www.youtube.com/watch?v={0}";
@@ -105,36 +104,6 @@ namespace OPMF.SiteAdapter.Youtube
             }
 
             return vidoeInfos;
-        }
-
-        public List<Entities.IChannel> ImportChannels()
-        {
-            List<Entities.IChannel> channels = new List<Entities.IChannel>();
-
-            Console.WriteLine("importing channels from google");
-            SubscriptionsResource.ListRequest request = this.__youtubeService.Subscriptions.List(__channelParts);
-            request.Mine = true;
-            request.MaxResults = __maxResultsPerResponse;
-            string nextPageToken = null;
-            do
-            {
-                SubscriptionListResponse response = request.Execute();
-                IList<Subscription> subscriptions = response.Items;
-                foreach (Subscription subscription in subscriptions)
-                {
-                    Console.WriteLine("importing: " + subscription.Snippet.Title);
-                    channels.Add(new Entities.YoutubeChannel()
-                    {
-                        SiteId = subscription.Snippet.ResourceId.ChannelId
-                        , Name = subscription.Snippet.Title
-                        , Description = subscription.Snippet.Description
-                    });
-                }
-                nextPageToken = request.PageToken = response.NextPageToken;
-            }
-            while (nextPageToken != null);
-
-            return channels;
         }
     }
 }
