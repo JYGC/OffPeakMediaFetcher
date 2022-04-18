@@ -37,6 +37,11 @@ namespace OPMF.Database
             __collection = __db.GetCollection<TItem>(collectionName);
         }
 
+        public TItem FindById(string Id)
+        {
+            return _Collection.FindById(Id);
+        }
+
         public void InsertBulk(IEnumerable<TItem> items)
         {
             _Collection.InsertBulk(items);

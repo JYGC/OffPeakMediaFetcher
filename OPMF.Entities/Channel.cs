@@ -9,6 +9,7 @@ namespace OPMF.Entities
         string Name { get; set; }
         string Description { get; set; }
         bool BlackListed { get; set; }
+        bool IsAddedBySingleVideo { get; set; }
         bool NotFound { get; set; }
         DateTime? LastCheckedOut { get; set; }
         DateTime? LastActivityDate { get; set; }
@@ -32,6 +33,7 @@ namespace OPMF.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public bool BlackListed { get; set; } = false;
+        public bool IsAddedBySingleVideo { get; set; } = false;
         public bool NotFound { get; set; } = false;
         public DateTime? LastCheckedOut { get; set; }
         public DateTime? LastActivityDate { get; set; }

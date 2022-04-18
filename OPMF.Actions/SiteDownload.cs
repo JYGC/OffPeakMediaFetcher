@@ -39,7 +39,7 @@ namespace OPMF.Actions
             List<Entities.IMetadata> metadatas = null;
             try
             {
-                SiteAdapter.ISiteAdapter<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeAdapter();
+                SiteAdapter.IMetadataFetcher<Entities.IChannel, Entities.IMetadata> siteAdapter = new SiteAdapter.Youtube.YoutubeMetadataFetcher();
 
                 Console.WriteLine("getting channels");
                 Database.DatabaseAdapter.AccessDbAdapter(dbConn =>

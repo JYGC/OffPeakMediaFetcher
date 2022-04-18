@@ -10,21 +10,20 @@ using Newtonsoft.Json;
 
 namespace OPMF.SiteAdapter.Youtube
 {
-    public class YoutubeAdapter : ISiteAdapter<Entities.IChannel, Entities.IMetadata>
+    public class YoutubeMetadataFetcher : IMetadataFetcher<Entities.IChannel, Entities.IMetadata>
     {
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
         private readonly string __videoInfoParts = "snippet,contentDetails";
-        private readonly string __channelParts = "snippet";
         private readonly string __urlSaffolding = "https://www.youtube.com/watch?v={0}";
 
         private YouTubeService __youtubeService;
 
-        public YoutubeAdapter()
+        public YoutubeMetadataFetcher()
         {
             UserCredential credential = GoogleAuthentication.GetCredential(__apiScope);
             __youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApplicationName = this.GetType().ToString()
+                ApplicationName = GetType().ToString()
                 , HttpClientInitializer = credential
             });
         }
