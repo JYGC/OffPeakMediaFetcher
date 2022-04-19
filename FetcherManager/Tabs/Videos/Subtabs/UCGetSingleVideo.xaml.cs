@@ -28,7 +28,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
             __txt_EnterVideoURL_TextChanged(null, null);
             uc_VideoBrowser.GetMetadataChannels = () =>
             {
-                OPMF.SiteAdapter.ISiteVideoGetter siteVideoGetter = new OPMF.SiteAdapter.Youtube.YoutubeVideoGetter(); // Replace when adding other platforms
+                OPMF.SiteAdapter.ISiteVideoMetadataGetter siteVideoGetter = new OPMF.SiteAdapter.Youtube.YoutubeVideoMetadataGetter(); // Replace when adding other platforms
                 string siteId = siteVideoGetter.GetSiteIdFromURL(txt_EnterVideoURL.Text);
                 (OPMF.Entities.IMetadata, OPMF.Entities.IChannel) videoWithChannel = (null, null);
                 OPMF.Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>

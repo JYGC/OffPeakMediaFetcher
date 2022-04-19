@@ -9,6 +9,7 @@ namespace OPMF.SiteAdapter.Youtube
 {
     public class YoutubeChannelFinder : ISiteChannelFinder
     {
+        private const int __maxResultsPerResponse = 50;
         private const string __channelParts = "snippet";
 
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
@@ -57,6 +58,38 @@ namespace OPMF.SiteAdapter.Youtube
                 }
             }
             return newChannels;
+        }
+
+        public List<Entities.IChannel> ImportChannels() // Test this
+        {
+            List<Entities.IChannel> channels = new List<Entities.IChannel>();
+
+            Console.WriteLine("importing channels from google");
+            SubscriptionsResource.ListRequest request = this.__youtubeService.Subscriptions.List(__channelParts);
+            request.Mine = true;
+            request.MaxResults = __maxResultsPerResponse;
+            string nextPageToken = null;
+            do
+            {
+                SubscriptionListResponse response = request.Execute();
+                IList<Subscription> subscriptions = response.Items;
+                foreach (Subscription subscription in subscriptions)
+                {
+                    Console.WriteLine("importing: " + subscription.Snippet.Title);
+                    channels.Add(new Entities.YoutubeChannel()
+                    {
+                        SiteId = subscription.Snippet.ResourceId.ChannelId
+                        ,
+                        Name = subscription.Snippet.Title
+                        ,
+                        Description = subscription.Snippet.Description
+                    });
+                }
+                nextPageToken = request.PageToken = response.NextPageToken;
+            }
+            while (nextPageToken != null);
+
+            return channels;
         }
     }
 }

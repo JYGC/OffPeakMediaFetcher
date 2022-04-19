@@ -10,11 +10,16 @@
                 OPMF.Actions.FolderSetup.EstablishFolders();
                 OPMF.Settings.ConfigHelper.EstablishConfig();
 
-                if (args.Length == 1)
+                if (args.Length >= 1)
                 {
                     switch (args[0])
                     {
                         case "videos":
+                            if (args.Length == 2)
+                            {
+                                OPMF.Actions.SiteDownload.FetchVideos(args[1]);
+                                break;
+                            }
                             OPMF.Actions.SiteDownload.FetchVideos();
                             break;
                         case "metadata":
@@ -27,7 +32,7 @@
                 }
                 else
                 {
-                    throw new System.Exception("Single argument required.");
+                    throw new System.Exception("Appropriate arguments required.");
                 }
             }
             catch (System.Exception e)

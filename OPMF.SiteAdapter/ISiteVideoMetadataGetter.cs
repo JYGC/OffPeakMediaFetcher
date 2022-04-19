@@ -1,6 +1,6 @@
 ﻿namespace OPMF.SiteAdapter
 {
-    public interface ISiteVideoGetter
+    public interface ISiteVideoMetadataGetter
     {
         string GetSiteIdFromURL(string videoURL);
 

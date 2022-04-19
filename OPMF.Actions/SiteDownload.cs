@@ -6,6 +6,34 @@ namespace OPMF.Actions
 {
     public static class SiteDownload
     {
+        public static void ImportChannels() // Test this
+        {
+            SiteAdapter.ISiteChannelFinder siteAdapter = null;
+            List<Entities.IChannel> channels = null;
+            try
+            {
+                siteAdapter = new SiteAdapter.Youtube.YoutubeChannelFinder();
+                channels = siteAdapter.ImportChannels();
+
+                Console.WriteLine("saving channels to database");
+                Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
+                Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+                {
+                    dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
+                });
+            }
+            catch (Exception e)
+            {
+                Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "channels", channels }
+                    }
+                });
+            }
+        }
+
         public static void ImportChannels(string filePath)
         {
             string opml = null;
@@ -69,7 +97,17 @@ namespace OPMF.Actions
             }
         }
 
+        public static void FetchVideos(string siteId)
+        {
+            __FetchVideos(dbConn => new List<Entities.IMetadata> { dbConn.YoutubeMetadataDbCollection.FindById(siteId) });
+        }
+
         public static void FetchVideos()
+        {
+            __FetchVideos(dbConn => new List<Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload()));
+        }
+
+        public static void __FetchVideos(Func<Database.DatabaseAdapter, List<Entities.IMetadata>> GetVideoMetadata)
         {
             List<Entities.IMetadata> metadatas = null;
             try
@@ -79,7 +117,7 @@ namespace OPMF.Actions
                 Console.WriteLine("fetching videos");
                 Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
                 {
-                    metadatas = new List<Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload());
+                    metadatas = GetVideoMetadata(dbConn);
                 });
                 downloader.Download(metadatas);
                 Database.DatabaseAdapter.AccessDbAdapter(dbConn =>

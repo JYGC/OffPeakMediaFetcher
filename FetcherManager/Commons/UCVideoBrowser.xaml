@@ -59,6 +59,11 @@
                     <Separator />
                     <Label Content="Description: " FontWeight="Bold" />
                     <TextBlock x:Name="lbl_Description" TextWrapping="Wrap"/>
+                    <Separator />
+                    <Label Content="Actions: " FontWeight="Bold" />
+                    <DockPanel>
+                        <Button x:Name="btn_DownloadNow" Content="Download Now" Click="__btn_DownloadNow_Click" Visibility="Hidden" HorizontalAlignment="Left" />
+                    </DockPanel>
                 </StackPanel>
             </ScrollViewer>
         </StackPanel>

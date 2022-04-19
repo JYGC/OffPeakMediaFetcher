@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Threading;
 
 namespace FetcherManager.Commons
 {
@@ -94,6 +96,7 @@ namespace FetcherManager.Commons
                     hl_Url.NavigateUri = new Uri(selectedMetadataChannel.Metadata.Url);
                     txt_UrlTextBlock.Text = selectedMetadataChannel.Metadata.Url;
                     lbl_Description.Text = selectedMetadataChannel.Metadata.Description;
+                    btn_DownloadNow.Visibility = Visibility.Visible;
                 }
                 else
                 {
@@ -102,6 +105,7 @@ namespace FetcherManager.Commons
                     hl_Url.NavigateUri = null;
                     txt_UrlTextBlock.Text = null;
                     lbl_Description.Text = null;
+                    btn_DownloadNow.Visibility = Visibility.Hidden;
                 }
             }
             catch (Exception ex)
@@ -129,8 +133,29 @@ namespace FetcherManager.Commons
         {
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(OPMF.Settings.ConfigHelper.Config.WebBrowserPath, e.Uri.AbsoluteUri));
+                Process.Start(new ProcessStartInfo(OPMF.Settings.ConfigHelper.Config.WebBrowserPath, e.Uri.AbsoluteUri));
                 e.Handled = true;
+            }
+            catch (Exception ex)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void __btn_DownloadNow_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Thread thread = new Thread(new ThreadStart(() =>
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        _ = MessageBox.Show(i.ToString(), "Test");
+                        Thread.Sleep(1000);
+                    }
+                }));
+                thread.Start();
             }
             catch (Exception ex)
             {

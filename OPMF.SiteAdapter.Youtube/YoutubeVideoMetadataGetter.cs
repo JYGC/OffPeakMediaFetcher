@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace OPMF.SiteAdapter.Youtube
 {
-    public class YoutubeVideoGetter : ISiteVideoGetter
+    public class YoutubeVideoMetadataGetter : ISiteVideoMetadataGetter
     {
         private const string __videoInfoParts = "snippet,contentDetails";
         private const string __channelParts = "snippet";
@@ -18,7 +18,7 @@ namespace OPMF.SiteAdapter.Youtube
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
         private readonly string[] __siteIdExtractorSeperator = new string[] { "watch?v=", "&" };
 
-        public YoutubeVideoGetter()
+        public YoutubeVideoMetadataGetter()
         {
             UserCredential credential = GoogleAuthentication.GetCredential(__apiScope);
             __youtubeService = new YouTubeService(new BaseClientService.Initializer()
