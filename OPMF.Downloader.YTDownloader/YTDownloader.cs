@@ -8,6 +8,11 @@ namespace OPMF.Downloader.YTDownloader
 {
     public class YTDownloader : IDownloader<Entities.IMetadata>
     {
+        private bool __isDownloading = false;
+
+        public List<Entities.IMetadata> DownloadQueue { get; set; }
+        public List<DownloadInstance> DownloadInstances { get; set; }
+
         public YTDownloader()
         {
             // Setup YoutubeDL
@@ -19,7 +24,7 @@ namespace OPMF.Downloader.YTDownloader
             youtubeDL.StandardErrorEvent += (sender, errorOutput) => Console.WriteLine(errorOutput);
         }
 
-        private class DownloadInstance
+        public class DownloadInstance
         {
             private const int TITLE_DISPLAY_LENGTH = 40;
 
@@ -92,42 +97,58 @@ namespace OPMF.Downloader.YTDownloader
             }
         }
 
-        public void Download(List<Entities.IMetadata> items)
+        public void AddToDownloadQueue(Entities.IMetadata metadata)
         {
+            DownloadQueue.Add(metadata);
+            if (DownloadQueue.Count < Settings.ConfigHelper.Config.YoutubeDL.MaxNoOfParallelDownloads)
+            {
+                int newScreenPosition = DownloadInstances.Count;
+                DownloadInstances.Add(new DownloadInstance() { ScreenPosition = newScreenPosition });
+            }
+            if (!__isDownloading)
+            {
+                StartDownloadingQueue();
+            }
+        }
+
+        public void StartDownloadingQueue()
+        {
+            __isDownloading = true;
             // Create download instance
-            List<DownloadInstance> instances = new List<DownloadInstance>();
+            DownloadInstances = new List<DownloadInstance>();
             int noOfInstances = (
-                items.Count < Settings.ConfigHelper.Config.YoutubeDL.MaxNoOfParallelDownloads
-            ) ? items.Count : Settings.ConfigHelper.Config.YoutubeDL.MaxNoOfParallelDownloads;
+                DownloadQueue.Count < Settings.ConfigHelper.Config.YoutubeDL.MaxNoOfParallelDownloads
+            ) ? DownloadQueue.Count : Settings.ConfigHelper.Config.YoutubeDL.MaxNoOfParallelDownloads;
             for (int i = 0; i < noOfInstances; i++)
             {
-                instances.Add(new DownloadInstance() { ScreenPosition = i });
+                DownloadInstances.Add(new DownloadInstance() { ScreenPosition = i });
             }
 
             int currentMetadataIndex = 0;
-            while (currentMetadataIndex < items.Count || instances.Count > 0)
+            while (currentMetadataIndex < DownloadQueue.Count || DownloadInstances.Count > 0)
             {
                 // Needs to decrement as we are removing elements from instances
-                for (int i = instances.Count - 1; i >= 0; i--)
+                for (int i = DownloadInstances.Count - 1; i >= 0; i--)
                 {
                     // Leave instances alone that are still downloading
-                    if (instances[i].NotDownloading)
+                    if (DownloadInstances[i].NotDownloading)
                     {
-                        if (currentMetadataIndex < items.Count)
+                        if (currentMetadataIndex < DownloadQueue.Count)
                         {
-                            instances[i].Download(items[currentMetadataIndex]);
+                            DownloadInstances[i].Download(DownloadQueue[currentMetadataIndex]);
                             currentMetadataIndex++;
                         }
                         else
                         {
                             // When there is no more videos to download, remove instances that are not downloading
-                            WriteOnLine(instances[i].ScreenPosition, "download instance not needed. removed...");
-                            instances.Remove(instances[i]);
+                            WriteOnLine(DownloadInstances[i].ScreenPosition, "download instance not needed. removed...");
+                            DownloadInstances.Remove(DownloadInstances[i]);
                         }
                     }
                 }
                 Thread.Sleep(5000);
             }
+            __isDownloading = false;
         }
 
         public static void WriteOnLine(int position, string message)

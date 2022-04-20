@@ -15,6 +15,9 @@ namespace FetcherManager.Commons
     /// </summary>
     public partial class UCVideoBrowser : UserControl
     {
+        private const string __offPeakMediaFetcherEXE = @"OffPeakMediaFetcher.exe";
+        private const string __offPeakMediaFetcherArgsScaffold = "videos {0}";
+
         private ObservableCollection<OPMF.Entities.IMetadataChannel> __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>();
 
         public Func<IEnumerable<OPMF.Entities.IMetadataChannel>> GetMetadataChannels { get; set; }
@@ -96,7 +99,8 @@ namespace FetcherManager.Commons
                     hl_Url.NavigateUri = new Uri(selectedMetadataChannel.Metadata.Url);
                     txt_UrlTextBlock.Text = selectedMetadataChannel.Metadata.Url;
                     lbl_Description.Text = selectedMetadataChannel.Metadata.Description;
-                    btn_DownloadNow.Visibility = Visibility.Visible;
+                    btn_DownloadNow.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Collapsed : Visibility.Visible;
+                    btn_RemoveIsBeingDownloaded.Visibility = lbl_IsBeingDownloaded.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Visible : Visibility.Hidden;
                 }
                 else
                 {
@@ -106,6 +110,7 @@ namespace FetcherManager.Commons
                     txt_UrlTextBlock.Text = null;
                     lbl_Description.Text = null;
                     btn_DownloadNow.Visibility = Visibility.Hidden;
+                    btn_RemoveIsBeingDownloaded.Visibility = lbl_IsBeingDownloaded.Visibility = Visibility.Hidden;
                 }
             }
             catch (Exception ex)
@@ -147,15 +152,32 @@ namespace FetcherManager.Commons
         {
             try
             {
-                Thread thread = new Thread(new ThreadStart(() =>
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        _ = MessageBox.Show(i.ToString(), "Test");
-                        Thread.Sleep(1000);
-                    }
-                }));
-                thread.Start();
+                SelectedMetadata.Metadata.IsBeingDownloaded = true;
+                SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.ToDownload;
+                __dg_Videos_SelectedCellsChanged(null, null);
+                OPMF.Actions.MetadataManagement.SaveMetadataChanges(new List<OPMF.Entities.IMetadataChannel> { SelectedMetadata });
+
+                Process process = new Process();
+                process.StartInfo.FileName = __offPeakMediaFetcherEXE;
+                process.StartInfo.Arguments = string.Format(__offPeakMediaFetcherArgsScaffold, SelectedMetadata.Metadata.SiteId);
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void __btn_RemoveIsBeingDownloaded_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SelectedMetadata.Metadata.IsBeingDownloaded = false;
+                __dg_Videos_SelectedCellsChanged(null, null);
+                OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbconn => dbconn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(
+                    new List<OPMF.Entities.IMetadata> { SelectedMetadata.Metadata }
+                ));
             }
             catch (Exception ex)
             {

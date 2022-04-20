@@ -109,7 +109,7 @@ namespace OPMF.Actions
 
         public static void __FetchVideos(Func<Database.DatabaseAdapter, List<Entities.IMetadata>> GetVideoMetadata)
         {
-            List<Entities.IMetadata> metadatas = null;
+            List<Entities.IMetadata> metadatasForErrorLogging = null;
             try
             {
                 Downloader.IDownloader<Entities.IMetadata> downloader = new Downloader.YTDownloader.YTDownloader();
@@ -117,20 +117,23 @@ namespace OPMF.Actions
                 Console.WriteLine("fetching videos");
                 Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
                 {
-                    metadatas = GetVideoMetadata(dbConn);
+                    downloader.DownloadQueue = GetVideoMetadata(dbConn);
+                    dbConn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(downloader.DownloadQueue, true);
                 });
-                downloader.Download(metadatas);
+                metadatasForErrorLogging = downloader.DownloadQueue; // Pass to log if error
+                downloader.StartDownloadingQueue();
                 Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
                 {
-                    dbConn.YoutubeMetadataDbCollection.UpdateStatus(metadatas);
+                    dbConn.YoutubeMetadataDbCollection.UpdateStatus(downloader.DownloadQueue);
+                    dbConn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(downloader.DownloadQueue, false);
                 });
                 FolderSetup.EstablishVideoOutputFolder();
                 FileOperations.MoveAllInFolder(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
                                                Settings.ConfigHelper.Config.VideoOutputFolderPath,
                                                new string[]
                                                {
-                                                   Settings.ConfigHelper.Config.YoutubeDL.VideoExtension
-                                                   , Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
+                                                   Settings.ConfigHelper.Config.YoutubeDL.VideoExtension,
+                                                   Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
                                                });
             }
             catch (Exception e)
@@ -139,7 +142,7 @@ namespace OPMF.Actions
                 {
                     Variables = new Dictionary<string, object>
                     {
-                        { "metadatas", metadatas }
+                        { "metadatas", metadatasForErrorLogging }
                     }
                 });
                 throw e;

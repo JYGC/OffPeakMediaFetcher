@@ -15,7 +15,7 @@ namespace OPMF.Database
 
         private ILiteCollection<TItem> __collection;
 
-        protected LiteDatabase _Db
+        protected LiteDatabase _DB
         {
             get
             {
