@@ -53,11 +53,11 @@ namespace OPMF.Database
                 IEnumerable<TItem> toInsert = items.Where(i => !dbToUpdate.Any(j => j.Id == i.Id));
                 _Collection.InsertBulk(toInsert);
 
-                _Db.Commit();
+                _DB.Commit();
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
                 throw e;
             }
         }
@@ -72,11 +72,11 @@ namespace OPMF.Database
                     dbItem.LastActivityDate = item.LastActivityDate;
                 });
 
-                _Db.Commit();
+                _DB.Commit();
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
                 throw e;
             }
         }
@@ -89,7 +89,7 @@ namespace OPMF.Database
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
                 throw e;
             }
         }

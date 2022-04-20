@@ -34,6 +34,7 @@ namespace OPMF.Entities
             Title = metadata.Title;
             Description = metadata.Description;
             Status = metadata.Status;
+            IsBeingDownloaded = metadata.IsBeingDownloaded;
             PublishedAt = metadata.PublishedAt;
             ChannelSiteId = metadata.ChannelSiteId;
         }

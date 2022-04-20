@@ -63,6 +63,10 @@
                     <Label Content="Actions: " FontWeight="Bold" />
                     <DockPanel>
                         <Button x:Name="btn_DownloadNow" Content="Download Now" Click="__btn_DownloadNow_Click" Visibility="Hidden" HorizontalAlignment="Left" />
+                        <Label x:Name="lbl_IsBeingDownloaded" Content="Video is being downloaded..." Visibility="Hidden" />
+                    </DockPanel>
+                    <DockPanel>
+                        <Button x:Name="btn_RemoveIsBeingDownloaded" Content='Remove "being downloaded" block' Click="__btn_RemoveIsBeingDownloaded_Click" Visibility="Hidden" HorizontalAlignment="Left" />
                     </DockPanel>
                 </StackPanel>
             </ScrollViewer>
