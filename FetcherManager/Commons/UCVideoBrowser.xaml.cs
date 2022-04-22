@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
+using System.Linq;
 
 namespace FetcherManager.Commons
 {
@@ -75,7 +76,9 @@ namespace FetcherManager.Commons
                         (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>) metadatas = SplitFromStatus(__metadataChannels);
                         IEnumerable<OPMF.Entities.IMetadataChannel> notNewMetadataChannels = metadatas.Item2;
                         __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(metadatas.Item1);
-                        SaveMetadataChanges(notNewMetadataChannels);
+                        SaveMetadataChanges(notNewMetadataChannels.Where(
+                            metadataChannel => !metadataChannel.Metadata.IsBeingDownloaded // prevent override of metadata status when it has been downloaded
+                        ));
                         dg_Videos.ItemsSource = __metadataChannels; // reload dg_VideoInfo
                     });
                     loadingDialog.Show();
