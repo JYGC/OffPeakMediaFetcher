@@ -15,15 +15,17 @@
                     switch (args[0])
                     {
                         case "videos":
+                            VideoFetcher videoFetcher = new VideoFetcher();
                             if (args.Length == 2)
                             {
-                                OPMF.Actions.SiteDownload.FetchVideos(args[1]);
+                                videoFetcher.Run(args[1]);
                                 break;
                             }
-                            OPMF.Actions.SiteDownload.FetchVideos();
+                            videoFetcher.Run();
                             break;
                         case "metadata":
-                            OPMF.Actions.SiteDownload.FetchMetadata();
+                            MetadataFetcher metadataFetcher = new MetadataFetcher();
+                            metadataFetcher.Run();
                             break;
                         default:
                             throw new System.Exception("Invalid argument.");

@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace OffPeakMediaFetcher
+{
+    internal class VideoFetcher
+    {
+        public void Run(string siteId)
+        {
+            __Run(dbConn => new List<OPMF.Entities.IMetadata> { dbConn.YoutubeMetadataDbCollection.FindById(siteId) });
+        }
+
+        public void Run()
+        {
+            __Run(dbConn => new List<OPMF.Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload()));
+        }
+
+        public void __Run(Func<OPMF.Database.DatabaseAdapter, List<OPMF.Entities.IMetadata>> GetVideoMetadata)
+        {
+            List<OPMF.Entities.IMetadata> metadatasForErrorLogging = null;
+            try
+            {
+                OPMF.Downloader.IDownloader<OPMF.Entities.IMetadata> downloader = new OPMF.Downloader.YTDownloader.YTDownloader();
+
+                Console.WriteLine("fetching videos");
+                OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                {
+                    downloader.DownloadQueue = GetVideoMetadata(dbConn);
+                    dbConn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(downloader.DownloadQueue, true);
+                });
+                metadatasForErrorLogging = downloader.DownloadQueue; // Pass to log if error
+                downloader.StartDownloadingQueue();
+                OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
+                {
+                    dbConn.YoutubeMetadataDbCollection.UpdateStatus(downloader.DownloadQueue);
+                    dbConn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(downloader.DownloadQueue, false);
+                });
+                OPMF.Actions.FolderSetup.EstablishVideoOutputFolder();
+                OPMF.Actions.FileOperations.MoveAllInFolder(OPMF.Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
+                                               OPMF.Settings.ConfigHelper.Config.VideoOutputFolderPath,
+                                               new string[]
+                                               {
+                                                   OPMF.Settings.ConfigHelper.Config.YoutubeDL.VideoExtension,
+                                                   OPMF.Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
+                                               });
+            }
+            catch (Exception e)
+            {
+                OPMF.Logging.Logger.GetCurrent().LogEntry(new OPMF.Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "metadatas", metadatasForErrorLogging }
+                    }
+                });
+                throw e;
+            }
+        }
+    }
+}

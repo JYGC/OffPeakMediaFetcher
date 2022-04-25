@@ -20,7 +20,7 @@
                 <StackPanel>
                     <DataGrid x:Name="dg_Videos" CanUserAddRows="False" SelectedCellsChanged="__dg_Videos_SelectedCellsChanged">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Metadata.Status}" Width="100" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Status" Binding="{Binding Metadata.DisplayedStatus}" Width="100" IsReadOnly="True" />
                             <DataGridTextColumn Header="Author" Binding="{Binding Channel.Name}" Width="100" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
