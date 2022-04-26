@@ -98,8 +98,8 @@ namespace FetcherManager.Tabs.Channels.Subtabs
                     txt_UrlTextBlock.Text = selectedChannel.Url;
                     img_Thumbnail.Source = (selectedChannel.Thumbnail.Url != null) ? new BitmapImage(new Uri(selectedChannel.Thumbnail.Url, UriKind.Absolute))
                                                                                                     : null;
-                    img_Thumbnail.Width = selectedChannel.Thumbnail.Width.Value;
-                    img_Thumbnail.Height = selectedChannel.Thumbnail.Height.Value;
+                    img_Thumbnail.Width = selectedChannel.Thumbnail.Width;
+                    img_Thumbnail.Height = selectedChannel.Thumbnail.Height;
                     lbl_LastCheckedOut.Content = selectedChannel.LastCheckedOut;
                     lbl_LastActivityDate.Content = selectedChannel.LastActivityDate;
                     lbl_Status.Content = selectedChannel.NotFound ? "Channel Not Found" : "Channel Exists";

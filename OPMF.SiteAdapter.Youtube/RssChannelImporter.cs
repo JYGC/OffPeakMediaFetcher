@@ -89,8 +89,8 @@ namespace OPMF.SiteAdapter.Youtube
                     channel.Name = channelList[0].Snippet.Title;
                     channel.Description = channelList[0].Snippet.Description;
                     channel.Thumbnail.Url = channelList[0].Snippet.Thumbnails.Default__.Url;
-                    channel.Thumbnail.Width = channelList[0].Snippet.Thumbnails.Default__.Width;
-                    channel.Thumbnail.Height = channelList[0].Snippet.Thumbnails.Default__.Height;
+                    channel.Thumbnail.Width = channelList[0].Snippet.Thumbnails.Default__.Width.Value;
+                    channel.Thumbnail.Height = channelList[0].Snippet.Thumbnails.Default__.Height.Value;
                 }
                 channels = channels.Concat(new Entities.IChannel[] { channel });
             }

@@ -56,8 +56,8 @@ namespace OPMF.SiteAdapter.Youtube
                         Thumbnail = new Entities.EntityThumbnail
                         {
                             Url = channel.Snippet.Thumbnails.Default__.Url,
-                            Width = channel.Snippet.Thumbnails.Default__.Width,
-                            Height = channel.Snippet.Thumbnails.Default__.Height,
+                            Width = channel.Snippet.Thumbnails.Default__.Width.Value,
+                            Height = channel.Snippet.Thumbnails.Default__.Height.Value,
                         },
                         Description = channel.Snippet.Description,
                     });
@@ -89,8 +89,8 @@ namespace OPMF.SiteAdapter.Youtube
                         Thumbnail = new Entities.EntityThumbnail
                         {
                             Url = subscription.Snippet.Thumbnails.Default__.Url,
-                            Width = subscription.Snippet.Thumbnails.Default__.Width,
-                            Height = subscription.Snippet.Thumbnails.Default__.Height,
+                            Width = subscription.Snippet.Thumbnails.Default__.Width.Value,
+                            Height = subscription.Snippet.Thumbnails.Default__.Height.Value,
                         },
                         Description = subscription.Snippet.Description
                     });

@@ -66,8 +66,8 @@ namespace OPMF.SiteAdapter.Youtube
                                     Thumbnail = new Entities.EntityThumbnail
                                     {
                                         Url = activity.Snippet.Thumbnails.Default__.Url,
-                                        Width = activity.Snippet.Thumbnails.Default__.Width,
-                                        Height = activity.Snippet.Thumbnails.Default__.Height,
+                                        Width = activity.Snippet.Thumbnails.Default__.Width.Value,
+                                        Height = activity.Snippet.Thumbnails.Default__.Height.Value,
                                     },
                                     Description = activity.Snippet.Description,
                                     ChannelSiteId = activity.Snippet.ChannelId,

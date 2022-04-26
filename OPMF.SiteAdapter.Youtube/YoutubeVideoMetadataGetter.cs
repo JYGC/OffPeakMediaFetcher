@@ -59,8 +59,8 @@ namespace OPMF.SiteAdapter.Youtube
                 Thumbnail = new Entities.EntityThumbnail
                 {
                     Url = videoResponse.Items[0].Snippet.Thumbnails.Default__.Url,
-                    Width = videoResponse.Items[0].Snippet.Thumbnails.Default__.Width,
-                    Height = videoResponse.Items[0].Snippet.Thumbnails.Default__.Height,
+                    Width = videoResponse.Items[0].Snippet.Thumbnails.Default__.Width.Value,
+                    Height = videoResponse.Items[0].Snippet.Thumbnails.Default__.Height.Value,
                 },
                 Description = videoResponse.Items[0].Snippet.Description,
                 ChannelSiteId = videoResponse.Items[0].Snippet.ChannelId,
@@ -79,8 +79,8 @@ namespace OPMF.SiteAdapter.Youtube
                 Thumbnail = new Entities.EntityThumbnail
                 {
                     Url = channelResponse.Items[0].Snippet.Thumbnails.Default__.Url,
-                    Width = channelResponse.Items[0].Snippet.Thumbnails.Default__.Width,
-                    Height = channelResponse.Items[0].Snippet.Thumbnails.Default__.Height,
+                    Width = channelResponse.Items[0].Snippet.Thumbnails.Default__.Width.Value,
+                    Height = channelResponse.Items[0].Snippet.Thumbnails.Default__.Height.Value,
                 },
                 Description = channelResponse.Items[0].Snippet.Description,
                 BlackListed = true,

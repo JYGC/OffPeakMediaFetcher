@@ -103,8 +103,8 @@ namespace FetcherManager.Commons
                     txt_UrlTextBlock.Text = selectedMetadataChannel.Metadata.Url;
                     img_Thumbnail.Source = (selectedMetadataChannel.Metadata.Thumbnail.Url != null) ? new BitmapImage(new Uri(selectedMetadataChannel.Metadata.Thumbnail.Url, UriKind.Absolute))
                                                                                                     : null;
-                    img_Thumbnail.Width = selectedMetadataChannel.Metadata.Thumbnail.Width.Value;
-                    img_Thumbnail.Height = selectedMetadataChannel.Metadata.Thumbnail.Height.Value;
+                    img_Thumbnail.Width = selectedMetadataChannel.Metadata.Thumbnail.Width;
+                    img_Thumbnail.Height = selectedMetadataChannel.Metadata.Thumbnail.Height;
                     lbl_Description.Text = selectedMetadataChannel.Metadata.Description;
                     btn_DownloadNow.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Collapsed : Visibility.Visible;
                     btn_RemoveIsBeingDownloaded.Visibility = lbl_IsBeingDownloaded.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Visible : Visibility.Hidden;
