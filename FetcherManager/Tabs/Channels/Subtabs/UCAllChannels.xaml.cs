@@ -96,8 +96,7 @@ namespace FetcherManager.Tabs.Channels.Subtabs
                     lbl_ChannelName.Content = selectedChannel.Name;
                     hl_Url.NavigateUri = new Uri(selectedChannel.Url);
                     txt_UrlTextBlock.Text = selectedChannel.Url;
-                    img_Thumbnail.Source = (selectedChannel.Thumbnail.Url != null) ? new BitmapImage(new Uri(selectedChannel.Thumbnail.Url, UriKind.Absolute))
-                                                                                                    : null;
+                    img_Thumbnail.Source = (selectedChannel.Thumbnail.Url != null) ? new BitmapImage(new Uri(selectedChannel.Thumbnail.Url, UriKind.Absolute)) : null;
                     img_Thumbnail.Width = selectedChannel.Thumbnail.Width;
                     img_Thumbnail.Height = selectedChannel.Thumbnail.Height;
                     lbl_LastCheckedOut.Content = selectedChannel.LastCheckedOut;
