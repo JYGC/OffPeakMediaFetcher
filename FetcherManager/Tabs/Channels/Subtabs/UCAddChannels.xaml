@@ -17,6 +17,7 @@
                 <RadioButton x:Name="rb_SelectName" GroupName="IdentifierSelect" Checked="__rb_SelectName_Checked">Name</RadioButton>
                 <RadioButton x:Name="rb_SelectId" GroupName="IdentifierSelect" Checked="__rb_SelectId_Checked">Id</RadioButton>
                 <Button x:Name="btn_SearchChannel" Content="Search for Youtube Channel" Click="__btn_SearchChannel_Click" HorizontalAlignment="Left" />
+                <Label Content="(NOT WORKING)" />
             </DockPanel>
             <Label x:Name="lbl_Res" Content="Test" HorizontalAlignment="Left" />
         </StackPanel>
