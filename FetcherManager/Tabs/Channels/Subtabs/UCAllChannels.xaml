@@ -58,15 +58,15 @@
                     <Label  Content="Channel Name: " FontWeight="Bold" />
                     <Label x:Name="lbl_ChannelName" />
                     <Separator />
+                    <Label Content="Thumbnail: " FontWeight="Bold" />
+                    <Image x:Name="img_Thumbnail" />
+                    <Separator />
                     <Label Content="Url: " FontWeight="Bold" />
                     <TextBlock>
                         <Hyperlink x:Name="hl_Url" RequestNavigate="__hl_Url_RequestNavigate">
                             <TextBlock x:Name="txt_UrlTextBlock" />
                         </Hyperlink>
                     </TextBlock>
-                    <Separator />
-                    <Label Content="Thumbnail: " FontWeight="Bold" />
-                    <Image x:Name="img_Thumbnail" />
                     <Separator />
                     <Label Content="Last checked out on: " FontWeight="Bold" />
                     <Label x:Name="lbl_LastCheckedOut" />
