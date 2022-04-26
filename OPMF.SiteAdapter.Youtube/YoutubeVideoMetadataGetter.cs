@@ -56,6 +56,12 @@ namespace OPMF.SiteAdapter.Youtube
                 SiteId = siteId,
                 Url = string.Format(__urlSaffolding, siteId),
                 Title = videoResponse.Items[0].Snippet.Title,
+                Thumbnail = new Entities.EntityThumbnail
+                {
+                    Url = videoResponse.Items[0].Snippet.Thumbnails.Default__.Url,
+                    Width = videoResponse.Items[0].Snippet.Thumbnails.Default__.Width.Value,
+                    Height = videoResponse.Items[0].Snippet.Thumbnails.Default__.Height.Value,
+                },
                 Description = videoResponse.Items[0].Snippet.Description,
                 ChannelSiteId = videoResponse.Items[0].Snippet.ChannelId,
                 PublishedAt = Convert.ToDateTime(videoResponse.Items[0].Snippet.PublishedAt)
@@ -70,6 +76,12 @@ namespace OPMF.SiteAdapter.Youtube
                 SiteId = videoMetaData.ChannelSiteId,
                 Url = string.Format(__channelUrlScaffolding, videoMetaData.ChannelSiteId),
                 Name = channelResponse.Items[0].Snippet.Title,
+                Thumbnail = new Entities.EntityThumbnail
+                {
+                    Url = channelResponse.Items[0].Snippet.Thumbnails.Default__.Url,
+                    Width = channelResponse.Items[0].Snippet.Thumbnails.Default__.Width.Value,
+                    Height = channelResponse.Items[0].Snippet.Thumbnails.Default__.Height.Value,
+                },
                 Description = channelResponse.Items[0].Snippet.Description,
                 BlackListed = true,
                 IsAddedBySingleVideo = true,

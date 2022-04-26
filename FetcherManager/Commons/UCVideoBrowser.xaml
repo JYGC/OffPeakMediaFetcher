@@ -47,6 +47,9 @@
                     <Label  Content="Title: " FontWeight="Bold" />
                     <Label x:Name="lbl_Title" />
                     <Separator />
+                    <Label Content="Thumbnail: " FontWeight="Bold" />
+                    <Image x:Name="img_Thumbnail" />
+                    <Separator />
                     <Label Content="Channel: " FontWeight="Bold" />
                     <Label x:Name="lbl_Channel" />
                     <Separator />

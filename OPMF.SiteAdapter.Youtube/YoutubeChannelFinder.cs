@@ -53,6 +53,12 @@ namespace OPMF.SiteAdapter.Youtube
                         SiteId = channel.Id,
                         Url = channel.Snippet.CustomUrl,
                         Name = channel.Snippet.Title,
+                        Thumbnail = new Entities.EntityThumbnail
+                        {
+                            Url = channel.Snippet.Thumbnails.Default__.Url,
+                            Width = channel.Snippet.Thumbnails.Default__.Width.Value,
+                            Height = channel.Snippet.Thumbnails.Default__.Height.Value,
+                        },
                         Description = channel.Snippet.Description,
                     });
                 }
@@ -78,10 +84,14 @@ namespace OPMF.SiteAdapter.Youtube
                     Console.WriteLine("importing: " + subscription.Snippet.Title);
                     channels.Add(new Entities.YoutubeChannel()
                     {
-                        SiteId = subscription.Snippet.ResourceId.ChannelId
-                        ,
-                        Name = subscription.Snippet.Title
-                        ,
+                        SiteId = subscription.Snippet.ResourceId.ChannelId,
+                        Name = subscription.Snippet.Title,
+                        Thumbnail = new Entities.EntityThumbnail
+                        {
+                            Url = subscription.Snippet.Thumbnails.Default__.Url,
+                            Width = subscription.Snippet.Thumbnails.Default__.Width.Value,
+                            Height = subscription.Snippet.Thumbnails.Default__.Height.Value,
+                        },
                         Description = subscription.Snippet.Description
                     });
                 }

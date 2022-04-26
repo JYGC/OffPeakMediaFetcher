@@ -60,12 +60,18 @@ namespace OPMF.SiteAdapter.Youtube
                                 Console.WriteLine("fetched: " + activity.Snippet.Title);
                                 vidoeInfos.Add(new Entities.YoutubeMetadata()
                                 {
-                                    SiteId = activity.ContentDetails.Upload.VideoId
-                                    , Url = string.Format(__urlSaffolding, activity.ContentDetails.Upload.VideoId)
-                                    , Title = activity.Snippet.Title
-                                    , Description = activity.Snippet.Description
-                                    , ChannelSiteId = activity.Snippet.ChannelId
-                                    , PublishedAt = publishedAt
+                                    SiteId = activity.ContentDetails.Upload.VideoId,
+                                    Url = string.Format(__urlSaffolding, activity.ContentDetails.Upload.VideoId),
+                                    Title = activity.Snippet.Title,
+                                    Thumbnail = new Entities.EntityThumbnail
+                                    {
+                                        Url = activity.Snippet.Thumbnails.Default__.Url,
+                                        Width = activity.Snippet.Thumbnails.Default__.Width.Value,
+                                        Height = activity.Snippet.Thumbnails.Default__.Height.Value,
+                                    },
+                                    Description = activity.Snippet.Description,
+                                    ChannelSiteId = activity.Snippet.ChannelId,
+                                    PublishedAt = publishedAt
                                 });
 
                                 lastActivityDate = (!lastActivityDate.HasValue || lastActivityDate.Value.CompareTo(publishedAt) == -1) ? publishedAt : lastActivityDate;
