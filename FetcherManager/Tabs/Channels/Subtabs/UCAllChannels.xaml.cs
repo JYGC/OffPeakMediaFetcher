@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows;
 using System;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace FetcherManager.Tabs.Channels.Subtabs
 {
@@ -95,6 +96,10 @@ namespace FetcherManager.Tabs.Channels.Subtabs
                     lbl_ChannelName.Content = selectedChannel.Name;
                     hl_Url.NavigateUri = new Uri(selectedChannel.Url);
                     txt_UrlTextBlock.Text = selectedChannel.Url;
+                    img_Thumbnail.Source = (selectedChannel.Thumbnail.Url != null) ? new BitmapImage(new Uri(selectedChannel.Thumbnail.Url, UriKind.Absolute))
+                                                                                                    : null;
+                    img_Thumbnail.Width = selectedChannel.Thumbnail.Width.Value;
+                    img_Thumbnail.Height = selectedChannel.Thumbnail.Height.Value;
                     lbl_LastCheckedOut.Content = selectedChannel.LastCheckedOut;
                     lbl_LastActivityDate.Content = selectedChannel.LastActivityDate;
                     lbl_Status.Content = selectedChannel.NotFound ? "Channel Not Found" : "Channel Exists";

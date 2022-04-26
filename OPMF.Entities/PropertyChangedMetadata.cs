@@ -54,6 +54,7 @@ namespace OPMF.Entities
             SiteId = metadata.SiteId;
             Url = metadata.Url;
             Title = metadata.Title;
+            Thumbnail = metadata.Thumbnail;
             Description = metadata.Description;
             Status = metadata.Status;
             IsBeingDownloaded = metadata.IsBeingDownloaded;

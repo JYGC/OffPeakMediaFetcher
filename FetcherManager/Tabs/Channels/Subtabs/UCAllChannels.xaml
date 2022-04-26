@@ -65,6 +65,9 @@
                         </Hyperlink>
                     </TextBlock>
                     <Separator />
+                    <Label Content="Thumbnail: " FontWeight="Bold" />
+                    <Image x:Name="img_Thumbnail" />
+                    <Separator />
                     <Label Content="Last checked out on: " FontWeight="Bold" />
                     <Label x:Name="lbl_LastCheckedOut" />
                     <Separator />

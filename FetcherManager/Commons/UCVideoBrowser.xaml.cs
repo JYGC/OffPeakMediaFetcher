@@ -6,8 +6,8 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace FetcherManager.Commons
 {
@@ -60,7 +60,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -86,7 +86,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -101,6 +101,10 @@ namespace FetcherManager.Commons
                     lbl_Channel.Content = selectedMetadataChannel.Channel.Name;
                     hl_Url.NavigateUri = new Uri(selectedMetadataChannel.Metadata.Url);
                     txt_UrlTextBlock.Text = selectedMetadataChannel.Metadata.Url;
+                    img_Thumbnail.Source = (selectedMetadataChannel.Metadata.Thumbnail.Url != null) ? new BitmapImage(new Uri(selectedMetadataChannel.Metadata.Thumbnail.Url, UriKind.Absolute))
+                                                                                                    : null;
+                    img_Thumbnail.Width = selectedMetadataChannel.Metadata.Thumbnail.Width.Value;
+                    img_Thumbnail.Height = selectedMetadataChannel.Metadata.Thumbnail.Height.Value;
                     lbl_Description.Text = selectedMetadataChannel.Metadata.Description;
                     btn_DownloadNow.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Collapsed : Visibility.Visible;
                     btn_RemoveIsBeingDownloaded.Visibility = lbl_IsBeingDownloaded.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Visible : Visibility.Hidden;
@@ -111,6 +115,9 @@ namespace FetcherManager.Commons
                     lbl_Channel.Content = null;
                     hl_Url.NavigateUri = null;
                     txt_UrlTextBlock.Text = null;
+                    img_Thumbnail.Source = null;
+                    img_Thumbnail.Width = 0;
+                    img_Thumbnail.Height = 0;
                     lbl_Description.Text = null;
                     btn_DownloadNow.Visibility = Visibility.Hidden;
                     btn_RemoveIsBeingDownloaded.Visibility = lbl_IsBeingDownloaded.Visibility = Visibility.Hidden;
@@ -118,7 +125,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -132,7 +139,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -146,7 +153,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -167,7 +174,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -184,7 +191,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }

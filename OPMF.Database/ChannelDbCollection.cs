@@ -44,6 +44,9 @@ namespace OPMF.Database
                 {
                     dbItem.Name = item.Name;
                     dbItem.Url = item.Url;
+                    dbItem.Thumbnail.Url = item.Thumbnail.Url;
+                    dbItem.Thumbnail.Width = item.Thumbnail.Width;
+                    dbItem.Thumbnail.Height = item.Thumbnail.Height;
                     if (item.Description != null)
                     {
                         dbItem.Description = item.Description;
