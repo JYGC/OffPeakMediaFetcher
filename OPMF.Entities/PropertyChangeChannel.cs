@@ -32,6 +32,7 @@ namespace OPMF.Entities
             SiteId = channel.SiteId;
             Url = channel.Url;
             Name = channel.Name;
+            Thumbnail = channel.Thumbnail;
             Description = channel.Description;
             BlackListed = channel.BlackListed;
             NotFound = channel.NotFound;

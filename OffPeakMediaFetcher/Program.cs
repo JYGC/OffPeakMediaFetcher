@@ -10,15 +10,22 @@
                 OPMF.Actions.FolderSetup.EstablishFolders();
                 OPMF.Settings.ConfigHelper.EstablishConfig();
 
-                if (args.Length == 1)
+                if (args.Length >= 1)
                 {
                     switch (args[0])
                     {
                         case "videos":
-                            OPMF.Actions.SiteDownload.FetchVideos();
+                            VideoFetcher videoFetcher = new VideoFetcher();
+                            if (args.Length == 2)
+                            {
+                                videoFetcher.Run(args[1]);
+                                break;
+                            }
+                            videoFetcher.Run();
                             break;
                         case "metadata":
-                            OPMF.Actions.SiteDownload.FetchMetadata();
+                            MetadataFetcher metadataFetcher = new MetadataFetcher();
+                            metadataFetcher.Run();
                             break;
                         default:
                             throw new System.Exception("Invalid argument.");
@@ -27,7 +34,7 @@
                 }
                 else
                 {
-                    throw new System.Exception("Single argument required.");
+                    throw new System.Exception("Appropriate arguments required.");
                 }
             }
             catch (System.Exception e)

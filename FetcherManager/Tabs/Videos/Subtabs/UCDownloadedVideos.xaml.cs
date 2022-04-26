@@ -42,16 +42,28 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         private void __cb_ToDownload_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded)
+            {
+                return;
+            }
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.ToDownload;
         }
 
         private void __cb_BackToDownloaded_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded)
+            {
+                return;
+            }
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Downloaded;
         }
 
         private void __cb_SetToWait_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded)
+            {
+                return;
+            }
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Wait;
         }
     }

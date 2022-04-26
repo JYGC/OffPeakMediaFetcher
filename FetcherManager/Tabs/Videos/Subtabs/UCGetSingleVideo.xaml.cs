@@ -1,20 +1,21 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FetcherManager.Tabs.Videos.Subtabs
 {
     /// <summary>
-    /// Interaction logic for UCToDownload.xaml
+    /// Interaction logic for UCGetSingleVideo.xaml
     /// </summary>
-    public partial class UCToDownload : UserControl
+    public partial class UCGetSingleVideo : UserControl
     {
         public RoutedCommand IgnoreMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand ToDownloadMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand BackToNewMetadata { get; set; } = new RoutedCommand();
         public RoutedCommand SetToWaitMetadata { get; set; } = new RoutedCommand();
 
-        public UCToDownload()
+        public UCGetSingleVideo()
         {
             InitializeComponent();
             __PrepareChildUserControls();
@@ -23,11 +24,34 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         private void __PrepareChildUserControls()
         {
-            uc_VideoBrowser.Btn_GetVideos.Content = "Get Download Queue";
-            uc_VideoBrowser.GetMetadataChannels = () => OPMF.Actions.MetadataManagement.GetToDownloadAndWait().OrderBy(c => c.Channel.Name);
-            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => OPMF.Actions.MetadataManagement.SplitFromStatus(metadataChannels,
-                                                                                                                    OPMF.Entities.MetadataStatus.ToDownload,
-                                                                                                                    OPMF.Entities.MetadataStatus.Wait);
+            uc_VideoBrowser.Btn_GetVideos.Content = "Get Video";
+            __txt_EnterVideoURL_TextChanged(null, null);
+            uc_VideoBrowser.GetMetadataChannels = () =>
+            {
+                OPMF.SiteAdapter.ISiteVideoMetadataGetter siteVideoGetter = new OPMF.SiteAdapter.Youtube.YoutubeVideoMetadataGetter(); // Replace when adding other platforms
+                string siteId = siteVideoGetter.GetSiteIdFromURL(txt_EnterVideoURL.Text);
+                (OPMF.Entities.IMetadata, OPMF.Entities.IChannel) videoWithChannel = (null, null);
+                OPMF.Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+                {
+                    videoWithChannel.Item1 = dbAdapter.YoutubeMetadataDbCollection.FindById(siteId);
+                    if (videoWithChannel.Item1 == null)
+                    {
+                        videoWithChannel = siteVideoGetter.GetVideoByURL(siteId);
+                        dbAdapter.YoutubeMetadataDbCollection.InsertNew(new List<OPMF.Entities.IMetadata> { videoWithChannel.Item1 });
+                        dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(new List<OPMF.Entities.IChannel> { videoWithChannel.Item2 });
+                    }
+                    else
+                    {
+                        videoWithChannel.Item2 = dbAdapter.YoutubeChannelDbCollection.FindById(videoWithChannel.Item1.ChannelSiteId);
+                    }
+                });
+                return new OPMF.Entities.IMetadataChannel[] { new OPMF.Entities.MetadataChannel
+                {
+                    Metadata = new OPMF.Entities.PropertyChangedMetadata(videoWithChannel.Item1),
+                    Channel = videoWithChannel.Item2
+                }};
+            };
+            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => (metadataChannels, metadataChannels);
             uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => OPMF.Actions.MetadataManagement.SaveMetadataChanges(notStatusMetadataChannels);
         }
 
@@ -77,6 +101,11 @@ namespace FetcherManager.Tabs.Videos.Subtabs
                 return;
             }
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Wait;
+        }
+
+        private void __txt_EnterVideoURL_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            uc_VideoBrowser.Btn_GetVideos.Visibility = (txt_EnterVideoURL.Text.Length > 0) ? Visibility.Visible : Visibility.Hidden;
         }
     }
 }

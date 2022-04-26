@@ -6,7 +6,20 @@
              xmlns:local="clr-namespace:FetcherManager.Tabs.Channels.Subtabs"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel Height="30">
-        <Button x:Name="btn_ImportYoutubeXml" Content="Import Youtube Channels from XML" Click="__btn_ImportYoutubeXml_Click" HorizontalAlignment="Left" />
-    </DockPanel>
+    <StackPanel Height="180">
+        <StackPanel>
+            <Button x:Name="btn_ImportYoutubeXml" Content="Import Youtube Channels from XML" Click="__btn_ImportYoutubeXml_Click" HorizontalAlignment="Left" />
+        </StackPanel>
+        <StackPanel>
+            <DockPanel>
+                <TextBox x:Name="txt_ChannelIdentifier" Width="200px" HorizontalAlignment="Left" />
+                <Label x:Name="lbl_IdentifierSelect" Content="Search by:" />
+                <RadioButton x:Name="rb_SelectName" GroupName="IdentifierSelect" Checked="__rb_SelectName_Checked">Name</RadioButton>
+                <RadioButton x:Name="rb_SelectId" GroupName="IdentifierSelect" Checked="__rb_SelectId_Checked">Id</RadioButton>
+                <Button x:Name="btn_SearchChannel" Content="Search for Youtube Channel" Click="__btn_SearchChannel_Click" HorizontalAlignment="Left" />
+                <Label Content="(NOT WORKING)" />
+            </DockPanel>
+            <Label x:Name="lbl_Res" Content="Test" HorizontalAlignment="Left" />
+        </StackPanel>
+    </StackPanel>
 </UserControl>

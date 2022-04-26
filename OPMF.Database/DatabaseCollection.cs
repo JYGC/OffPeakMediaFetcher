@@ -15,7 +15,7 @@ namespace OPMF.Database
 
         private ILiteCollection<TItem> __collection;
 
-        protected LiteDatabase _Db
+        protected LiteDatabase _DB
         {
             get
             {
@@ -35,6 +35,11 @@ namespace OPMF.Database
         {
             __db = db;
             __collection = __db.GetCollection<TItem>(collectionName);
+        }
+
+        public TItem FindById(string Id)
+        {
+            return _Collection.FindById(Id);
         }
 
         public void InsertBulk(IEnumerable<TItem> items)

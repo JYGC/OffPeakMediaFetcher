@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup />
+  <PropertyGroup>
+    <_LastSelectedProfileId>C:\Users\jygcn\Source\Programming\OffPeakMediaFetcherProject\OffPeakMediaFetcher\FetcherManager\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Update="App.xaml">
       <SubType>Designer</SubType>
@@ -23,6 +25,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Tabs\Videos\Subtabs\UCDownloadedVideos.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Tabs\Videos\Subtabs\UCGetSingleVideo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Tabs\Videos\Subtabs\UCIgnoredVideos.xaml.cs">
@@ -58,6 +63,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Tabs\Videos\Subtabs\UCDownloadedVideos.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Tabs\Videos\Subtabs\UCGetSingleVideo.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Tabs\Videos\Subtabs\UCIgnoredVideos.xaml">

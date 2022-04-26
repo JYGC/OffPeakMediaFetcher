@@ -10,22 +10,20 @@ using Newtonsoft.Json;
 
 namespace OPMF.SiteAdapter.Youtube
 {
-    public class YoutubeAdapter : ISiteAdapter<Entities.IChannel, Entities.IMetadata>
+    public class YoutubeMetadataFetcher : IMetadataFetcher<Entities.IChannel, Entities.IMetadata>
     {
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
-        private readonly int __maxResultsPerResponse = 50;
         private readonly string __videoInfoParts = "snippet,contentDetails";
-        private readonly string __channelParts = "snippet";
         private readonly string __urlSaffolding = "https://www.youtube.com/watch?v={0}";
 
         private YouTubeService __youtubeService;
 
-        public YoutubeAdapter()
+        public YoutubeMetadataFetcher()
         {
             UserCredential credential = GoogleAuthentication.GetCredential(__apiScope);
             __youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApplicationName = this.GetType().ToString()
+                ApplicationName = GetType().ToString()
                 , HttpClientInitializer = credential
             });
         }
@@ -62,12 +60,18 @@ namespace OPMF.SiteAdapter.Youtube
                                 Console.WriteLine("fetched: " + activity.Snippet.Title);
                                 vidoeInfos.Add(new Entities.YoutubeMetadata()
                                 {
-                                    SiteId = activity.ContentDetails.Upload.VideoId
-                                    , Url = string.Format(__urlSaffolding, activity.ContentDetails.Upload.VideoId)
-                                    , Title = activity.Snippet.Title
-                                    , Description = activity.Snippet.Description
-                                    , ChannelSiteId = activity.Snippet.ChannelId
-                                    , PublishedAt = publishedAt
+                                    SiteId = activity.ContentDetails.Upload.VideoId,
+                                    Url = string.Format(__urlSaffolding, activity.ContentDetails.Upload.VideoId),
+                                    Title = activity.Snippet.Title,
+                                    Thumbnail = new Entities.EntityThumbnail
+                                    {
+                                        Url = activity.Snippet.Thumbnails.Default__.Url,
+                                        Width = activity.Snippet.Thumbnails.Default__.Width.Value,
+                                        Height = activity.Snippet.Thumbnails.Default__.Height.Value,
+                                    },
+                                    Description = activity.Snippet.Description,
+                                    ChannelSiteId = activity.Snippet.ChannelId,
+                                    PublishedAt = publishedAt
                                 });
 
                                 lastActivityDate = (!lastActivityDate.HasValue || lastActivityDate.Value.CompareTo(publishedAt) == -1) ? publishedAt : lastActivityDate;
@@ -105,36 +109,6 @@ namespace OPMF.SiteAdapter.Youtube
             }
 
             return vidoeInfos;
-        }
-
-        public List<Entities.IChannel> ImportChannels()
-        {
-            List<Entities.IChannel> channels = new List<Entities.IChannel>();
-
-            Console.WriteLine("importing channels from google");
-            SubscriptionsResource.ListRequest request = this.__youtubeService.Subscriptions.List(__channelParts);
-            request.Mine = true;
-            request.MaxResults = __maxResultsPerResponse;
-            string nextPageToken = null;
-            do
-            {
-                SubscriptionListResponse response = request.Execute();
-                IList<Subscription> subscriptions = response.Items;
-                foreach (Subscription subscription in subscriptions)
-                {
-                    Console.WriteLine("importing: " + subscription.Snippet.Title);
-                    channels.Add(new Entities.YoutubeChannel()
-                    {
-                        SiteId = subscription.Snippet.ResourceId.ChannelId
-                        , Name = subscription.Snippet.Title
-                        , Description = subscription.Snippet.Description
-                    });
-                }
-                nextPageToken = request.PageToken = response.NextPageToken;
-            }
-            while (nextPageToken != null);
-
-            return channels;
         }
     }
 }

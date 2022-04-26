@@ -5,6 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace FetcherManager.Commons
 {
@@ -13,6 +16,9 @@ namespace FetcherManager.Commons
     /// </summary>
     public partial class UCVideoBrowser : UserControl
     {
+        private const string __offPeakMediaFetcherEXE = @"OffPeakMediaFetcher.exe";
+        private const string __offPeakMediaFetcherArgsScaffold = "videos {0}";
+
         private ObservableCollection<OPMF.Entities.IMetadataChannel> __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>();
 
         public Func<IEnumerable<OPMF.Entities.IMetadataChannel>> GetMetadataChannels { get; set; }
@@ -54,7 +60,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -70,7 +76,9 @@ namespace FetcherManager.Commons
                         (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>) metadatas = SplitFromStatus(__metadataChannels);
                         IEnumerable<OPMF.Entities.IMetadataChannel> notNewMetadataChannels = metadatas.Item2;
                         __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(metadatas.Item1);
-                        SaveMetadataChanges(notNewMetadataChannels);
+                        SaveMetadataChanges(notNewMetadataChannels.Where(
+                            metadataChannel => !metadataChannel.Metadata.IsBeingDownloaded // prevent override of metadata status when it has been downloaded
+                        ));
                         dg_Videos.ItemsSource = __metadataChannels; // reload dg_VideoInfo
                     });
                     loadingDialog.Show();
@@ -78,7 +86,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -93,7 +101,12 @@ namespace FetcherManager.Commons
                     lbl_Channel.Content = selectedMetadataChannel.Channel.Name;
                     hl_Url.NavigateUri = new Uri(selectedMetadataChannel.Metadata.Url);
                     txt_UrlTextBlock.Text = selectedMetadataChannel.Metadata.Url;
+                    img_Thumbnail.Source = (selectedMetadataChannel.Metadata.Thumbnail.Url != null) ? new BitmapImage(new Uri(selectedMetadataChannel.Metadata.Thumbnail.Url, UriKind.Absolute)) : null;
+                    img_Thumbnail.Width = selectedMetadataChannel.Metadata.Thumbnail.Width;
+                    img_Thumbnail.Height = selectedMetadataChannel.Metadata.Thumbnail.Height;
                     lbl_Description.Text = selectedMetadataChannel.Metadata.Description;
+                    btn_DownloadNow.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Collapsed : Visibility.Visible;
+                    btn_RemoveIsBeingDownloaded.Visibility = lbl_IsBeingDownloaded.Visibility = selectedMetadataChannel.Metadata.IsBeingDownloaded ? Visibility.Visible : Visibility.Hidden;
                 }
                 else
                 {
@@ -101,12 +114,17 @@ namespace FetcherManager.Commons
                     lbl_Channel.Content = null;
                     hl_Url.NavigateUri = null;
                     txt_UrlTextBlock.Text = null;
+                    img_Thumbnail.Source = null;
+                    img_Thumbnail.Width = 0;
+                    img_Thumbnail.Height = 0;
                     lbl_Description.Text = null;
+                    btn_DownloadNow.Visibility = Visibility.Hidden;
+                    btn_RemoveIsBeingDownloaded.Visibility = lbl_IsBeingDownloaded.Visibility = Visibility.Hidden;
                 }
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -120,7 +138,7 @@ namespace FetcherManager.Commons
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }
@@ -129,12 +147,50 @@ namespace FetcherManager.Commons
         {
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(OPMF.Settings.ConfigHelper.Config.WebBrowserPath, e.Uri.AbsoluteUri));
+                Process.Start(new ProcessStartInfo(OPMF.Settings.ConfigHelper.Config.WebBrowserPath, e.Uri.AbsoluteUri));
                 e.Handled = true;
             }
             catch (Exception ex)
             {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void __btn_DownloadNow_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SelectedMetadata.Metadata.IsBeingDownloaded = true;
+                SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.ToDownload;
+                __dg_Videos_SelectedCellsChanged(null, null);
+                OPMF.Actions.MetadataManagement.SaveMetadataChanges(new List<OPMF.Entities.IMetadataChannel> { SelectedMetadata });
+
+                Process process = new Process();
+                process.StartInfo.FileName = __offPeakMediaFetcherEXE;
+                process.StartInfo.Arguments = string.Format(__offPeakMediaFetcherArgsScaffold, SelectedMetadata.Metadata.SiteId);
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void __btn_RemoveIsBeingDownloaded_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SelectedMetadata.Metadata.IsBeingDownloaded = false;
+                __dg_Videos_SelectedCellsChanged(null, null);
+                OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbconn => dbconn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(
+                    new List<OPMF.Entities.IMetadata> { SelectedMetadata.Metadata }
+                ));
+            }
+            catch (Exception ex)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
                 MessageBox.Show(ex.Message, "Error");
             }
         }

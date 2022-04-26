@@ -44,6 +44,9 @@ namespace OPMF.Database
                 {
                     dbItem.Name = item.Name;
                     dbItem.Url = item.Url;
+                    dbItem.Thumbnail.Url = item.Thumbnail.Url;
+                    dbItem.Thumbnail.Width = item.Thumbnail.Width;
+                    dbItem.Thumbnail.Height = item.Thumbnail.Height;
                     if (item.Description != null)
                     {
                         dbItem.Description = item.Description;
@@ -53,11 +56,11 @@ namespace OPMF.Database
                 IEnumerable<TItem> toInsert = items.Where(i => !dbToUpdate.Any(j => j.Id == i.Id));
                 _Collection.InsertBulk(toInsert);
 
-                _Db.Commit();
+                _DB.Commit();
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
                 throw e;
             }
         }
@@ -72,11 +75,11 @@ namespace OPMF.Database
                     dbItem.LastActivityDate = item.LastActivityDate;
                 });
 
-                _Db.Commit();
+                _DB.Commit();
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
                 throw e;
             }
         }
@@ -89,7 +92,7 @@ namespace OPMF.Database
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
                 throw e;
             }
         }

@@ -20,7 +20,7 @@
                 <StackPanel>
                     <DataGrid x:Name="dg_Videos" CanUserAddRows="False" SelectedCellsChanged="__dg_Videos_SelectedCellsChanged">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Metadata.Status}" Width="100" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Status" Binding="{Binding Metadata.DisplayedStatus}" Width="100" IsReadOnly="True" />
                             <DataGridTextColumn Header="Author" Binding="{Binding Channel.Name}" Width="100" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -47,6 +47,9 @@
                     <Label  Content="Title: " FontWeight="Bold" />
                     <Label x:Name="lbl_Title" />
                     <Separator />
+                    <Label Content="Thumbnail: " FontWeight="Bold" />
+                    <Image x:Name="img_Thumbnail" />
+                    <Separator />
                     <Label Content="Channel: " FontWeight="Bold" />
                     <Label x:Name="lbl_Channel" />
                     <Separator />
@@ -59,6 +62,15 @@
                     <Separator />
                     <Label Content="Description: " FontWeight="Bold" />
                     <TextBlock x:Name="lbl_Description" TextWrapping="Wrap"/>
+                    <Separator />
+                    <Label Content="Actions: " FontWeight="Bold" />
+                    <DockPanel>
+                        <Button x:Name="btn_DownloadNow" Content="Download Now" Click="__btn_DownloadNow_Click" Visibility="Hidden" HorizontalAlignment="Left" />
+                        <Label x:Name="lbl_IsBeingDownloaded" Content="Video is being downloaded..." Visibility="Hidden" />
+                    </DockPanel>
+                    <DockPanel>
+                        <Button x:Name="btn_RemoveIsBeingDownloaded" Content='Remove "being downloaded" block' Click="__btn_RemoveIsBeingDownloaded_Click" Visibility="Hidden" HorizontalAlignment="Left" />
+                    </DockPanel>
                 </StackPanel>
             </ScrollViewer>
         </StackPanel>

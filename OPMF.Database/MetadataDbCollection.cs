@@ -7,7 +7,7 @@ using OPMF.Entities;
 
 namespace OPMF.Database
 {
-    public interface IMetadataDbCollection<TItem> : IDatabaseCollection where TItem : Entities.IMetadata
+    public interface IMetadataDbCollection<TItem> : IDatabaseCollection where TItem : IMetadata
     {
         IEnumerable<TItem> GetToDownload();
         IEnumerable<TItem> GetNew();
@@ -16,6 +16,7 @@ namespace OPMF.Database
         IEnumerable<TItem> GetIgnored();
         void InsertNew(IEnumerable<TItem> items);
         void UpdateStatus(IEnumerable<TItem> items);
+        void UpdateIsBeingProcessed(IEnumerable<TItem> items, bool? isProcessedValue = null);
     }
 
     public class MetadataDbCollection<TItem> : DatabaseCollection<TItem>, IMetadataDbCollection<TItem> where TItem : IMetadata
@@ -53,11 +54,11 @@ namespace OPMF.Database
             {
                 IEnumerable<TItem> toInsert = items.Where(i => _Collection.FindOne(Query.EQ(_KeyName, i.Id)) == null);
                 _Collection.InsertBulk(toInsert);
-                _Db.Commit();
+                _DB.Commit();
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
                 throw e;
             }
         }
@@ -67,12 +68,32 @@ namespace OPMF.Database
             try
             {
                 _UpdateFields(items, (item, dbItem) => dbItem.Status = item.Status);
-
-                _Db.Commit();
+                _DB.Commit();
             }
             catch (Exception e)
             {
-                _Db.Rollback();
+                _DB.Rollback();
+                throw e;
+            }
+        }
+
+        public void UpdateIsBeingProcessed(IEnumerable<TItem> items, bool? isProcessedValue = null)
+        {
+            try
+            {
+                _UpdateFields(items, (item, dbItem) =>
+                {
+                    if (isProcessedValue.HasValue) // Need to update items as well
+                    {
+                        item.IsBeingDownloaded = isProcessedValue.Value;
+                    }
+                    dbItem.IsBeingDownloaded = item.IsBeingDownloaded;
+                });
+                _DB.Commit();
+            }
+            catch (Exception e)
+            {
+                _DB.Rollback();
                 throw e;
             }
         }

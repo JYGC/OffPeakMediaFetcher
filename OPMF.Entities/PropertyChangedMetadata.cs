@@ -11,8 +11,9 @@ namespace OPMF.Entities
     public class PropertyChangedMetadata : Metadata, IPropertyChangedMetadata
     {
         private MetadataStatus __status;
+        private bool __isBeingDownloaded;
 
-        new public MetadataStatus Status
+        public new MetadataStatus Status
         {
             get
             {
@@ -21,7 +22,28 @@ namespace OPMF.Entities
             set
             {
                 __status = value;
-                NotifyPropertyChanged();
+                NotifyPropertyChanged("DisplayedStatus");
+            }
+        }
+
+        public new bool IsBeingDownloaded
+        {
+            get
+            {
+                return __isBeingDownloaded;
+            }
+            set
+            {
+                __isBeingDownloaded = value;
+                NotifyPropertyChanged("DisplayedStatus");
+            }
+        }
+
+        public string DisplayedStatus
+        {
+            get
+            {
+                return IsBeingDownloaded ? "IsBeingDownloaded" : __status.ToString();
             }
         }
 
@@ -32,8 +54,10 @@ namespace OPMF.Entities
             SiteId = metadata.SiteId;
             Url = metadata.Url;
             Title = metadata.Title;
+            Thumbnail = metadata.Thumbnail;
             Description = metadata.Description;
             Status = metadata.Status;
+            IsBeingDownloaded = metadata.IsBeingDownloaded;
             PublishedAt = metadata.PublishedAt;
             ChannelSiteId = metadata.ChannelSiteId;
         }
