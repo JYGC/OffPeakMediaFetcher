@@ -11,9 +11,9 @@ namespace OPMF.Database
     {
         IEnumerable<TItem> GetToDownload();
         IEnumerable<TItem> GetNew();
-        IEnumerable<TItem> GetDownloaded();
         IEnumerable<TItem> GetToDownloadAndWait();
-        IEnumerable<TItem> GetIgnored();
+        IEnumerable<TItem> GetManyByWordInTitle(string wordInMetadataTitle);
+        IEnumerable<TItem> GetManyByChannelSiteIdAndWordInTitle(IEnumerable<string> channelSiteIds, string wordInMetadataTitle);
         void InsertNew(IEnumerable<TItem> items);
         void UpdateStatus(IEnumerable<TItem> items);
         void UpdateIsBeingProcessed(IEnumerable<TItem> items, bool? isProcessedValue = null);
@@ -38,14 +38,24 @@ namespace OPMF.Database
             return _Collection.Find(i => i.Status == MetadataStatus.New);
         }
 
-        public IEnumerable<TItem> GetDownloaded()
+        public IEnumerable<TItem> GetManyByWordInTitle(string wordInMetadataTitle)
         {
-            return _Collection.Find(i => i.Status == MetadataStatus.Downloaded);
+            return _Collection.Find(Query.Contains("Title", wordInMetadataTitle));
         }
 
-        public IEnumerable<TItem> GetIgnored()
+        public IEnumerable<TItem> GetManyByChannelSiteIdAndWordInTitle(IEnumerable<string> channelSiteIds, string wordInMetadataTitle)
         {
-            return _Collection.Find(i => i.Status == MetadataStatus.Ignore);
+            BsonArray siteIdsBsonArray = new BsonArray();
+            foreach (string channelSiteId in channelSiteIds)
+            {
+                siteIdsBsonArray.Add(channelSiteId);
+            }
+            BsonExpression whereCause = Query.In("ChannelSiteId", siteIdsBsonArray);
+            if (!string.IsNullOrWhiteSpace(wordInMetadataTitle))
+            {
+                whereCause = Query.And(whereCause, Query.Contains("Title", wordInMetadataTitle));
+            }
+            return _Collection.Find(whereCause);
         }
 
         public void InsertNew(IEnumerable<TItem> items)

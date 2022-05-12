@@ -25,7 +25,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         private void __PrepareChildUserControls()
         {
             uc_VideoBrowser.Btn_GetVideos.Content = "Get Video";
-            __txt_EnterVideoURL_TextChanged(null, null);
+            uc_VideoBrowser.Btn_GetVideos.Visibility = Visibility.Hidden;
             uc_VideoBrowser.GetMetadataChannels = () =>
             {
                 OPMF.SiteAdapter.ISiteVideoMetadataGetter siteVideoGetter = new OPMF.SiteAdapter.Youtube.YoutubeVideoMetadataGetter(); // Replace when adding other platforms
@@ -105,7 +105,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         private void __txt_EnterVideoURL_TextChanged(object sender, TextChangedEventArgs e)
         {
-            uc_VideoBrowser.Btn_GetVideos.Visibility = (txt_EnterVideoURL.Text.Length > 0) ? Visibility.Visible : Visibility.Hidden;
+            uc_VideoBrowser.Btn_GetVideos.Visibility = string.IsNullOrWhiteSpace(txt_EnterVideoURL.Text) ? Visibility.Hidden : Visibility.Visible;
         }
     }
 }

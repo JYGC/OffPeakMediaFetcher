@@ -12,6 +12,7 @@ namespace OPMF.Database
         IEnumerable<TItem> GetNotBacklisted();
         TItem GetBySiteId(string id);
         TItem GetById(string id);
+        IEnumerable<TItem> GetManyByWordInName(string wordInChannelName);
         void InsertOrUpdate(IEnumerable<TItem> items);
         void UpdateLastCheckedOutAndActivity(IEnumerable<TItem> items);
         void UpdateBlackListStatus(IEnumerable<TItem> items);
@@ -34,6 +35,11 @@ namespace OPMF.Database
         public TItem GetById(string id)
         {
             return _Collection.FindById(id);
+        }
+
+        public IEnumerable<TItem> GetManyByWordInName(string wordInChannelName)
+        {
+            return _Collection.Find(Query.Contains("Name", wordInChannelName));
         }
 
         public void InsertOrUpdate(IEnumerable<TItem> items)
