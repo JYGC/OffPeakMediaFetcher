@@ -1,12 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace OPMF.Actions
 {
     public static class MetadataManagement
     {
+        public static IEnumerable<Entities.IMetadataChannel> GetByChannelAndTitleContainingWord(
+            string wordInChannelName,
+            string wordInMetadataTitle)
+        {
+            IEnumerable<Entities.IMetadataChannel> metadataChannels = new Entities.IMetadataChannel[] { };
+            Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            {
+                Dictionary<string, Entities.IChannel> channelsWithSiteId = dbAdapter.YoutubeChannelDbCollection.GetManyByWordInName(
+                    wordInChannelName).ToDictionary(c => c.SiteId, c => c);
+                IEnumerable<Entities.IMetadata> metadatas = dbAdapter.YoutubeMetadataDbCollection.GetManyByChannelSiteIdAndWordInTitle(
+                    channelsWithSiteId.Keys, wordInMetadataTitle);
+                foreach (Entities.IMetadata metadata in metadatas)
+                {
+                    metadataChannels = metadataChannels.Concat(new Entities.IMetadataChannel[]
+                    {
+                        new Entities.MetadataChannel
+                        {
+                            Metadata = new Entities.PropertyChangedMetadata(metadata),
+                            Channel = channelsWithSiteId[metadata.ChannelSiteId]
+                        }
+                    });
+                }
+            });
+            return metadataChannels;
+        }
+
         private static IEnumerable<Entities.IMetadataChannel> _GetMetadataChannels(
             Func<Database.IMetadataDbCollection<Entities.IMetadata>, IEnumerable<Entities.IMetadata>> metadataDbFunc)
         {
@@ -21,8 +46,8 @@ namespace OPMF.Actions
                     {
                         new Entities.MetadataChannel
                         {
-                            Metadata = new Entities.PropertyChangedMetadata(metadata)
-                            , Channel = dbAdapter.YoutubeChannelDbCollection.GetBySiteId(metadata.ChannelSiteId)
+                            Metadata = new Entities.PropertyChangedMetadata(metadata),
+                            Channel = dbAdapter.YoutubeChannelDbCollection.GetBySiteId(metadata.ChannelSiteId)
                         }
                     });
                 }
@@ -41,14 +66,9 @@ namespace OPMF.Actions
             return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetToDownloadAndWait());
         }
 
-        public static IEnumerable<Entities.IMetadataChannel> GetDownloaded()
+        public static IEnumerable<Entities.IMetadataChannel> GetByTitleContainingWord(string wordInMetadataTitle)
         {
-            return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetDownloaded());
-        }
-
-        public static IEnumerable<Entities.IMetadataChannel> GetIgnored()
-        {
-            return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetIgnored());
+            return _GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetManyByWordInTitle(wordInMetadataTitle));
         }
 
         public static (IEnumerable<Entities.IMetadataChannel>, IEnumerable<Entities.IMetadataChannel>) SplitFromStatus(IEnumerable<Entities.IMetadataChannel> metadataChannels,

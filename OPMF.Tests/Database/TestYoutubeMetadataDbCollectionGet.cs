@@ -66,18 +66,6 @@ namespace OPMF.Tests.Database
         }
 
         [Fact]
-        public void TestGetDownloaded()
-        {
-            AssertMetadataStatus(dbAdapter => dbAdapter.YoutubeMetadataDbCollection.GetDownloaded(), metadata => metadata.Status == MetadataStatus.Downloaded);
-        }
-
-        [Fact]
-        public void TestGetIgnored()
-        {
-            AssertMetadataStatus(dbAdapter => dbAdapter.YoutubeMetadataDbCollection.GetIgnored(), metadata => metadata.Status == MetadataStatus.Ignore);
-        }
-
-        [Fact]
         public void TestGetToDownloadAndWait()
         {
             AssertMetadataStatus(

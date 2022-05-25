@@ -2,7 +2,7 @@
   "profiles": {
     "OffPeakMediaFetcher": {
       "commandName": "Project",
-      "commandLineArgs": "metadata"
+      "commandLineArgs": "videos"
     }
   }
 }

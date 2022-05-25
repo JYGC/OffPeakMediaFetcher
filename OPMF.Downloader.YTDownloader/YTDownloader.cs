@@ -9,7 +9,6 @@ namespace OPMF.Downloader.YTDownloader
     public class YTDownloader : IDownloader<Entities.IMetadata>
     {
         private List<DownloadInstance> __downloadInstances;
-
         public List<Entities.IMetadata> DownloadQueue { get; set; }
 
         public YTDownloader()
@@ -42,8 +41,10 @@ namespace OPMF.Downloader.YTDownloader
                 for (int i = __downloadInstances.Count - 1; i >= 0; i--)
                 {
                     // Leave instances alone that are still downloading
-                    if (__downloadInstances[i].NotDownloading)
+                    if (__downloadInstances[i].NotDownloading ||
+                        DateTime.Now.Subtract(__downloadInstances[i].StartDateTime).TotalSeconds > Settings.ConfigHelper.Config.StopDownloadInstanceAfterSeconds)
                     {
+                        __downloadInstances[i].StopDownloadThread();
                         if (currentMetadataIndex < DownloadQueue.Count)
                         {
                             __downloadInstances[i].Download(DownloadQueue[currentMetadataIndex]);
@@ -57,7 +58,7 @@ namespace OPMF.Downloader.YTDownloader
                         }
                     }
                 }
-                Thread.Sleep(5000);
+                Thread.Sleep(5000); // replace this
             }
         }
     }
@@ -66,10 +67,12 @@ namespace OPMF.Downloader.YTDownloader
     {
         private const int TITLE_DISPLAY_LENGTH = 40;
 
+        private Thread __thread;
         private YoutubeDL __youtubeDL;
         private string __downloadError;
         private string __title;
 
+        public DateTime StartDateTime { get; } = DateTime.Now; // Rough fix for frozen DownloadInstance
         public bool NotDownloading { get; set; } = true;
         public int ScreenPosition { get; set; }
 
@@ -98,31 +101,45 @@ namespace OPMF.Downloader.YTDownloader
             __downloadError = null;
             __youtubeDL.Options.FilesystemOptions.Output = Path.Join(Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
                                                                      __ItemNameSanitizer(metadata.Title) + "." + Settings.ConfigHelper.Config.YoutubeDL.VideoExtension);
-            Thread thread = new Thread(() =>
+            __thread = new Thread(() =>
             {
                 __title = metadata.Title;
-                __youtubeDL.Download(metadata.Url);
-                if (string.IsNullOrEmpty(__downloadError))
+                try
                 {
-                    metadata.Status = Entities.MetadataStatus.Downloaded;
-                }
-                else
-                {
-                    Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFLog
+                    __youtubeDL.Download(metadata.Url);
+                    if (string.IsNullOrEmpty(__downloadError))
                     {
-                        Message = __downloadError,
-                        Type = Entities.OPMFLogType.Warning,
-                        Variables = new Dictionary<string, object>
+                        metadata.Status = Entities.MetadataStatus.Downloaded;
+                    }
+                    else
+                    {
+                        Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFLog
+                        {
+                            Message = __downloadError,
+                            Type = Entities.OPMFLogType.Warning,
+                            Variables = new Dictionary<string, object>
                             {
                                 { "metadata.Title", __title },
                                 { "metadata.Url", metadata.Url }
                             }
+                        });
+                        WriteOnLine(ScreenPosition, "An error has occured. See error log...");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Logger.GetCurrent().LogEntry(new Entities.OPMFError(ex)
+                    {
+                        Variables = new Dictionary<string, object>
+                        {
+                            { "metadata.Title", __title },
+                            { "metadata.Url", metadata.Url }
+                        }
                     });
-                    WriteOnLine(ScreenPosition, "An error has occured. See error log...");
                 }
                 NotDownloading = true;
             });
-            thread.Start();
+            __thread.Start();
         }
 
         public void WriteOnLine(int position, string message)
@@ -131,6 +148,11 @@ namespace OPMF.Downloader.YTDownloader
             Console.WriteLine(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, position);
             Console.WriteLine(message);
+        }
+
+        public void StopDownloadThread()
+        {
+            if (__thread != null) __thread.Interrupt();
         }
 
         private string __TruncateStrIfTooLong(string str)

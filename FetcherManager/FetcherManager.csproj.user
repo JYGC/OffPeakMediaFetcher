@@ -24,13 +24,10 @@
     <Compile Update="Tabs\Channels\UCChannels.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Tabs\Videos\Subtabs\UCDownloadedVideos.xaml.cs">
+    <Compile Update="Tabs\Videos\Subtabs\UCFindVideos.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Tabs\Videos\Subtabs\UCGetSingleVideo.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Tabs\Videos\Subtabs\UCIgnoredVideos.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Tabs\Videos\Subtabs\UCNewVideos.xaml.cs">
@@ -62,13 +59,10 @@
     <Page Update="Tabs\Channels\UCChannels.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Tabs\Videos\Subtabs\UCDownloadedVideos.xaml">
+    <Page Update="Tabs\Videos\Subtabs\UCFindVideos.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Tabs\Videos\Subtabs\UCGetSingleVideo.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Tabs\Videos\Subtabs\UCIgnoredVideos.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Tabs\Videos\Subtabs\UCNewVideos.xaml">
