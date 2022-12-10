@@ -4,7 +4,7 @@ using System;
 
 namespace OPMF.Tests.Database
 {
-    public class TestYoutubeChannelDbCollection : IClassFixture<SetupFixture>
+    public class TestYoutubeChannelDbCollection : IClassFixture<AppFolderFixture>
     {
         //[Fact]
         //public void TestBulkInsert()
