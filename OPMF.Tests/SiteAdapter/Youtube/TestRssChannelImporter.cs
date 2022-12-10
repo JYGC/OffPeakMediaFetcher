@@ -5,7 +5,7 @@ using Xunit;
 
 namespace OPMF.Tests.SiteAdapter.Youtube
 {
-    public class TestRssChannelImporter : IClassFixture<SetupFixture>
+    public class TestRssChannelImporter
     {
         private readonly string __fiveChannelsXml = @"<opml version=""1.1"">
 <body>
@@ -45,24 +45,24 @@ namespace OPMF.Tests.SiteAdapter.Youtube
             }
         };
 
-        [Fact]
-        public void ValidXmlFiveChannels()
-        {
-            RssChannelImporter rssChannelImporter = new RssChannelImporter(__fiveChannelsXml);
-            IEnumerable<IChannel> channels = rssChannelImporter.ImportChannels();
-            Assert.Equal(__fiveChannels, channels);
-        }
+        //[Fact]
+        //public void ValidXmlFiveChannels()
+        //{
+        //    RssChannelImporter rssChannelImporter = new RssChannelImporter(__fiveChannelsXml);
+        //    IEnumerable<IChannel> channels = rssChannelImporter.ImportChannels();
+        //    Assert.Equal(__fiveChannels, channels);
+        //}
 
-        [Fact]
-        public void Add()
-        {
-            Assert.Equal(3, 2 + 1);
-        }
+        //[Fact]
+        //public void Add()
+        //{
+        //    Assert.Equal(3, 2 + 1);
+        //}
 
-        [Fact]
-        public void Wrong()
-        {
-            Assert.True(false);
-        }
+        //[Fact]
+        //public void Wrong()
+        //{
+        //    Assert.True(false);
+        //}
     }
 }

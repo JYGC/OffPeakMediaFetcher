@@ -1,6 +1,5 @@
 ﻿using LiteDB;
 using System;
-using System.Threading;
 
 namespace OPMF.Database
 {

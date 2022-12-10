@@ -2,7 +2,7 @@
 
 namespace OPMF.Tests.Entities
 {
-    public class TestYoutubeMetadata : IClassFixture<SetupFixture>
+    public class TestYoutubeMetadata : IClassFixture<AppFolderFixture>
     {
     }
 }

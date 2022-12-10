@@ -3,9 +3,9 @@ using System.IO;
 
 namespace OPMF.Tests
 {
-    public class SetupFixture : IDisposable
+    public class AppFolderFixture : IDisposable
     {
-        public SetupFixture()
+        public AppFolderFixture()
         {
             Settings.ConfigHelper.ReadonlySettings = new Settings.ReadOnlyTestSettings();
             Actions.FolderSetup.EstablishFolders();
