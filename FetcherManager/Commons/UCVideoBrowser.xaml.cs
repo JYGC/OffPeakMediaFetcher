@@ -164,7 +164,8 @@ namespace FetcherManager.Commons
                 SelectedMetadata.Metadata.IsBeingDownloaded = true;
                 SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.ToDownload;
                 __dg_Videos_SelectedCellsChanged(null, null);
-                OPMF.Actions.MetadataManagement.SaveMetadataChanges(new List<OPMF.Entities.IMetadataChannel> { SelectedMetadata });
+                Data.MetadataManager __metadataManager = new Data.MetadataManager();
+                __metadataManager.SaveMetadataChanges(new List<OPMF.Entities.IMetadataChannel> { SelectedMetadata });
 
                 Process process = new Process();
                 process.StartInfo.FileName = __offPeakMediaFetcherEXE;

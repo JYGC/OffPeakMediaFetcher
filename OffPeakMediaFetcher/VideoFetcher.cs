@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace OffPeakMediaFetcher
 {
@@ -13,6 +15,25 @@ namespace OffPeakMediaFetcher
         public void Run()
         {
             __Run(dbConn => new List<OPMF.Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload()));
+        }
+
+        private static void __MoveAllInFolder(string srcFolderPath, string dstFolderPath, string[] fileExtensions)
+        {
+            IEnumerable<string> srcFilepaths = new string[] { };
+
+            foreach (string fileExtension in fileExtensions)
+            {
+                srcFilepaths = srcFilepaths.Concat(Directory.GetFiles(srcFolderPath).Where(f => f.EndsWith("." + fileExtension)));
+            }
+
+            foreach (string srcFile in srcFilepaths)
+            {
+                FileInfo srcFileInfo = new FileInfo(srcFile);
+                if (new FileInfo(Path.Join(dstFolderPath, srcFileInfo.Name)).Exists == false)
+                {
+                    srcFileInfo.MoveTo(Path.Join(dstFolderPath, srcFileInfo.Name));
+                }
+            }
         }
 
         public void __Run(Func<OPMF.Database.DatabaseAdapter, List<OPMF.Entities.IMetadata>> GetVideoMetadata)
@@ -36,13 +57,13 @@ namespace OffPeakMediaFetcher
                     dbConn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(downloader.DownloadQueue, false);
                 });
                 OPMF.Actions.FolderSetup.EstablishVideoOutputFolder();
-                OPMF.Actions.FileOperations.MoveAllInFolder(OPMF.Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
-                                               OPMF.Settings.ConfigHelper.Config.VideoOutputFolderPath,
-                                               new string[]
-                                               {
-                                                   OPMF.Settings.ConfigHelper.Config.YoutubeDL.VideoExtension,
-                                                   OPMF.Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
-                                               });
+                __MoveAllInFolder(OPMF.Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
+                                  OPMF.Settings.ConfigHelper.Config.VideoOutputFolderPath,
+                                  new string[]
+                                  {
+                                      OPMF.Settings.ConfigHelper.Config.YoutubeDL.VideoExtension,
+                                      OPMF.Settings.ConfigHelper.Config.YoutubeDL.SubtitleExtension
+                                  });
             }
             catch (Exception e)
             {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,6 +18,61 @@ namespace FetcherManager.Tabs.Channels.Subtabs
             rb_SelectName.IsChecked = true;
         }
 
+        private static void __ImportChannels() // Test this
+        {
+            OPMF.SiteAdapter.ISiteChannelFinder siteAdapter = null;
+            List<OPMF.Entities.IChannel> channels = null;
+            try
+            {
+                siteAdapter = new OPMF.SiteAdapter.Youtube.YoutubeChannelFinder();
+                channels = siteAdapter.ImportChannels();
+
+                Console.WriteLine("saving channels to database");
+                OPMF.Database.DatabaseAuxillary.RemoveDuplicateIds(channels);
+                OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+                {
+                    dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
+                });
+            }
+            catch (Exception e)
+            {
+                OPMF.Logging.Logger.GetCurrent().LogEntry(new OPMF.Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "channels", channels }
+                    }
+                });
+            }
+        }
+
+        private static void __ImportChannels(string filePath)
+        {
+            string opml = null;
+            IEnumerable<OPMF.Entities.IChannel> channels = null;
+            try
+            {
+                opml = File.ReadAllText(filePath);
+                OPMF.SiteAdapter.Youtube.RssChannelImporter youtubeChannelImporter = new OPMF.SiteAdapter.Youtube.RssChannelImporter(opml);
+                channels = youtubeChannelImporter.ImportChannels();
+                OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+                {
+                    dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(channels);
+                });
+            }
+            catch (Exception e)
+            {
+                OPMF.Logging.Logger.GetCurrent().LogEntry(new OPMF.Entities.OPMFError(e)
+                {
+                    Variables = new Dictionary<string, object>
+                    {
+                        { "opml", opml },
+                        { "channels", channels }
+                    }
+                });
+            }
+        }
+
         private void __btn_ImportYoutubeXml_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -26,7 +82,7 @@ namespace FetcherManager.Tabs.Channels.Subtabs
                 {
                     LoadingDialog loadingDialog = new LoadingDialog("Importing channels...", () =>
                     {
-                        OPMF.Actions.SiteDownload.ImportChannels(openFileDialog.FileName);
+                        __ImportChannels(openFileDialog.FileName);
                     });
                     loadingDialog.Show();
                 }

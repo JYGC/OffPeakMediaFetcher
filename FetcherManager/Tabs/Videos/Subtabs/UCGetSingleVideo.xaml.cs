@@ -52,7 +52,8 @@ namespace FetcherManager.Tabs.Videos.Subtabs
                 }};
             };
             uc_VideoBrowser.SplitFromStatus = (metadataChannels) => (metadataChannels, metadataChannels);
-            uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => OPMF.Actions.MetadataManagement.SaveMetadataChanges(notStatusMetadataChannels);
+            Data.MetadataManager __metadataManager = new Data.MetadataManager();
+            uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => __metadataManager.SaveMetadataChanges(notStatusMetadataChannels);
         }
 
         private void __InitializeKeyBindings()

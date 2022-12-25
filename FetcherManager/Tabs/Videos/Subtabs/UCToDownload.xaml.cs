@@ -23,12 +23,14 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         private void __PrepareChildUserControls()
         {
+            Data.MetadataManager metadataManager = new Data.MetadataManager();
+
             uc_VideoBrowser.Btn_GetVideos.Content = "Get Download Queue";
-            uc_VideoBrowser.GetMetadataChannels = () => OPMF.Actions.MetadataManagement.GetToDownloadAndWait().OrderBy(c => c.Channel.Name);
-            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => OPMF.Actions.MetadataManagement.SplitFromStatus(metadataChannels,
-                                                                                                                    OPMF.Entities.MetadataStatus.ToDownload,
-                                                                                                                    OPMF.Entities.MetadataStatus.Wait);
-            uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => OPMF.Actions.MetadataManagement.SaveMetadataChanges(notStatusMetadataChannels);
+            uc_VideoBrowser.GetMetadataChannels = () => metadataManager.GetToDownloadAndWait().OrderBy(c => c.Channel.Name);
+            uc_VideoBrowser.SplitFromStatus = (metadataChannels) => metadataManager.SplitFromStatus(metadataChannels,
+                                                                                                    OPMF.Entities.MetadataStatus.ToDownload,
+                                                                                                    OPMF.Entities.MetadataStatus.Wait);
+            uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => metadataManager.SaveMetadataChanges(notStatusMetadataChannels);
         }
 
         private void __InitializeKeyBindings()
@@ -45,37 +47,25 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         private void __cb_Ignore_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded)
-            {
-                return;
-            }
+            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded) return;
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Ignore;
         }
 
         private void __cb_ToDownload_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded)
-            {
-                return;
-            }
+            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded) return;
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.ToDownload;
         }
 
         private void __cb_BackToNew_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded)
-            {
-                return;
-            }
+            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded) return;
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.New;
         }
 
         private void __cb_SetToWait_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded)
-            {
-                return;
-            }
+            if (uc_VideoBrowser.SelectedMetadata.Metadata.IsBeingDownloaded) return;
             uc_VideoBrowser.SelectedMetadata.Metadata.Status = OPMF.Entities.MetadataStatus.Wait;
         }
     }
