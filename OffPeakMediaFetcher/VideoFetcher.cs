@@ -56,7 +56,7 @@ namespace OffPeakMediaFetcher
                     dbConn.YoutubeMetadataDbCollection.UpdateStatus(downloader.DownloadQueue);
                     dbConn.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(downloader.DownloadQueue, false);
                 });
-                OPMF.Actions.FolderSetup.EstablishVideoOutputFolder();
+                OPMF.Filesystem.FolderSetup.EstablishVideoOutputFolder();
                 __MoveAllInFolder(OPMF.Settings.ConfigHelper.ReadonlySettings.GetDownloadFolderPath(),
                                   OPMF.Settings.ConfigHelper.Config.VideoOutputFolderPath,
                                   new string[]

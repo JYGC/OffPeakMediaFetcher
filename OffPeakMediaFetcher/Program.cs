@@ -7,7 +7,7 @@
             try
             {
                 OPMF.Settings.ConfigHelper.InitReadonlySettings();
-                OPMF.Actions.FolderSetup.EstablishFolders();
+                OPMF.Filesystem.FolderSetup.EstablishFolders();
                 OPMF.Settings.ConfigHelper.EstablishConfig();
 
                 if (args.Length >= 1)

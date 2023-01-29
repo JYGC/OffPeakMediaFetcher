@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Database", "OPMF.Datab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Settings", "OPMF.Settings\OPMF.Settings.csproj", "{6BA9E349-7418-48B3-A823-2A49BE67BC50}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Actions", "OPMF.Actions\OPMF.Actions.csproj", "{22ACBCE7-5076-49EF-B9B5-E432B394738A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Filesystem", "OPMF.Filesystem\OPMF.Filesystem.csproj", "{22ACBCE7-5076-49EF-B9B5-E432B394738A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FetcherManager", "FetcherManager\FetcherManager.csproj", "{249CFA55-789F-4BB5-BF0C-68091A12F826}"
 EndProject
