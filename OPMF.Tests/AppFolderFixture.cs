@@ -8,7 +8,7 @@ namespace OPMF.Tests
         public AppFolderFixture()
         {
             Settings.ConfigHelper.ReadonlySettings = new Settings.ReadOnlyTestSettings();
-            Actions.FolderSetup.EstablishFolders();
+            Filesystem.FolderSetup.EstablishFolders();
             Settings.ConfigHelper.EstablishConfig();
         }
 
