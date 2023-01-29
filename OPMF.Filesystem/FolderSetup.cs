@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace OPMF.Actions
+namespace OPMF.Filesystem
 {
     /// <summary>
     /// Exposes methods that alter OS file system for the program.

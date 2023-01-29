@@ -5,6 +5,7 @@ using System.Windows;
 using System;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using System.Collections.Generic;
 
 namespace FetcherManager.Tabs.Channels.Subtabs
 {
@@ -33,11 +34,30 @@ namespace FetcherManager.Tabs.Channels.Subtabs
             UnblacklistChannel.InputGestures.Add(new KeyGesture(Key.F2));
         }
 
+        private static IEnumerable<OPMF.Entities.IPropertyChangeChannel> __GetAllChannelsFromDB()
+        {
+            IEnumerable<OPMF.Entities.IPropertyChangeChannel> channels = new OPMF.Entities.IPropertyChangeChannel[] { };
+
+            OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            {
+                IEnumerable<OPMF.Entities.IChannel> rawChannels = dbAdapter.YoutubeChannelDbCollection.GetAll();
+                foreach (OPMF.Entities.IChannel rawChannel in rawChannels)
+                {
+                    channels = channels.Concat(new OPMF.Entities.IPropertyChangeChannel[]
+                    {
+                        new OPMF.Entities.PropertyChangeChannel(rawChannel)
+                    });
+                }
+            });
+
+            return channels;
+        }
+
         private void __btn_GetAllChannels_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                __channels = new ObservableCollection<OPMF.Entities.IPropertyChangeChannel>(OPMF.Actions.ChannelManagement.GetAllChannels().OrderBy(c => c.Name));
+                __channels = new ObservableCollection<OPMF.Entities.IPropertyChangeChannel>(__GetAllChannelsFromDB().OrderBy(c => c.Name));
 
                 LoadingDialog loadingDialog = new LoadingDialog("Loading " + __channels.Count.ToString() + " channels entries", () =>
                 {
@@ -54,6 +74,14 @@ namespace FetcherManager.Tabs.Channels.Subtabs
             }
         }
 
+        public static void __UpdateChannelSettingsInDB(IEnumerable<OPMF.Entities.IChannel> channels)
+        {
+            OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
+            {
+                dbAdapter.YoutubeChannelDbCollection.UpdateBlackListStatus(channels);
+            });
+        }
+
         private void __btn_Save_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -62,7 +90,7 @@ namespace FetcherManager.Tabs.Channels.Subtabs
                 {
                     LoadingDialog loadingDialog = new LoadingDialog("Saving channel selection...", () =>
                     {
-                        OPMF.Actions.ChannelManagement.UpdateChannelSettings(__channels);
+                        __UpdateChannelSettingsInDB(__channels);
                     });
                     loadingDialog.Show();
                 }

@@ -24,20 +24,22 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
         private void __PrepareChildUserControls()
         {
+            Data.MetadataManager __metadataManager = new Data.MetadataManager();
+
             uc_VideoBrowser.Btn_GetVideos.Content = "Find";
             uc_VideoBrowser.Btn_GetVideos.Visibility = Visibility.Hidden;
             uc_VideoBrowser.GetMetadataChannels = () =>
             {
                 if (string.IsNullOrWhiteSpace(txt_FindByChannelName.Text))
                 {
-                    return OPMF.Actions.MetadataManagement.GetByTitleContainingWord(
+                    return __metadataManager.GetByTitleContainingWord(
                         txt_FindByVideoTitle.Text).OrderByDescending(c => c.Metadata.PublishedAt);
                 }
-                return OPMF.Actions.MetadataManagement.GetByChannelAndTitleContainingWord(
+                return __metadataManager.GetByChannelAndTitleContainingWord(
                     txt_FindByChannelName.Text, txt_FindByVideoTitle.Text).OrderByDescending(c => c.Metadata.PublishedAt);
             };
             uc_VideoBrowser.SplitFromStatus = (metadataChannels) => (metadataChannels, metadataChannels);
-            uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => OPMF.Actions.MetadataManagement.SaveMetadataChanges(notStatusMetadataChannels);
+            uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => __metadataManager.SaveMetadataChanges(notStatusMetadataChannels);
         }
 
         private void __InitializeKeyBindings()

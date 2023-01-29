@@ -12,6 +12,7 @@ namespace FetcherManager
             try
             {
                 OPMF.Settings.ConfigHelper.InitReadonlySettings();
+                OPMF.Filesystem.FolderSetup.EstablishFolders();
                 OPMF.Settings.ConfigHelper.EstablishConfig();
 
                 InitializeComponent();
