@@ -1,1 +1,2 @@
-Requires .NET Core 3.1
+FetcherManager - GUI to manage data
+OffPeakMediaFetcher - Executable that gets called by Task Scheduler
