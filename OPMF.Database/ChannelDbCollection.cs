@@ -29,7 +29,7 @@ namespace OPMF.Database
 
         public TItem GetBySiteId(string id)
         {
-            return GetById(id);
+            return _Collection.FindOne(Query.Contains("SiteId", id));
         }
 
         public TItem GetById(string id)
