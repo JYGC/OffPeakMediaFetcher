@@ -9,7 +9,7 @@ namespace OffPeakMediaFetcher
     {
         public void Run(string siteId)
         {
-            __Run(dbConn => new List<OPMF.Entities.IMetadata> { dbConn.YoutubeMetadataDbCollection.FindById(siteId) });
+            __Run(dbConn => new List<OPMF.Entities.IMetadata> { dbConn.YoutubeMetadataDbCollection.GetBySiteId(siteId) });
         }
 
         public void Run()
