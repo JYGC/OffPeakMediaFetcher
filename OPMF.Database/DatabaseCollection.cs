@@ -45,11 +45,6 @@ namespace OPMF.Database
             return _Collection.FindOne(Query.Contains("SiteId", id));
         }
 
-        public TItem FindById(string Id)
-        {
-            return _Collection.FindById(Id);
-        }
-
         public void InsertBulk(IEnumerable<TItem> items)
         {
             _Collection.InsertBulk(items);

@@ -158,14 +158,14 @@ namespace OPMF.Tests.Database
                 List<string> metadataIdsToTest = metadataIndexesToTest.Select(index => VideoMetadata.MetadataList2[index].SiteId).ToList();
                 IEnumerable<IMetadata> metadatasToTest = metadataIdsToTest.Select(siteId =>
                 {
-                    IMetadata metadata = dbAdapter.YoutubeMetadataDbCollection.FindById(siteId);
+                    IMetadata metadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId);
                     metadata.Status = metadataStatus;
                     return metadata;
                 });
                 dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatasToTest);
                 for (int i = 0; i < metadataIdsToTest.Count(); i++)
                 {
-                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.FindById(metadataIdsToTest[i]);
+                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToTest[i]);
                     Assert.Equal(metadataStatus, changedMetadata.Status);
                 }
             });
@@ -187,17 +187,17 @@ namespace OPMF.Tests.Database
             DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 List<string> metadataIdsToSetToBeingProcessed = (new int[] { 0, 1, 2, 5, 8, 11, 14, 18 }).Select(index => VideoMetadata.MetadataList2[index].SiteId).ToList();
-                dbAdapter.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(metadataIdsToSetToBeingProcessed.Select(siteId => dbAdapter.YoutubeMetadataDbCollection.FindById(siteId)), true);
+                dbAdapter.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(metadataIdsToSetToBeingProcessed.Select(siteId => dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId)), true);
                 for (int i = 0; i < metadataIdsToSetToBeingProcessed.Count(); i++)
                 {
-                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.FindById(metadataIdsToSetToBeingProcessed[i]);
+                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToSetToBeingProcessed[i]);
                     Assert.True(changedMetadata.IsBeingDownloaded);
                 }
                 List<string> metadataIdsToUnsetFromBeingProcessed = (new int[] { 0, 1, 8, 11, 18 }).Select(index => VideoMetadata.MetadataList2[index].SiteId).ToList();
-                dbAdapter.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(metadataIdsToUnsetFromBeingProcessed.Select(siteId => dbAdapter.YoutubeMetadataDbCollection.FindById(siteId)), false);
+                dbAdapter.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(metadataIdsToUnsetFromBeingProcessed.Select(siteId => dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId)), false);
                 for (int i = 0; i < metadataIdsToUnsetFromBeingProcessed.Count(); i++)
                 {
-                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.FindById(metadataIdsToUnsetFromBeingProcessed[i]);
+                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToUnsetFromBeingProcessed[i]);
                     Assert.False(changedMetadata.IsBeingDownloaded);
                 }
             });
