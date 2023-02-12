@@ -7,7 +7,7 @@ using OPMF.Entities;
 
 namespace OPMF.Database
 {
-    public interface IMetadataDbCollection<TItem> : IDatabaseCollection where TItem : IMetadata
+    public interface IMetadataDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : IMetadata
     {
         IEnumerable<TItem> GetToDownload();
         IEnumerable<TItem> GetNew();
