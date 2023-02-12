@@ -11,7 +11,6 @@ namespace OPMF.Database
         IEnumerable<TItem> GetAll();
         IEnumerable<TItem> GetNotBacklisted();
         TItem GetBySiteId(string id);
-        TItem GetById(string id);
         IEnumerable<TItem> GetManyByWordInName(string wordInChannelName);
         void InsertOrUpdate(IEnumerable<TItem> items);
         void UpdateLastCheckedOutAndActivity(IEnumerable<TItem> items);
@@ -30,11 +29,6 @@ namespace OPMF.Database
         public TItem GetBySiteId(string id)
         {
             return _Collection.FindOne(Query.Contains("SiteId", id));
-        }
-
-        public TItem GetById(string id)
-        {
-            return _Collection.FindById(id);
         }
 
         public IEnumerable<TItem> GetManyByWordInName(string wordInChannelName)
