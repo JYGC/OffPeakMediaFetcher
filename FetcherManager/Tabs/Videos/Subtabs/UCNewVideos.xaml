@@ -4,9 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Commons="clr-namespace:FetcherManager.Commons"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
+             mc:Ignorable="d">
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid Height="30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -26,7 +25,7 @@
                 <CommandBinding x:Name="cb_BackToNew" Executed="__cb_BackToNew_Executed" />
                 <CommandBinding x:Name="cb_SetToWait" Executed="__cb_SetToWait_Executed" />
             </Grid.CommandBindings>
-            <Commons:UCVideoBrowser x:Name="uc_VideoBrowser" />
+            <Commons:UCVideoBrowser x:Name="uc_VideoBrowser" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </Grid>
     </StackPanel>
 </UserControl>

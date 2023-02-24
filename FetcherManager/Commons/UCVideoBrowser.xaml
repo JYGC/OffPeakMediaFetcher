@@ -4,75 +4,81 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FetcherManager.Commons"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             mc:Ignorable="d">
+    <Grid VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Column="0">
-            <DockPanel Height="30">
-                <Button x:Name="btn_GetVideos" Content="" Click="__btn_GetVideos_Click" />
-                <Button x:Name="btn_Save" Content="Save" Visibility="Hidden" Click="__btn_Save_Click" HorizontalAlignment="Right" />
-            </DockPanel>
-            <ScrollViewer x:Name="sv_VideoInfo" PreviewMouseWheel="__sv_Videos_PreviewMouseWheel" Height="600" IsDeferredScrollingEnabled="True">
-                <StackPanel>
-                    <DataGrid x:Name="dg_Videos" CanUserAddRows="False" SelectedCellsChanged="__dg_Videos_SelectedCellsChanged">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Metadata.DisplayedStatus}" Width="100" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Author" Binding="{Binding Channel.Name}" Width="100" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="TextWrapping" Value="Wrap" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Title" Binding="{Binding Metadata.Title}" Width="230" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="TextWrapping" Value="Wrap" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Header="Published At" Binding="{Binding Metadata.PublishedAt, StringFormat=\{0:yy/MM/dd HH:mm:ss\}}" Width="130" IsReadOnly="True" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </ScrollViewer>
-        </StackPanel>
-        <StackPanel Grid.Column="1">
-            <ScrollViewer HorizontalScrollBarVisibility="Visible"  Height="630">
-                <StackPanel>
-                    <Label  Content="Title: " FontWeight="Bold" />
-                    <Label x:Name="lbl_Title" />
-                    <Separator />
-                    <Label Content="Thumbnail: " FontWeight="Bold" />
-                    <Image x:Name="img_Thumbnail" />
-                    <Separator />
-                    <Label Content="Channel: " FontWeight="Bold" />
-                    <Label x:Name="lbl_Channel" />
-                    <Separator />
-                    <Label Content="Url: " FontWeight="Bold" />
-                    <TextBlock>
-                        <Hyperlink x:Name="hl_Url" RequestNavigate="__hl_Url_RequestNavigate">
-                            <TextBlock x:Name="txt_UrlTextBlock" />
-                        </Hyperlink>
-                    </TextBlock>
-                    <Separator />
-                    <Label Content="Description: " FontWeight="Bold" />
-                    <TextBlock x:Name="lbl_Description" TextWrapping="Wrap"/>
-                    <Separator />
-                    <Label Content="Actions: " FontWeight="Bold" />
-                    <DockPanel>
-                        <Button x:Name="btn_DownloadNow" Content="Download Now" Click="__btn_DownloadNow_Click" Visibility="Hidden" HorizontalAlignment="Left" />
-                        <Label x:Name="lbl_IsBeingDownloaded" Content="Video is being downloaded..." Visibility="Hidden" />
-                    </DockPanel>
-                    <DockPanel>
-                        <Button x:Name="btn_RemoveIsBeingDownloaded" Content='Remove "being downloaded" block' Click="__btn_RemoveIsBeingDownloaded_Click" Visibility="Hidden" HorizontalAlignment="Left" />
-                    </DockPanel>
-                </StackPanel>
-            </ScrollViewer>
-        </StackPanel>
+        <Grid Grid.Column="0"  VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <DockPanel>
+                    <Button x:Name="btn_GetVideos" Content="" Click="__btn_GetVideos_Click" />
+                    <Button x:Name="btn_Save" Content="Save" Visibility="Hidden" Click="__btn_Save_Click" HorizontalAlignment="Right" />
+                </DockPanel>
+            </Grid>
+            <Grid Grid.Row="1" VerticalAlignment="Stretch">
+                <DataGrid x:Name="dg_Videos" CanUserAddRows="False" SelectedCellsChanged="__dg_Videos_SelectedCellsChanged"
+                      ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Metadata.DisplayedStatus}" Width="100" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Author" Binding="{Binding Channel.Name}" Width="100" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Title" Binding="{Binding Metadata.Title}" Width="230" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Published At" Binding="{Binding Metadata.PublishedAt, StringFormat=\{0:yy/MM/dd HH:mm:ss\}}" Width="130" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="1" VerticalAlignment="Stretch">
+            <StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                    <StackPanel HorizontalAlignment="Stretch">
+                        <Label  Content="Title: " FontWeight="Bold" />
+                        <Label x:Name="lbl_Title" />
+                        <Separator />
+                        <Label Content="Thumbnail: " FontWeight="Bold" />
+                        <Image x:Name="img_Thumbnail" />
+                        <Separator />
+                        <Label Content="Channel: " FontWeight="Bold" />
+                        <Label x:Name="lbl_Channel" />
+                        <Separator />
+                        <Label Content="Url: " FontWeight="Bold" />
+                        <TextBlock>
+                            <Hyperlink x:Name="hl_Url" RequestNavigate="__hl_Url_RequestNavigate">
+                                <TextBlock x:Name="txt_UrlTextBlock" />
+                            </Hyperlink>
+                        </TextBlock>
+                        <Separator />
+                        <Label Content="Description: " FontWeight="Bold" />
+                        <TextBlock x:Name="lbl_Description" TextWrapping="Wrap"/>
+                        <Separator />
+                        <Label Content="Actions: " FontWeight="Bold" />
+                        <DockPanel>
+                            <Button x:Name="btn_DownloadNow" Content="Download Now" Click="__btn_DownloadNow_Click" Visibility="Hidden" HorizontalAlignment="Left" />
+                            <Label x:Name="lbl_IsBeingDownloaded" Content="Video is being downloaded..." Visibility="Hidden" />
+                        </DockPanel>
+                        <DockPanel>
+                            <Button x:Name="btn_RemoveIsBeingDownloaded" Content='Remove "being downloaded" block' Click="__btn_RemoveIsBeingDownloaded_Click" Visibility="Hidden" HorizontalAlignment="Left" />
+                        </DockPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
