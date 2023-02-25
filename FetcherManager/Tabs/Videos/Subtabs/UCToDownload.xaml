@@ -6,8 +6,12 @@
              xmlns:local="clr-namespace:FetcherManager.Tabs.Videos.Subtabs"
              xmlns:Commons="clr-namespace:FetcherManager.Commons"
              mc:Ignorable="d">
-    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -19,7 +23,7 @@
             <Label Content="[F3 key] - Mark as new" Grid.Column="2" />
             <Label Content="[F4 key] - Mark as wait" Grid.Column="3" />
         </Grid>
-        <Grid VerticalAlignment="Stretch">
+        <Grid Grid.Row="1" VerticalAlignment="Stretch">
             <Grid.CommandBindings>
                 <CommandBinding x:Name="cb_Ignore" Executed="__cb_Ignore_Executed" />
                 <CommandBinding x:Name="cb_ToDownload" Executed="__cb_ToDownload_Executed" />
@@ -28,5 +32,5 @@
             </Grid.CommandBindings>
             <Commons:UCVideoBrowser VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" x:Name="uc_VideoBrowser" />
         </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>
