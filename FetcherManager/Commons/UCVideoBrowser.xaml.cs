@@ -129,20 +129,6 @@ namespace FetcherManager.Commons
             }
         }
 
-        private void __sv_Videos_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            try
-            {
-                sv_VideoInfo.ScrollToVerticalOffset(sv_VideoInfo.VerticalOffset - e.Delta);
-                e.Handled = true;
-            }
-            catch (Exception ex)
-            {
-                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
-                MessageBox.Show(ex.Message, "Error");
-            }
-        }
-
         private void __hl_Url_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             try
