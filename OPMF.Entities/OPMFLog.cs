@@ -34,12 +34,13 @@ namespace OPMF.Entities
 
     public class OPMFError : OPMFLog
     {
-        public OPMFError(Exception exception)
+        public OPMFError() : base() { }
+        public OPMFError(Exception exception) : base()
         {
             Message = exception.Message;
             Type = OPMFLogType.Error;
             ExceptionObject = exception.ToString();
         }
-        public string ExceptionObject { get; }
+        public string ExceptionObject { get; set; }
     }
 }
