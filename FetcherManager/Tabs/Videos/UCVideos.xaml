@@ -3,21 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Subtabs="clr-namespace:FetcherManager.Tabs.Videos.Subtabs"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <TabControl>
+             xmlns:Subtabs="clr-namespace:FetcherManager.Tabs.Videos.Subtabs">
+    <TabControl VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
         <TabItem Header="New Videos">
-            <Subtabs:UCNewVideos />
+            <Subtabs:UCNewVideos VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
         </TabItem>
         <TabItem Header="Find Single Video From Internet">
-            <Subtabs:UCGetSingleVideo />
+            <Subtabs:UCGetSingleVideo VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
         </TabItem>
         <TabItem Header="Download Queue">
-            <Subtabs:UCToDownload />
+            <Subtabs:UCToDownload VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
         </TabItem>
         <TabItem Header="Find Videos In Database">
-            <Subtabs:UCFindVideos />
+            <Subtabs:UCFindVideos VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
         </TabItem>
     </TabControl>
 </UserControl>

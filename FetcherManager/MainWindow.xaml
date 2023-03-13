@@ -7,12 +7,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="MainWindow" Height="750" Width="1200">
-    <TabControl>
+    <TabControl VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
         <TabItem Header="Videos">
-            <Videos:UCVideos />
+            <Videos:UCVideos VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </TabItem>
         <TabItem Header="Channels">
-            <Channels:UCChannels />
+            <Channels:UCChannels VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </TabItem>
     </TabControl>
 </Window>
