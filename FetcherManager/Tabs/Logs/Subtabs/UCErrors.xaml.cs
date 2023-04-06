@@ -26,7 +26,7 @@ namespace FetcherManager.Tabs.Logs.Subtabs
 
                 OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
                 {
-                    logs = dbAdapter.OPMFLogDbCollection.GetErrors().Select(l => __ConvertLogToOPMFError(l));
+                    logs = dbAdapter.OPMFLogDbCollection.GetErrors().Select(l => __ConvertLogToOPMFError(l)).OrderByDescending(l => l.DateCreated);
                 });
 
                 return logs;

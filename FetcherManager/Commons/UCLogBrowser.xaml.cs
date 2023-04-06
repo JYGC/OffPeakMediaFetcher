@@ -52,7 +52,19 @@ namespace FetcherManager.Commons
 
         private void __dg_Logs_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            //
+            try
+            {
+                if (dg_Logs.SelectedItem is IOPMFLog log)
+                {
+                    lbl_Message.Text = log.Message;
+                    lbl_ExceptionObject.Text = (log is OPMFError) ? ((OPMFError)log).ExceptionObject : "";
+                }
+            }
+            catch (Exception ex)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(ex.StackTrace);
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ namespace FetcherManager.Tabs.Logs.Subtabs
 
                 OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
                 {
-                    logs = dbAdapter.OPMFLogDbCollection.GetWarnings();
+                    logs = dbAdapter.OPMFLogDbCollection.GetWarnings().OrderByDescending(l => l.DateCreated);
                 });
 
                 return logs;

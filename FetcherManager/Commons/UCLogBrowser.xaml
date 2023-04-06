@@ -25,7 +25,7 @@
                 <DataGrid x:Name="dg_Logs" CanUserAddRows="False" SelectedCellsChanged="__dg_Logs_SelectedCellsChanged"
                           ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible"
                           ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.Row="1" Margin="0" HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch">
+                          VerticalAlignment="Stretch" AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="230" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
@@ -46,10 +46,10 @@
             <ScrollViewer Grid.Row="0" CanContentScroll="True" HorizontalAlignment="Stretch" Margin="0">
                 <StackPanel>
                     <Label Content="Message: " FontWeight="Bold" />
-                    <Label x:Name="lbl_Message" />
+                    <TextBlock x:Name="lbl_Message" TextWrapping="Wrap" />
                     <Separator />
                     <Label Content="Exception Object: " FontWeight="Bold" />
-                    <Label x:Name="lbl_ExceptionObject" />
+                    <TextBlock x:Name="lbl_ExceptionObject" TextWrapping="Wrap" />
                 </StackPanel>
             </ScrollViewer>
         </Grid>
