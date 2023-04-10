@@ -28,15 +28,15 @@ namespace FetcherManager.Tabs.Videos.Subtabs
 
             uc_VideoBrowser.Btn_GetVideos.Content = "Find";
             uc_VideoBrowser.Btn_GetVideos.Visibility = Visibility.Hidden;
-            uc_VideoBrowser.GetMetadataChannels = () =>
+            uc_VideoBrowser.GetMetadataChannels = (skip, pageSize) =>
             {
                 if (string.IsNullOrWhiteSpace(txt_FindByChannelName.Text))
                 {
                     return __metadataManager.GetByTitleContainingWord(
-                        txt_FindByVideoTitle.Text).OrderByDescending(c => c.Metadata.PublishedAt);
+                        txt_FindByVideoTitle.Text, skip, pageSize).OrderByDescending(c => c.Metadata.PublishedAt);
                 }
                 return __metadataManager.GetByChannelAndTitleContainingWord(
-                    txt_FindByChannelName.Text, txt_FindByVideoTitle.Text).OrderByDescending(c => c.Metadata.PublishedAt);
+                    txt_FindByChannelName.Text, txt_FindByVideoTitle.Text, skip, pageSize).OrderByDescending(c => c.Metadata.PublishedAt);
             };
             uc_VideoBrowser.SplitFromStatus = (metadataChannels) => (metadataChannels, metadataChannels);
             uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => __metadataManager.SaveMetadataChanges(notStatusMetadataChannels);

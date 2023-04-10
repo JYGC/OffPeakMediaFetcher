@@ -1,18 +1,10 @@
 ﻿using OPMF.Entities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FetcherManager.Commons
 {
@@ -21,9 +13,9 @@ namespace FetcherManager.Commons
     /// </summary>
     public partial class UCLogBrowser : UserControl
     {
-        private IEnumerable<OPMF.Entities.IOPMFLog> __logs = new List<OPMF.Entities.IOPMFLog>();
+        private IEnumerable<IOPMFLog> __logs = new List<IOPMFLog>();
 
-        public Func<IEnumerable<OPMF.Entities.IOPMFLog>> GetLogs { get; set; }
+        public Func<int, int, IEnumerable<IOPMFLog>> GetLogs { get; set; }
 
         public UCLogBrowser()
         {
@@ -34,14 +26,10 @@ namespace FetcherManager.Commons
         {
             try
             {
-                __logs = GetLogs();
-
-                LoadingDialog loadingDialog = new LoadingDialog($"Rendering {__logs.Count()} log entries...", () =>
-                {
-                    dg_Logs.ItemsSource = __logs;
-                    dg_Logs.SelectedIndex = 0;
-                });
-                loadingDialog.Show();
+                __skip = 0;
+                __logs = GetLogs(__skip, __pageSize);
+                dg_Logs.ItemsSource = __logs;
+                dg_Logs.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -49,6 +37,31 @@ namespace FetcherManager.Commons
                 MessageBox.Show(ex.Message, "Error");
             }
         }
+
+        #region Paging
+        private const int __pageSize = 15;
+        private int __skip = 0;
+
+        public bool DisablePaging { get; set; } = false;
+
+        private void __btn_Back_Click(object sender, RoutedEventArgs e)
+        {
+            __skip = __skip - __pageSize;
+            __skip = __skip < 0 ? 0 : __skip;
+            __logs = new ObservableCollection<IOPMFLog>(GetLogs(__skip, __pageSize));
+            dg_Logs.ItemsSource = __logs;
+            dg_Logs.SelectedIndex = 0;
+        }
+
+        private void __btn_Forward_Click(object sender, RoutedEventArgs e)
+        {
+            if (__logs.Count() < __pageSize) return;
+            __skip += __pageSize;
+            __logs = new ObservableCollection<IOPMFLog>(GetLogs(__skip, __pageSize));
+            dg_Logs.ItemsSource = __logs;
+            dg_Logs.SelectedIndex = 0;
+        }
+        #endregion
 
         private void __dg_Logs_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {

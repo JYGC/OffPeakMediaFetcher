@@ -26,7 +26,8 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         {
             uc_VideoBrowser.Btn_GetVideos.Content = "Get Video";
             uc_VideoBrowser.Btn_GetVideos.Visibility = Visibility.Hidden;
-            uc_VideoBrowser.GetMetadataChannels = () =>
+            uc_VideoBrowser.DisablePaging = true;
+            uc_VideoBrowser.GetMetadataChannels = (skip, pageSize) =>
             {
                 OPMF.SiteAdapter.ISiteVideoMetadataGetter siteVideoGetter = new OPMF.SiteAdapter.Youtube.YoutubeVideoMetadataGetter(); // Replace when adding other platforms
                 string siteId = siteVideoGetter.GetSiteIdFromURL(txt_EnterVideoURL.Text);

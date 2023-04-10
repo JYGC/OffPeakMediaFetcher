@@ -19,13 +19,17 @@
             <Grid Grid.Row="0">
                 <DockPanel>
                     <Button x:Name="btn_GetLogs" Content="" Click="__btn_GetLogs_Click" />
+                    <DockPanel HorizontalAlignment="Right">
+                        <Button x:Name="btn_Back" Content="Back" Click="__btn_Back_Click" />
+                        <Button x:Name="btn_Forward" Content="Forward" Click="__btn_Forward_Click" />
+                    </DockPanel>
                 </DockPanel>
             </Grid>
             <Grid Grid.Row="1">
                 <DataGrid x:Name="dg_Logs" CanUserAddRows="False" SelectedCellsChanged="__dg_Logs_SelectedCellsChanged"
                           ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible"
                           ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.Row="1" Margin="0" HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch" AutoGenerateColumns="False">
+                          VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserSortColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="230" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>

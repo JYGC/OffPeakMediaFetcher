@@ -21,7 +21,7 @@ namespace FetcherManager.Commons
 
         private ObservableCollection<OPMF.Entities.IMetadataChannel> __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>();
 
-        public Func<IEnumerable<OPMF.Entities.IMetadataChannel>> GetMetadataChannels { get; set; }
+        public Func<int, int, IEnumerable<OPMF.Entities.IMetadataChannel>> GetMetadataChannels { get; set; }
         public Func<IEnumerable<OPMF.Entities.IMetadataChannel>, (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>)> SplitFromStatus { get; set; }
         public Action<IEnumerable<OPMF.Entities.IMetadataChannel>> SaveMetadataChanges { get; set; }
         public OPMF.Entities.IMetadataChannel SelectedMetadata
@@ -48,15 +48,11 @@ namespace FetcherManager.Commons
         {
             try
             {
-                __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(GetMetadataChannels());
-
-                LoadingDialog loadingDialog = new LoadingDialog("Loading " + __metadataChannels.Count.ToString() + " video entries...", () =>
-                {
-                    dg_Videos.ItemsSource = __metadataChannels;
-                    dg_Videos.SelectedIndex = 0;
-                    btn_Save.Visibility = Visibility.Visible;
-                });
-                loadingDialog.Show();
+                __skip = 0;
+                __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(GetMetadataChannels(__skip, __pageSize));
+                dg_Videos.ItemsSource = __metadataChannels;
+                dg_Videos.SelectedIndex = 0;
+                btn_Save.Visibility = Visibility.Visible;
             }
             catch (Exception ex)
             {
@@ -69,20 +65,14 @@ namespace FetcherManager.Commons
         {
             try
             {
-                if (__metadataChannels.Count > 0)
-                {
-                    LoadingDialog loadingDialog = new LoadingDialog("Saving video selection...", () =>
-                    {
-                        (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>) metadatas = SplitFromStatus(__metadataChannels);
-                        IEnumerable<OPMF.Entities.IMetadataChannel> notNewMetadataChannels = metadatas.Item2;
-                        __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(metadatas.Item1);
-                        SaveMetadataChanges(notNewMetadataChannels.Where(
-                            metadataChannel => !metadataChannel.Metadata.IsBeingDownloaded // prevent override of metadata status when it has been downloaded
-                        ));
-                        dg_Videos.ItemsSource = __metadataChannels; // reload dg_VideoInfo
-                    });
-                    loadingDialog.Show();
-                }
+                if (__metadataChannels.Count == 0) return;
+                (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>) metadatas = SplitFromStatus(__metadataChannels);
+                IEnumerable<OPMF.Entities.IMetadataChannel> notNewMetadataChannels = metadatas.Item2;
+                SaveMetadataChanges(notNewMetadataChannels.Where(
+                    metadataChannel => !metadataChannel.Metadata.IsBeingDownloaded // prevent override of metadata status when it has been downloaded
+                ));
+                __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(GetMetadataChannels(__skip, __pageSize));
+                dg_Videos.ItemsSource = __metadataChannels; // reload dg_VideoInfo
             }
             catch (Exception ex)
             {
@@ -90,6 +80,37 @@ namespace FetcherManager.Commons
                 MessageBox.Show(ex.Message, "Error");
             }
         }
+
+        #region Paging
+        private const int __pageSize = 15;
+        private int __skip = 0;
+
+        public bool DisablePaging
+        {
+            set
+            {
+                dp_Paging.Visibility = value ? Visibility.Hidden : Visibility.Visible;
+            }
+        }
+
+        private void __btn_Back_Click(object sender, RoutedEventArgs e)
+        {
+            __skip = __skip - __pageSize;
+            __skip = __skip < 0 ? 0 : __skip;
+            __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(GetMetadataChannels(__skip, __pageSize));
+            dg_Videos.ItemsSource = __metadataChannels;
+            dg_Videos.SelectedIndex = 0;
+        }
+
+        private void __btn_Forward_Click(object sender, RoutedEventArgs e)
+        {
+            if (__metadataChannels.Count() < __pageSize) return;
+            __skip += __pageSize;
+            __metadataChannels = new ObservableCollection<OPMF.Entities.IMetadataChannel>(GetMetadataChannels(__skip, __pageSize));
+            dg_Videos.ItemsSource = __metadataChannels;
+            dg_Videos.SelectedIndex = 0;
+        }
+        #endregion
 
         private void __dg_Videos_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {

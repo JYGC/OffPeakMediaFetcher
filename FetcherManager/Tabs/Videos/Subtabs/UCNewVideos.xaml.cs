@@ -25,7 +25,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         {
             uc_VideoBrowser.Btn_GetVideos.Content = "Get New Videos";
             Data.MetadataManager __metadataManager = new Data.MetadataManager();
-            uc_VideoBrowser.GetMetadataChannels = () => __metadataManager.GetNew().OrderBy(c => c.Channel.Name);
+            uc_VideoBrowser.GetMetadataChannels = (skip, pageSize) => __metadataManager.GetNew(skip, pageSize).OrderBy(c => c.Channel.Name);
             uc_VideoBrowser.SplitFromStatus = (metadataChannels) => __metadataManager.SplitFromStatus(metadataChannels, OPMF.Entities.MetadataStatus.New);
             uc_VideoBrowser.SaveMetadataChanges = (notStatusMetadataChannels) => __metadataManager.SaveMetadataChanges(notStatusMetadataChannels);
         }
