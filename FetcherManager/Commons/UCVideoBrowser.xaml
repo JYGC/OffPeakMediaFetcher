@@ -19,13 +19,17 @@
             <Grid Grid.Row="0">
                 <DockPanel>
                     <Button x:Name="btn_GetVideos" Content="" Click="__btn_GetVideos_Click" />
-                    <Button x:Name="btn_Save" Content="Save" Visibility="Hidden" Click="__btn_Save_Click" HorizontalAlignment="Right" />
+                    <Button x:Name="btn_Save" Content="Save" Visibility="Hidden" Click="__btn_Save_Click" HorizontalAlignment="Left" />
+                    <DockPanel x:Name="dp_Paging" HorizontalAlignment="Right">
+                        <Button x:Name="btn_Back" Content="Back" Click="__btn_Back_Click" />
+                        <Button x:Name="btn_Forward" Content="Forward" Click="__btn_Forward_Click" />
+                    </DockPanel>
                 </DockPanel>
             </Grid>
             <DataGrid x:Name="dg_Videos" CanUserAddRows="False" SelectedCellsChanged="__dg_Videos_SelectedCellsChanged"
                       ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible"
                       ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.Row="1" Margin="0" HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch">
+                      VerticalAlignment="Stretch" CanUserSortColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Status" Binding="{Binding Metadata.DisplayedStatus}" Width="100" IsReadOnly="True" />
                     <DataGridTextColumn Header="Author" Binding="{Binding Channel.Name}" Width="100" IsReadOnly="True">

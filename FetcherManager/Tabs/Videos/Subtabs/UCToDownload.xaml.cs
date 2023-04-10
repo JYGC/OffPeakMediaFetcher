@@ -26,7 +26,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
             Data.MetadataManager metadataManager = new Data.MetadataManager();
 
             uc_VideoBrowser.Btn_GetVideos.Content = "Get Download Queue";
-            uc_VideoBrowser.GetMetadataChannels = () => metadataManager.GetToDownloadAndWait().OrderBy(c => c.Channel.Name);
+            uc_VideoBrowser.GetMetadataChannels = (skip, pageSize) => metadataManager.GetToDownloadAndWait(skip, pageSize).OrderBy(c => c.Channel.Name);
             uc_VideoBrowser.SplitFromStatus = (metadataChannels) => metadataManager.SplitFromStatus(metadataChannels,
                                                                                                     OPMF.Entities.MetadataStatus.ToDownload,
                                                                                                     OPMF.Entities.MetadataStatus.Wait);

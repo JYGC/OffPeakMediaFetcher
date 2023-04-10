@@ -20,13 +20,13 @@ namespace FetcherManager.Tabs.Logs.Subtabs
         {
             uc_LogBrowser.btn_GetLogs.Content = "Get Errors";
 
-            uc_LogBrowser.GetLogs = () =>
+            uc_LogBrowser.GetLogs = (__skip, __pageSize) =>
             {
                 IEnumerable<IOPMFLog> logs = new IOPMFLog[] { };
 
                 OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
                 {
-                    logs = dbAdapter.OPMFLogDbCollection.GetErrors().Select(l => __ConvertLogToOPMFError(l)).OrderByDescending(l => l.DateCreated);
+                    logs = dbAdapter.OPMFLogDbCollection.GetErrors(__skip, __pageSize).Select(l => __ConvertLogToOPMFError(l)).OrderByDescending(l => l.DateCreated);
                 });
 
                 return logs;

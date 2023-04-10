@@ -59,7 +59,7 @@ namespace OPMF.Tests.Database
         [Fact]
         public void TestGetNew()
         {
-            AssertMetadataStatus(dbAdapter => dbAdapter.YoutubeMetadataDbCollection.GetNew(), metadata => metadata.Status == MetadataStatus.New);
+            AssertMetadataStatus(dbAdapter => dbAdapter.YoutubeMetadataDbCollection.GetNew(0, 2147483647), metadata => metadata.Status == MetadataStatus.New);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace OPMF.Tests.Database
         public void TestGetToDownloadAndWait()
         {
             AssertMetadataStatus(
-                dbAdapter => dbAdapter.YoutubeMetadataDbCollection.GetToDownloadAndWait(),
+                dbAdapter => dbAdapter.YoutubeMetadataDbCollection.GetToDownloadAndWait(0, 2147483647),
                 metadata => metadata.Status == MetadataStatus.ToDownload || metadata.Status == MetadataStatus.Wait
             );
         }

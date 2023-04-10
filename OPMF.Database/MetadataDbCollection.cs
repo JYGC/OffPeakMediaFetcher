@@ -10,10 +10,10 @@ namespace OPMF.Database
     public interface IMetadataDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : IMetadata
     {
         IEnumerable<TItem> GetToDownload();
-        IEnumerable<TItem> GetNew();
-        IEnumerable<TItem> GetToDownloadAndWait();
-        IEnumerable<TItem> GetManyByWordInTitle(string wordInMetadataTitle);
-        IEnumerable<TItem> GetManyByChannelSiteIdAndWordInTitle(IEnumerable<string> channelSiteIds, string wordInMetadataTitle);
+        IEnumerable<TItem> GetNew(int skip, int pageSize);
+        IEnumerable<TItem> GetToDownloadAndWait(int skip, int pageSize);
+        IEnumerable<TItem> GetManyByWordInTitle(string wordInMetadataTitle, int skip, int pageSize);
+        IEnumerable<TItem> GetManyByChannelSiteIdAndWordInTitle(IEnumerable<string> channelSiteIds, string wordInMetadataTitle, int skip, int pageSize);
         void InsertNew(IEnumerable<TItem> items);
         void UpdateStatus(IEnumerable<TItem> items);
         void UpdateIsBeingProcessed(IEnumerable<TItem> items, bool? isProcessedValue = null);
@@ -28,22 +28,22 @@ namespace OPMF.Database
             return _Collection.Find(i => i.Status == MetadataStatus.ToDownload);
         }
 
-        public IEnumerable<TItem> GetToDownloadAndWait()
+        public IEnumerable<TItem> GetToDownloadAndWait(int skip, int pageSize)
         {
-            return _Collection.Find(i => i.Status == MetadataStatus.ToDownload || i.Status == MetadataStatus.Wait);
+            return _Collection.Find(i => i.Status == MetadataStatus.ToDownload || i.Status == MetadataStatus.Wait, skip, pageSize);
         }
 
-        public IEnumerable<TItem> GetNew()
+        public IEnumerable<TItem> GetNew(int skip, int pageSize)
         {
-            return _Collection.Find(i => i.Status == MetadataStatus.New);
+            return _Collection.Find(i => i.Status == MetadataStatus.New, skip, pageSize);
         }
 
-        public IEnumerable<TItem> GetManyByWordInTitle(string wordInMetadataTitle)
+        public IEnumerable<TItem> GetManyByWordInTitle(string wordInMetadataTitle, int skip, int pageSize)
         {
-            return _Collection.Find(Query.Contains("Title", wordInMetadataTitle));
+            return _Collection.Find(Query.Contains("Title", wordInMetadataTitle), skip, pageSize);
         }
 
-        public IEnumerable<TItem> GetManyByChannelSiteIdAndWordInTitle(IEnumerable<string> channelSiteIds, string wordInMetadataTitle)
+        public IEnumerable<TItem> GetManyByChannelSiteIdAndWordInTitle(IEnumerable<string> channelSiteIds, string wordInMetadataTitle, int skip, int pageSize)
         {
             BsonArray siteIdsBsonArray = new BsonArray();
             foreach (string channelSiteId in channelSiteIds)
@@ -55,7 +55,7 @@ namespace OPMF.Database
             {
                 whereCause = Query.And(whereCause, Query.Contains("Title", wordInMetadataTitle));
             }
-            return _Collection.Find(whereCause);
+            return _Collection.Find(whereCause, skip, pageSize);
         }
 
         public void InsertNew(IEnumerable<TItem> items)
