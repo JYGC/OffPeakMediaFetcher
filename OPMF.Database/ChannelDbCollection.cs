@@ -6,12 +6,10 @@ using LiteDB;
 
 namespace OPMF.Database
 {
-    public interface IChannelDbCollection<TItem> : IDatabaseCollection where TItem : Entities.IChannel
+    public interface IChannelDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : Entities.IChannel
     {
         IEnumerable<TItem> GetAll();
         IEnumerable<TItem> GetNotBacklisted();
-        TItem GetBySiteId(string id);
-        TItem GetById(string id);
         IEnumerable<TItem> GetManyByWordInName(string wordInChannelName);
         void InsertOrUpdate(IEnumerable<TItem> items);
         void UpdateLastCheckedOutAndActivity(IEnumerable<TItem> items);
@@ -25,16 +23,6 @@ namespace OPMF.Database
         public IEnumerable<TItem> GetNotBacklisted()
         {
             return _Collection.Find(i => i.BlackListed == false).ToList();
-        }
-
-        public TItem GetBySiteId(string id)
-        {
-            return GetById(id);
-        }
-
-        public TItem GetById(string id)
-        {
-            return _Collection.FindById(id);
         }
 
         public IEnumerable<TItem> GetManyByWordInName(string wordInChannelName)

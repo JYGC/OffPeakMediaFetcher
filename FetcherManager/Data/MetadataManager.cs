@@ -8,7 +8,7 @@ namespace FetcherManager.Data
     {
         public IEnumerable<OPMF.Entities.IMetadataChannel> GetByChannelAndTitleContainingWord(
             string wordInChannelName,
-            string wordInMetadataTitle)
+            string wordInMetadataTitle, int skip, int pageSize)
         {
             IEnumerable<OPMF.Entities.IMetadataChannel> metadataChannels = new OPMF.Entities.IMetadataChannel[] { };
             OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
@@ -16,7 +16,7 @@ namespace FetcherManager.Data
                 Dictionary<string, OPMF.Entities.IChannel> channelsWithSiteId = dbAdapter.YoutubeChannelDbCollection.GetManyByWordInName(
                     wordInChannelName).ToDictionary(c => c.SiteId, c => c);
                 IEnumerable<OPMF.Entities.IMetadata> metadatas = dbAdapter.YoutubeMetadataDbCollection.GetManyByChannelSiteIdAndWordInTitle(
-                    channelsWithSiteId.Keys, wordInMetadataTitle);
+                    channelsWithSiteId.Keys, wordInMetadataTitle, skip, pageSize);
                 foreach (OPMF.Entities.IMetadata metadata in metadatas)
                 {
                     metadataChannels = metadataChannels.Concat(new OPMF.Entities.IMetadataChannel[]
@@ -56,19 +56,19 @@ namespace FetcherManager.Data
             return metadataChannels;
         }
 
-        public IEnumerable<OPMF.Entities.IMetadataChannel> GetNew()
+        public IEnumerable<OPMF.Entities.IMetadataChannel> GetNew(int skip, int pageSize)
         {
-            return __GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetNew());
+            return __GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetNew(skip, pageSize));
         }
 
-        public IEnumerable<OPMF.Entities.IMetadataChannel> GetToDownloadAndWait()
+        public IEnumerable<OPMF.Entities.IMetadataChannel> GetToDownloadAndWait(int skip, int pageSize)
         {
-            return __GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetToDownloadAndWait());
+            return __GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetToDownloadAndWait(skip, pageSize));
         }
 
-        public IEnumerable<OPMF.Entities.IMetadataChannel> GetByTitleContainingWord(string wordInMetadataTitle)
+        public IEnumerable<OPMF.Entities.IMetadataChannel> GetByTitleContainingWord(string wordInMetadataTitle, int skip, int pageSize)
         {
-            return __GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetManyByWordInTitle(wordInMetadataTitle));
+            return __GetMetadataChannels((metadataDbAdapter) => metadataDbAdapter.GetManyByWordInTitle(wordInMetadataTitle, skip, pageSize));
         }
 
         public (IEnumerable<OPMF.Entities.IMetadataChannel>, IEnumerable<OPMF.Entities.IMetadataChannel>) SplitFromStatus(IEnumerable<OPMF.Entities.IMetadataChannel> metadataChannels,

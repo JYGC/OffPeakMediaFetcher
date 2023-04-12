@@ -16,20 +16,8 @@ namespace OPMF.Entities
         DateTime? LastActivityDate { get; set; }
     }
 
-    public class Channel : IChannel
+    public class Channel : SiteIdAsId, IChannel 
     {
-        public string Id { get; set; }
-        public string SiteId
-        {
-            get
-            {
-                return Id;
-            }
-            set
-            {
-                Id = value;
-            }
-        }
         public string Url { get; set; }
         public string Name { get; set; }
         public EntityThumbnail Thumbnail { get; set; } = new EntityThumbnail { Url = null, Width = 0, Height = 0 };

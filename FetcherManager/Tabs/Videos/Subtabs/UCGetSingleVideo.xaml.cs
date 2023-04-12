@@ -26,14 +26,15 @@ namespace FetcherManager.Tabs.Videos.Subtabs
         {
             uc_VideoBrowser.Btn_GetVideos.Content = "Get Video";
             uc_VideoBrowser.Btn_GetVideos.Visibility = Visibility.Hidden;
-            uc_VideoBrowser.GetMetadataChannels = () =>
+            uc_VideoBrowser.DisablePaging = true;
+            uc_VideoBrowser.GetMetadataChannels = (skip, pageSize) =>
             {
                 OPMF.SiteAdapter.ISiteVideoMetadataGetter siteVideoGetter = new OPMF.SiteAdapter.Youtube.YoutubeVideoMetadataGetter(); // Replace when adding other platforms
                 string siteId = siteVideoGetter.GetSiteIdFromURL(txt_EnterVideoURL.Text);
                 (OPMF.Entities.IMetadata, OPMF.Entities.IChannel) videoWithChannel = (null, null);
                 OPMF.Database.DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
                 {
-                    videoWithChannel.Item1 = dbAdapter.YoutubeMetadataDbCollection.FindById(siteId);
+                    videoWithChannel.Item1 = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId);
                     if (videoWithChannel.Item1 == null)
                     {
                         videoWithChannel = siteVideoGetter.GetVideoByURL(siteId);
@@ -42,7 +43,7 @@ namespace FetcherManager.Tabs.Videos.Subtabs
                     }
                     else
                     {
-                        videoWithChannel.Item2 = dbAdapter.YoutubeChannelDbCollection.FindById(videoWithChannel.Item1.ChannelSiteId);
+                        videoWithChannel.Item2 = dbAdapter.YoutubeChannelDbCollection.GetBySiteId(videoWithChannel.Item1.ChannelSiteId);
                     }
                 });
                 return new OPMF.Entities.IMetadataChannel[] { new OPMF.Entities.MetadataChannel

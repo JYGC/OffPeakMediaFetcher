@@ -5,9 +5,12 @@ using System.Linq;
 
 namespace OPMF.Database
 {
-    public interface IDatabaseCollection { }
+    public interface IDatabaseCollection<TItem>
+    {
+        TItem GetBySiteId(string id);
+    }
 
-    public class DatabaseCollection<TItem> : IDatabaseCollection where TItem : Entities.IStringId
+    public class DatabaseCollection<TItem> : IDatabaseCollection<TItem> where TItem : Entities.IStringId
     {
         protected string _KeyName { get; } = "_id";
 
@@ -37,9 +40,9 @@ namespace OPMF.Database
             __collection = __db.GetCollection<TItem>(collectionName);
         }
 
-        public TItem FindById(string Id)
+        public TItem GetBySiteId(string id)
         {
-            return _Collection.FindById(Id);
+            return _Collection.FindOne(Query.Contains("SiteId", id));
         }
 
         public void InsertBulk(IEnumerable<TItem> items)

@@ -4,15 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:Videos="clr-namespace:FetcherManager.Tabs.Videos"
         xmlns:Channels="clr-namespace:FetcherManager.Tabs.Channels"
+        xmlns:Logs="clr-namespace:FetcherManager.Tabs.Logs"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="MainWindow" Height="750" Width="1200">
-    <TabControl>
+    <TabControl VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
         <TabItem Header="Videos">
-            <Videos:UCVideos />
+            <Videos:UCVideos VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </TabItem>
         <TabItem Header="Channels">
-            <Channels:UCChannels />
+            <Channels:UCChannels VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+        </TabItem>
+        <TabItem Header="Logs">
+            <Logs:UCLogs VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </TabItem>
     </TabControl>
 </Window>

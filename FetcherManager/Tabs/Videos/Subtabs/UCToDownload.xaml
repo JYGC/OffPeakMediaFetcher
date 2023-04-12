@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FetcherManager.Tabs.Videos.Subtabs"
              xmlns:Commons="clr-namespace:FetcherManager.Commons"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <Grid Height="30">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -20,14 +24,14 @@
             <Label Content="[F3 key] - Mark as new" Grid.Column="2" />
             <Label Content="[F4 key] - Mark as wait" Grid.Column="3" />
         </Grid>
-        <Grid>
+        <Grid Grid.Row="1" VerticalAlignment="Stretch">
             <Grid.CommandBindings>
                 <CommandBinding x:Name="cb_Ignore" Executed="__cb_Ignore_Executed" />
                 <CommandBinding x:Name="cb_ToDownload" Executed="__cb_ToDownload_Executed" />
                 <CommandBinding x:Name="cb_BackToNew" Executed="__cb_BackToNew_Executed" />
                 <CommandBinding x:Name="cb_SetToWait" Executed="__cb_SetToWait_Executed" />
             </Grid.CommandBindings>
-            <Commons:UCVideoBrowser x:Name="uc_VideoBrowser" />
+            <Commons:UCVideoBrowser VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" x:Name="uc_VideoBrowser" />
         </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>

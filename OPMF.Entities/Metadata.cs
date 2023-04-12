@@ -24,21 +24,9 @@ namespace OPMF.Entities
         string ChannelSiteId { get; set; }
     }
 
-    public class Metadata : IMetadata
+    public class Metadata : SiteIdAsId, IMetadata
     {
-        public string Id { get; set; }
         public string Url { get; set; }
-        public string SiteId
-        {
-            get
-            {
-                return Id;
-            }
-            set
-            {
-                Id = value;
-            }
-        }
         public string Title { get; set; }
         public EntityThumbnail Thumbnail { get; set; } = new EntityThumbnail { Url = null, Width = 0, Height = 0 };
         public string Description { get; set; }
