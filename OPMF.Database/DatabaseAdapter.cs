@@ -72,7 +72,7 @@ namespace OPMF.Database
             catch (Exception e)
             {
                 TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
-                throw e;
+                throw;
             }
         }
     }
