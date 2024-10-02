@@ -29,7 +29,6 @@
                             break;
                         default:
                             throw new System.Exception("Invalid argument.");
-                            // break; - code will never reach this
                     }
                 }
                 else
