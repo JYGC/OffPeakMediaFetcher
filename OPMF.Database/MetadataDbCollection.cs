@@ -40,7 +40,7 @@ namespace OPMF.Database
 
         public IEnumerable<TItem> GetManyByWordInTitle(string wordInMetadataTitle, int skip, int pageSize)
         {
-            return _Collection.Find(Query.Contains("Title", wordInMetadataTitle), skip, pageSize);
+            return _Collection.Query().Where(i => i.Title.Contains(wordInMetadataTitle)).OrderByDescending(i => i.PublishedAt).Skip(skip).Limit(pageSize).ToList();
         }
 
         public IEnumerable<TItem> GetManyByChannelSiteIdAndWordInTitle(IEnumerable<string> channelSiteIds, string wordInMetadataTitle, int skip, int pageSize)
