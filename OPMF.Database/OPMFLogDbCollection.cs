@@ -11,17 +11,17 @@ namespace OPMF.Database
 
         public IEnumerable<IOPMFLog> GetWarnings(int __skip, int __pageSize)
         {
-            return _Collection.Find(i => i.Type == OPMFLogType.Warning, __skip, __pageSize);
+            return _Collection.Query().Where(i => i.Type == OPMFLogType.Warning).OrderByDescending(i => i.DateCreated).Skip(__skip).Limit(__pageSize).ToList();
         }
 
         public IEnumerable<IOPMFLog> GetErrors(int __skip, int __pageSize)
         {
-            return _Collection.Find(i => i.Type == OPMFLogType.Error, __skip, __pageSize);
+            return _Collection.Query().Where(i => i.Type == OPMFLogType.Error).OrderByDescending(i => i.DateCreated).Skip(__skip).Limit(__pageSize).ToList();
         }
 
         public IEnumerable<IOPMFLog> GetInfos(int __skip, int __pageSize)
         {
-            return _Collection.Find(i => i.Type == OPMFLogType.Info, __skip, __pageSize);
+            return _Collection.Query().Where(i => i.Type == OPMFLogType.Info).OrderByDescending(i => i.DateCreated).Skip(__skip).Limit(__pageSize).ToList();
         }
     }
 }
