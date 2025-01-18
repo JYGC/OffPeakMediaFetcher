@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="SiteProviderRepositoryDefinitions.fs" />
+    <Compile Include="SiteProviderRepository.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper.FSharp" Version="4.9.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaManager.Database.Types\MediaManager.Database.Types.fsproj" />
+    <ProjectReference Include="..\MediaManager.Database\MediaManager.Database.fsproj" />
+    <ProjectReference Include="..\MediaManager.Dtos\MediaManager.Dtos.fsproj" />
+    <ProjectReference Include="..\MediaManager.Models\MediaManager.Models.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="8.0.200" />
+  </ItemGroup>
+
+</Project>

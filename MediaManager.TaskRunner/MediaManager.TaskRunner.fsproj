@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaManager.Database\MediaManager.Database.fsproj" />
+    <ProjectReference Include="..\MediaManager.Dtos\MediaManager.Dtos.fsproj" />
+    <ProjectReference Include="..\MediaManager.Repositories\MediaManager.Repositories.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="9.0.101" />
+  </ItemGroup>
+
+</Project>

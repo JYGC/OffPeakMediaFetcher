@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaManager.Database\MediaManager.Database.fsproj" />
+    <ProjectReference Include="..\MediaManager.Dtos\MediaManager.Dtos.fsproj" />
+    <ProjectReference Include="..\MediaManager.Repositories\MediaManager.Repositories.fsproj" />
+  </ItemGroup>
+
+</Project>
