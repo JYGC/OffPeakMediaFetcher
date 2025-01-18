@@ -6,11 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="migrations\2025.01.18.000.CreateTables.sql" />
+    <None Include="Migrations\2025.01.18.000.CreateTables.Down.sql" />
+    <None Include="migrations\2025.01.18.000.CreateTables.Up.sql" />
   </ItemGroup>
 
 </Project>
