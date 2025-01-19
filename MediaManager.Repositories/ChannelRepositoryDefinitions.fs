@@ -33,6 +33,7 @@ module ChannelRepositoryDefinitions =
                         ct.Height
                     ))
                 | None -> None
+
             new ChannelDto(
                 new Guid(c.Id),
                 c.SiteId,
