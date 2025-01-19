@@ -8,8 +8,8 @@ open MediaManager.Database.DatabaseSchemas
 open MediaManager.Dtos.SiteProviderDtos
 open MediaManager.Models.SiteProviderModels
 
-module private SiteProviderRepositoryDefinitions =
-    let AddMultipleSiteProvider
+module SiteProviderRepositoryDefinitions =
+    let addMultipleSiteProvider
       (dbConnection: SQLiteConnection)
       (dataBaseTables: DatabaseTables)
       (siteProviders: IEnumerable<FullSiteProviderDto>) =
@@ -25,9 +25,10 @@ module private SiteProviderRepositoryDefinitions =
         insert {
             into dataBaseTables.SiteProviders
             values newSiteProviders
-        } |> dbConnection.InsertAsync
+        }
+        |> dbConnection.InsertAsync
 
-    let GetSiteProviderByNames
+    let getSiteProviderByNames
       (dbConnection: SQLiteConnection)
       (dataBaseTables: DatabaseTables)
       (names: IEnumerable<string>)

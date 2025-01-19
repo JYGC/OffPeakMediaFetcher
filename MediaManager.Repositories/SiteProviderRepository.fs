@@ -3,13 +3,13 @@
 open MediaManager.Database
 
 module SiteProviderRepository =
-    let AddMultipleSiteProvider siteProviders =
-        SiteProviderRepositoryDefinitions.AddMultipleSiteProvider
+    let addMultipleSiteProvider siteProviders =
+        SiteProviderRepositoryDefinitions.addMultipleSiteProvider
             DatabaseContext.databaseConnection
             DatabaseContext.databaseTables
             siteProviders
-    let GetSiteProviderByNames names =
-        SiteProviderRepositoryDefinitions.GetSiteProviderByNames
+    let getSiteProviderByNames names =
+        SiteProviderRepositoryDefinitions.getSiteProviderByNames
             DatabaseContext.databaseConnection
             DatabaseContext.databaseTables
             names

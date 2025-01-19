@@ -5,5 +5,6 @@ open Dapper.FSharp.SQLite
 
 module DatabaseContext =
     OptionTypes.register()
-    let databaseConnection = new SQLiteConnection("Data Source=C:\\Users\\jygcn\\AppData\\Local\\OffPeakMediaFetcherDev\\Databases\\test.db")
+    let databaseFilePath = "C:\\Users\\jygcn\\AppData\\Local\\OffPeakMediaFetcherDev\\Databases\\test.db"
+    let databaseConnection = new SQLiteConnection($"Data Source={databaseFilePath}")
     let databaseTables = new DatabaseSchemas.DatabaseTables()

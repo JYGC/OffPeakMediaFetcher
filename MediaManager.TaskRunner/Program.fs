@@ -9,16 +9,16 @@ newSiteProviders.Add(new FullSiteProviderDto(Guid.Empty, "Vemeo", "Vemeo.com"))
 newSiteProviders.Add(new FullSiteProviderDto(Guid.Empty, "Youtube", "youtube.com"))
 newSiteProviders.Add(new FullSiteProviderDto(Guid.Empty, "Dailymotion", "dailymotion.com"))
 
-SiteProviderRepository.AddMultipleSiteProvider newSiteProviders
+SiteProviderRepository.addMultipleSiteProvider newSiteProviders
 |> ignore
 
 let names = new List<string>()
 names.Add("Vimeo")
 names.Add("Youtube")
-let testvalue = SiteProviderRepository.GetSiteProviderByNames names
+let testvalue = SiteProviderRepository.getSiteProviderByNames names
 
 let jsonResult =
     testvalue
     |> JsonSerializer.Serialize
 
-printfn "%s" jsonResult
+printfn $"{jsonResult}"

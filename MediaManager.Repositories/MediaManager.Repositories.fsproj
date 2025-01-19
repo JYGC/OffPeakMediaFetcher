@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ChannelRepositoryDefinitions.fs" />
     <Compile Include="SiteProviderRepositoryDefinitions.fs" />
     <Compile Include="SiteProviderRepository.fs" />
   </ItemGroup>
