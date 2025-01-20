@@ -1,4 +1,4 @@
-﻿namespace MediaManager.Database.Types
+﻿namespace MediaManager.Database
 
 open System.Data.SQLite
 

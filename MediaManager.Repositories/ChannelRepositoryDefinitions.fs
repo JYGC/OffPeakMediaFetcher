@@ -1,16 +1,16 @@
 ﻿namespace MediaManager.Repositories
 
 open System
-open System.Data.SQLite
 open Dapper.FSharp.SQLite
 open MediaManager.Database.TableTypes
+open MediaManager.Database.DatabaseProviderTypes
 open MediaManager.Database.Types.DataTypes
 open MediaManager.Models.ChannelModels
 open MediaManager.Dtos.ChannelDtos
 
 module ChannelRepositoryDefinitions =
     let getAll
-      (dbConnection: SQLiteConnection)
+      (dbConnection: DatabaseConnection)
       (channelsTable: ChannelsTable)
       (channelThumbnailsTable: ChannelThumbnailsTable) =
         let getAllTask =

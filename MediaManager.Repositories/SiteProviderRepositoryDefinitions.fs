@@ -2,15 +2,15 @@
 
 open System
 open System.Collections.Generic
-open System.Data.SQLite
 open Dapper.FSharp.SQLite
 open MediaManager.Database.TableTypes
+open MediaManager.Database.DatabaseProviderTypes
 open MediaManager.Dtos.SiteProviderDtos
 open MediaManager.Models.SiteProviderModels
 
 module SiteProviderRepositoryDefinitions =
     let addMultipleSiteProvider
-      (dbConnection: SQLiteConnection)
+      (dbConnection: DatabaseConnection)
       (siteProvidersTable: SiteProvidersTable)
       (siteProviders: IEnumerable<FullSiteProviderDto>) =
         let newSiteProviders = [
@@ -29,7 +29,7 @@ module SiteProviderRepositoryDefinitions =
         |> dbConnection.InsertAsync
 
     let getSiteProviderByNames
-      (dbConnection: SQLiteConnection)
+      (dbConnection: DatabaseConnection)
       (siteProvidersTable: SiteProvidersTable)
       (names: IEnumerable<string>)
       : List<FullSiteProviderDto> =
