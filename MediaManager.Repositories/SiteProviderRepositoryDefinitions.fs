@@ -4,14 +4,14 @@ open System
 open System.Collections.Generic
 open System.Data.SQLite
 open Dapper.FSharp.SQLite
-open MediaManager.Database.DatabaseSchemas
+open MediaManager.Database.TableTypes
 open MediaManager.Dtos.SiteProviderDtos
 open MediaManager.Models.SiteProviderModels
 
 module SiteProviderRepositoryDefinitions =
     let addMultipleSiteProvider
       (dbConnection: SQLiteConnection)
-      (dataBaseTables: DatabaseTables)
+      (siteProvidersTable: SiteProvidersTable)
       (siteProviders: IEnumerable<FullSiteProviderDto>) =
         let newSiteProviders = [
             for sp in siteProviders ->
@@ -23,20 +23,20 @@ module SiteProviderRepositoryDefinitions =
         ]
 
         insert {
-            into dataBaseTables.SiteProviders
+            into siteProvidersTable
             values newSiteProviders
         }
         |> dbConnection.InsertAsync
 
     let getSiteProviderByNames
       (dbConnection: SQLiteConnection)
-      (dataBaseTables: DatabaseTables)
+      (siteProvidersTable: SiteProvidersTable)
       (names: IEnumerable<string>)
       : List<FullSiteProviderDto> =
         let namesList = names |> Seq.toList
         let getSiteProvidersTask =
             select {
-                for sp in dataBaseTables.SiteProviders do
+                for sp in siteProvidersTable do
                     where (isIn sp.Name namesList)
             }
             |> dbConnection.SelectAsync<SiteProvider>

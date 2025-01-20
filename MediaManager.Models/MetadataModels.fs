@@ -1,6 +1,6 @@
 ﻿namespace MediaManager.Models
 
-open MediaManager.Database.Types.SqliteTypes
+open MediaManager.Database.Types.DataTypes
 
 module MetadataModels =
     [<CLIMutable>]

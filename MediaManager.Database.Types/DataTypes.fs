@@ -2,7 +2,7 @@
 
 open System
 
-module SqliteTypes =
+module DataTypes =
     type SqliteGuid = string
     type SqliteUnixTime = int
     type SqliteMetadataStatus = New | ToDownload | Wait | Ignore | Downloaded

@@ -6,10 +6,10 @@ module SiteProviderRepository =
     let addMultipleSiteProvider siteProviders =
         SiteProviderRepositoryDefinitions.addMultipleSiteProvider
             DatabaseContext.databaseConnection
-            DatabaseContext.databaseTables
+            DatabaseContext.siteProvidersTable
             siteProviders
     let getSiteProviderByNames names =
         SiteProviderRepositoryDefinitions.getSiteProviderByNames
             DatabaseContext.databaseConnection
-            DatabaseContext.databaseTables
+            DatabaseContext.siteProvidersTable
             names

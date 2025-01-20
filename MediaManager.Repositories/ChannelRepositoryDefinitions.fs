@@ -3,19 +3,20 @@
 open System
 open System.Data.SQLite
 open Dapper.FSharp.SQLite
-open MediaManager.Database.DatabaseSchemas
-open MediaManager.Database.Types.SqliteTypes
+open MediaManager.Database.TableTypes
+open MediaManager.Database.Types.DataTypes
 open MediaManager.Models.ChannelModels
 open MediaManager.Dtos.ChannelDtos
 
 module ChannelRepositoryDefinitions =
     let getAll
       (dbConnection: SQLiteConnection)
-      (dataBaseTables: DatabaseTables) =
+      (channelsTable: ChannelsTable)
+      (channelThumbnailsTable: ChannelThumbnailsTable) =
         let getAllTask =
             select {
-                for c in dataBaseTables.Channels do
-                    leftJoin ct in dataBaseTables.ChannelThumbnails on (c.Id = ct.Channel_Id)
+                for c in channelsTable do
+                    leftJoin ct in channelThumbnailsTable on (c.Id = ct.Channel_Id)
                     selectAll
             }
             |> dbConnection.SelectAsyncOption<Channel, ChannelThumbnail>

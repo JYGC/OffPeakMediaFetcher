@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="DatabaseSchemas.fs" />
+    <Compile Include="TableTypes.fs" />
+    <Compile Include="DatabaseProviderTypes.fs" />
     <Compile Include="DatabaseContext.fs" />
   </ItemGroup>
 
