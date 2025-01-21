@@ -6,13 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="DatabaseTypeMappings.fs" />
     <Compile Include="SiteProviderModels.fs" />
     <Compile Include="ChannelModels.fs" />
     <Compile Include="MetadataModels.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MediaManager.Database.Types\MediaManager.Database.Types.fsproj" />
   </ItemGroup>
 
   <ItemGroup>

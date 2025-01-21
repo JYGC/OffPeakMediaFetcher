@@ -1,8 +1,8 @@
-﻿namespace MediaManager.Database.Types
+﻿namespace MediaManager.Models
 
 open System
 
-module DataTypes =
+module DatabaseTypeMappings =
     type SqliteGuid = string
     type SqliteUnixTime = int
     type SqliteMetadataStatus = New | ToDownload | Wait | Ignore | Downloaded

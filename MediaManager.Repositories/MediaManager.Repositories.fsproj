@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MediaManager.Database.Types\MediaManager.Database.Types.fsproj" />
     <ProjectReference Include="..\MediaManager.Database\MediaManager.Database.fsproj" />
     <ProjectReference Include="..\MediaManager.Dtos\MediaManager.Dtos.fsproj" />
     <ProjectReference Include="..\MediaManager.Models\MediaManager.Models.fsproj" />

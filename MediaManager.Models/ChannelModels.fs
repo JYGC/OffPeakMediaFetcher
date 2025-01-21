@@ -1,6 +1,6 @@
 ﻿namespace MediaManager.Models
 
-open MediaManager.Database.Types.DataTypes
+open MediaManager.Models.DatabaseTypeMappings
 
 module ChannelModels =
     [<CLIMutable>]

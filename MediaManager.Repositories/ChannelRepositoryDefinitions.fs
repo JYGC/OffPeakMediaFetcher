@@ -4,7 +4,7 @@ open System
 open Dapper.FSharp.SQLite
 open MediaManager.Database.TableTypes
 open MediaManager.Database.DatabaseProviderTypes
-open MediaManager.Database.Types.DataTypes
+open MediaManager.Models.DatabaseTypeMappings
 open MediaManager.Models.ChannelModels
 open MediaManager.Dtos.ChannelDtos
 
