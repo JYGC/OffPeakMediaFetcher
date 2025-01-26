@@ -3,19 +3,27 @@
 
 @inject IChannelMetadataServices ChannelMetadataServices
 
-<MudTextField @bind-Value="videoTitle" Label="Video title:" Variant="Variant.Text"></MudTextField>
-<MudTextField @bind-Value="channelName" Label="Channel name:" Variant="Variant.Text"></MudTextField>
-<MudButton Variant="Variant.Outlined" OnClick="Submit">Find</MudButton>
-
 <MudTable
-    T="OPMF.Entities.ChannelMetadata"
-    Items="@results"
-    Hover="true" 
-    Breakpoint="Breakpoint.Sm" 
-    Loading="@_loading" 
-    LoadingProgressColor="Color.Info"
-    Height="100vh"
->
+                T="OPMF.Entities.ChannelMetadata"
+                Items="_results"
+                Breakpoint="Breakpoint.Sm"
+                Loading="@_loading"
+                Virtualize="true"
+                FixedHeader="true"
+                LoadingProgressColor="Color.Info"
+                Height="80vh">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Find Videos from Database</MudText>
+        <MudSpacer />
+        <MudTextField
+                      @bind-Value="_videoTitle"
+                      Placeholder="Video title"
+                      Variant="Variant.Text"></MudTextField>
+        <MudTextField @bind-Value="_channelName"
+                      Placeholder="Channel name"
+                      Variant="Variant.Text"></MudTextField>
+        <MudButton Variant="Variant.Outlined" OnClick="Submit">Find</MudButton>
+    </ToolBarContent>
     <HeaderContent>
         <MudTh>Status</MudTh>
         <MudTh>Name</MudTh>
@@ -31,25 +39,43 @@
 </MudTable>
 
     @code {
-    private const int pageSize = 15;
+    private const int pageSize = 10000;
 
-    private int skip = 0;
+    private string _videoTitle = "";
+    private string _channelName = "";
 
-    private bool _loading;
+    private bool _loading = false;
 
-    private string videoTitle = "";
-    private string channelName = "";
-
-    private List<OPMF.Entities.ChannelMetadata> results = new();
+    private List<OPMF.Entities.ChannelMetadata> _results = new();
+    private int _skip = 0;
 
     private async Task Submit()
     {
+        if (string.IsNullOrWhiteSpace(_videoTitle) && string.IsNullOrWhiteSpace(_channelName))
+        {
+            return;
+        }
+
+        _results = new();
+        _skip = 0;
+
+        List<OPMF.Entities.ChannelMetadata>? resultsChuck = null;
+
+        _loading = true;
         await Task.Run(() =>
         {
-            results = string.IsNullOrWhiteSpace(channelName)
-                ? ChannelMetadataServices.GetByTitleContainingWord(videoTitle, skip, pageSize)
-                : ChannelMetadataServices.GetByChannelAndTitleContainingWord(channelName, videoTitle,
-                    skip, pageSize);
+            do
+            {
+                resultsChuck = string.IsNullOrWhiteSpace(_channelName)
+                ? ChannelMetadataServices.GetByTitleContainingWord(_videoTitle, _skip, pageSize)
+                : ChannelMetadataServices.GetByChannelAndTitleContainingWord(_channelName, _videoTitle,
+                    _skip, pageSize);
+                _results.AddRange(resultsChuck);
+                _skip += pageSize;
+            }
+            while (resultsChuck != null && resultsChuck.Count() == pageSize);
         });
+
+        _loading = false;
     }
 }
