@@ -1,0 +1,34 @@
+﻿using System.Windows;
+using MediaManager.Services;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace MediaManagerUI
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            try
+            {
+                OPMF.Settings.ConfigHelper.InitReadonlySettings();
+                OPMF.Filesystem.FolderSetup.EstablishFolders();
+                OPMF.Settings.ConfigHelper.EstablishConfig();
+
+                InitializeComponent();
+
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddWpfBlazorWebView();
+            serviceCollection.AddScoped<IChannelMetadataServices, ChannelMetadataServices>();
+            Resources.Add("services", serviceCollection.BuildServiceProvider());
+            }
+            catch (Exception e)
+            {
+                OPMF.TextLogging.TextLog.GetCurrent().LogEntry(e.ToString());
+                MessageBox.Show(e.Message, "Error");
+            }
+        }
+    }
+}

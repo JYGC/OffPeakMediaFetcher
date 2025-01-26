@@ -1,0 +1,47 @@
+﻿@using System.Text.Json
+@using MediaManager.Services
+
+@inject IChannelMetadataServices ChannelMetadataServices
+
+<div>
+    <label>Find by video title:</label>
+    <input type="text" id="findVideoByTitle" name="findVideoByTitle" @bind-value="@videoTitle" />
+</div>
+<div>
+    <label>Find by channel name:</label>
+    <input type="text" id="findVideoByChannel" name="findVideoByChannel" @bind-value="@channelName" />
+</div>
+<div>
+    <button @onclick="Submit">Find</button>
+</div>
+@if (results != null)
+{
+    <table>
+        @foreach (var channelMetadata in results)
+        {
+            <tr>
+                <td>
+                    @JsonSerializer.Serialize(channelMetadata);
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@code {
+    private const int pageSize = 15;
+    private int skip = 0;
+
+    private string videoTitle = "";
+    private string channelName = "";
+
+    private List<OPMF.Entities.ChannelMetadata>? results;
+
+    private void Submit()
+    {
+        results = string.IsNullOrWhiteSpace(channelName)
+            ? ChannelMetadataServices.GetByTitleContainingWord(videoTitle, skip, pageSize)
+            : ChannelMetadataServices.GetByChannelAndTitleContainingWord(channelName, videoTitle,
+                skip, pageSize);
+    }
+}

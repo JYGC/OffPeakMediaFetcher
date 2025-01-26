@@ -8,6 +8,7 @@ namespace OPMF.Database
 {
     public interface IChannelDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : Entities.IChannel
     {
+        List<TItem> GetManyBySiteIds(IEnumerable<string> ids);
         IEnumerable<TItem> GetAll();
         IEnumerable<TItem> GetNotBacklisted();
         IEnumerable<TItem> GetManyByWordInName(string wordInChannelName);
@@ -19,6 +20,11 @@ namespace OPMF.Database
     public class ChannelDbCollection<TItem> : DatabaseCollection<TItem>, IChannelDbCollection<TItem> where TItem : Entities.IChannel
     {
         public ChannelDbCollection(LiteDatabase db, string collectionName) : base(db, collectionName) { }
+
+        public List<TItem> GetManyBySiteIds(IEnumerable<string> ids)
+        {
+            return _Collection.Query().Where(c => ids.Contains(c.SiteId)).ToList();
+        }
 
         public IEnumerable<TItem> GetNotBacklisted()
         {
