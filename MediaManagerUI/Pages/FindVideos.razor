@@ -3,39 +3,44 @@
 
 @inject IChannelMetadataServices ChannelMetadataServices
 
-<div>
-    <label>Find by video title:</label>
-    <input type="text" id="findVideoByTitle" name="findVideoByTitle" @bind-value="@videoTitle" />
-</div>
-<div>
-    <label>Find by channel name:</label>
-    <input type="text" id="findVideoByChannel" name="findVideoByChannel" @bind-value="@channelName" />
-</div>
-<div>
-    <button @onclick="Submit">Find</button>
-</div>
-@if (results != null)
-{
-    <table>
-        @foreach (var channelMetadata in results)
-        {
-            <tr>
-                <td>
-                    @JsonSerializer.Serialize(channelMetadata);
-                </td>
-            </tr>
-        }
-    </table>
-}
+<MudTextField @bind-Value="videoTitle" Label="Video title:" Variant="Variant.Text"></MudTextField>
+<MudTextField @bind-Value="channelName" Label="Channel name:" Variant="Variant.Text"></MudTextField>
+<MudButton Variant="Variant.Outlined" OnClick="Submit">Find</MudButton>
 
-@code {
+<MudTable
+    T="OPMF.Entities.ChannelMetadata"
+    Items="@results"
+    Hover="true" 
+    Breakpoint="Breakpoint.Sm" 
+    Loading="@_loading" 
+    LoadingProgressColor="Color.Info"
+    Height="100vh"
+>
+    <HeaderContent>
+        <MudTh>Status</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Title</MudTh>
+        <MudTh>PublishedAt</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Status">@context.Metadata.Status</MudTd>
+        <MudTd DataLabel="Name">@context.Channel.Name</MudTd>
+        <MudTd DataLabel="Title">@context.Metadata.Title</MudTd>
+        <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
+    </RowTemplate>
+</MudTable>
+
+    @code {
     private const int pageSize = 15;
+
     private int skip = 0;
+
+    private bool _loading;
 
     private string videoTitle = "";
     private string channelName = "";
 
-    private List<OPMF.Entities.ChannelMetadata>? results;
+    private List<OPMF.Entities.ChannelMetadata> results = new();
 
     private void Submit()
     {

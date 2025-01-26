@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using MediaManager.Services;
 using Microsoft.Extensions.DependencyInjection;
+using MudBlazor.Services;
 
 namespace MediaManagerUI
 {
@@ -20,8 +21,9 @@ namespace MediaManagerUI
                 InitializeComponent();
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddWpfBlazorWebView();
             serviceCollection.AddScoped<IChannelMetadataServices, ChannelMetadataServices>();
+            serviceCollection.AddMudServices();
+            serviceCollection.AddWpfBlazorWebView();
             Resources.Add("services", serviceCollection.BuildServiceProvider());
             }
             catch (Exception e)
