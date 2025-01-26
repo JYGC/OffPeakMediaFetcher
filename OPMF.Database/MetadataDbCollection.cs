@@ -7,7 +7,7 @@ using OPMF.Entities;
 
 namespace OPMF.Database
 {
-    public interface IMetadataDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : IMetadata
+    public interface IMetadataDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : Metadata
     {
         IEnumerable<TItem> GetToDownload();
         IEnumerable<TItem> GetNew(int skip, int pageSize);
@@ -19,7 +19,7 @@ namespace OPMF.Database
         void UpdateIsBeingProcessed(IEnumerable<TItem> items, bool? isProcessedValue = null);
     }
 
-    public class MetadataDbCollection<TItem> : DatabaseCollection<TItem>, IMetadataDbCollection<TItem> where TItem : IMetadata
+    public class MetadataDbCollection<TItem> : DatabaseCollection<TItem>, IMetadataDbCollection<TItem> where TItem : Metadata
     {
         public MetadataDbCollection(LiteDatabase db, string collectionName) : base(db, collectionName) { }
 
@@ -108,7 +108,7 @@ namespace OPMF.Database
             }
         }
 
-        protected new IEnumerable<TItem> _UpdateFields(IEnumerable<TItem> items, Action<TItem, TItem> UpdateFields)
+        protected IEnumerable<TItem> _UpdateFields(IEnumerable<TItem> items, Action<TItem, TItem> UpdateFields)
         {
             IEnumerable<string> itemIds = items.Select(i => i.Id);
             List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.SiteId)).ToList(); // dbToUpdate must be list or it won't update in foreach loop

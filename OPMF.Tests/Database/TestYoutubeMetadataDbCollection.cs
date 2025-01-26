@@ -23,28 +23,28 @@ namespace OPMF.Tests.Database
             });
         }
 
-        private void AssertMetadataStatus(Func<DatabaseAdapter, IEnumerable<IMetadata>> DBCallToTest, Func<IMetadata, bool> StatusComparer)
+        private void AssertMetadataStatus(Func<DatabaseAdapter, IEnumerable<Metadata>> DBCallToTest, Func<Metadata, bool> StatusComparer)
         {
             DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
-                Dictionary<string, IMetadata> storedNewMetadata = DBCallToTest(dbAdapter).ToDictionary(
+                Dictionary<string, Metadata> storedNewMetadata = DBCallToTest(dbAdapter).ToDictionary(
                     metadata => metadata.SiteId,
                     metadata => metadata
                 );
-                Dictionary<string, IMetadata> metadataList1Dict = VideoMetadata.MetadataList1.ToDictionary(
+                Dictionary<string, Metadata> metadataList1Dict = VideoMetadata.MetadataList1.ToDictionary(
                     metadata => metadata.SiteId,
                     metadata => metadata
                 );
-                Dictionary<string, IMetadata> metadataList2Dict = VideoMetadata.MetadataList2.ToDictionary(
+                Dictionary<string, Metadata> metadataList2Dict = VideoMetadata.MetadataList2.ToDictionary(
                     metadata => metadata.SiteId,
                     metadata => metadata
                 );
                 IEnumerable<string> expectedSiteIdsInDB = metadataList1Dict.Keys.Union(metadataList2Dict.Keys);
-                IEnumerable<IMetadata> expectedMetadataStatus = expectedSiteIdsInDB.Select(
+                IEnumerable<Metadata> expectedMetadataStatus = expectedSiteIdsInDB.Select(
                     // Duplicate SiteIds in MetadataList2 must not override MetadataList1
                     siteId => metadataList1Dict.ContainsKey(siteId) ? metadataList1Dict[siteId] : metadataList2Dict[siteId]
                 ).Where(metadata => StatusComparer(metadata));
-                Dictionary<string, IMetadata> expectedDict = expectedMetadataStatus.ToDictionary(
+                Dictionary<string, Metadata> expectedDict = expectedMetadataStatus.ToDictionary(
                     metadata => metadata.SiteId,
                     metadata => metadata
                 );
@@ -83,7 +83,7 @@ namespace OPMF.Tests.Database
     {
         public IEnumerable<TTestCase> OrderTestCases<TTestCase>(IEnumerable<TTestCase> testCases) where TTestCase : ITestCase => testCases.OrderBy(testCase => testCase.TestMethod.Method.Name);
 
-        private void AssertMetadataPropertiesEqual(IMetadata expectedMetadata, IMetadata actualMetadata)
+        private void AssertMetadataPropertiesEqual(Metadata expectedMetadata, Metadata actualMetadata)
         {
             Assert.Equal(expectedMetadata.ChannelSiteId, actualMetadata.ChannelSiteId);
             Assert.Equal(expectedMetadata.Description, actualMetadata.Description);
@@ -99,11 +99,11 @@ namespace OPMF.Tests.Database
             DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 dbAdapter.YoutubeMetadataDbCollection.InsertNew(VideoMetadata.MetadataList1);
-                Dictionary<string, IMetadata> storedMetadataDict = dbAdapter.YoutubeMetadataDbCollection.GetAll().ToDictionary(
+                Dictionary<string, Metadata> storedMetadataDict = dbAdapter.YoutubeMetadataDbCollection.GetAll().ToDictionary(
                     metadata => metadata.SiteId,
                     metadata => metadata
                 );
-                Dictionary<string, IMetadata> list1MetadataDict = VideoMetadata.MetadataList1.ToDictionary(metadata => metadata.SiteId, metadata => metadata);
+                Dictionary<string, Metadata> list1MetadataDict = VideoMetadata.MetadataList1.ToDictionary(metadata => metadata.SiteId, metadata => metadata);
                 Assert.Empty(list1MetadataDict.Keys.Except(storedMetadataDict.Keys).Union(storedMetadataDict.Keys.Except(list1MetadataDict.Keys)));
                 foreach (string siteId in list1MetadataDict.Keys)
                 {
@@ -119,12 +119,12 @@ namespace OPMF.Tests.Database
             {
                 dbAdapter.YoutubeMetadataDbCollection.InsertNew(VideoMetadata.MetadataList2);
                 // Check for duplicate SiteId - will Except if duplicate SiteIds found
-                Dictionary<string, IMetadata> storedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetAll().ToDictionary(
+                Dictionary<string, Metadata> storedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetAll().ToDictionary(
                     metadata => metadata.SiteId,
                     metadata => metadata
                 );
-                Dictionary<string, IMetadata> list2Dict = VideoMetadata.MetadataList2.ToDictionary(metadata => metadata.SiteId, metadata => metadata);
-                Dictionary<string, IMetadata> list1Dict = VideoMetadata.MetadataList1.ToDictionary(metadata => metadata.SiteId, metadata => metadata);
+                Dictionary<string, Metadata> list2Dict = VideoMetadata.MetadataList2.ToDictionary(metadata => metadata.SiteId, metadata => metadata);
+                Dictionary<string, Metadata> list1Dict = VideoMetadata.MetadataList1.ToDictionary(metadata => metadata.SiteId, metadata => metadata);
                 Assert.Equal(list1Dict.Keys.Union(list2Dict.Keys).Count(), storedMetadata.Keys.Count());
                 foreach (string siteId in list1Dict.Keys)
                 {
@@ -156,16 +156,16 @@ namespace OPMF.Tests.Database
             DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 List<string> metadataIdsToTest = metadataIndexesToTest.Select(index => VideoMetadata.MetadataList2[index].SiteId).ToList();
-                IEnumerable<IMetadata> metadatasToTest = metadataIdsToTest.Select(siteId =>
+                IEnumerable<Metadata> metadatasToTest = metadataIdsToTest.Select(siteId =>
                 {
-                    IMetadata metadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId);
+                    Metadata metadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId);
                     metadata.Status = metadataStatus;
                     return metadata;
                 });
                 dbAdapter.YoutubeMetadataDbCollection.UpdateStatus(metadatasToTest);
                 for (int i = 0; i < metadataIdsToTest.Count(); i++)
                 {
-                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToTest[i]);
+                    Metadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToTest[i]);
                     Assert.Equal(metadataStatus, changedMetadata.Status);
                 }
             });
@@ -190,14 +190,14 @@ namespace OPMF.Tests.Database
                 dbAdapter.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(metadataIdsToSetToBeingProcessed.Select(siteId => dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId)), true);
                 for (int i = 0; i < metadataIdsToSetToBeingProcessed.Count(); i++)
                 {
-                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToSetToBeingProcessed[i]);
+                    Metadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToSetToBeingProcessed[i]);
                     Assert.True(changedMetadata.IsBeingDownloaded);
                 }
                 List<string> metadataIdsToUnsetFromBeingProcessed = (new int[] { 0, 1, 8, 11, 18 }).Select(index => VideoMetadata.MetadataList2[index].SiteId).ToList();
                 dbAdapter.YoutubeMetadataDbCollection.UpdateIsBeingProcessed(metadataIdsToUnsetFromBeingProcessed.Select(siteId => dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId)), false);
                 for (int i = 0; i < metadataIdsToUnsetFromBeingProcessed.Count(); i++)
                 {
-                    IMetadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToUnsetFromBeingProcessed[i]);
+                    Metadata changedMetadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(metadataIdsToUnsetFromBeingProcessed[i]);
                     Assert.False(changedMetadata.IsBeingDownloaded);
                 }
             });

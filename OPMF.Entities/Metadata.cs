@@ -11,20 +11,7 @@ namespace OPMF.Entities
         Downloaded
     }
 
-    public interface IMetadata : IStringId
-    {
-        string SiteId { get; set; }
-        string Url { get; set; }
-        string Title { get; set; }
-        EntityThumbnail Thumbnail { get; set; }
-        string Description { get; set; }
-        MetadataStatus Status { get; set; }
-        bool IsBeingDownloaded { get; set; }
-        DateTime PublishedAt { get; set; }
-        string ChannelSiteId { get; set; }
-    }
-
-    public class Metadata : SiteIdAsId, IMetadata
+    public class Metadata : SiteIdAsId
     {
         public string Url { get; set; }
         public string Title { get; set; }
@@ -33,6 +20,8 @@ namespace OPMF.Entities
         public MetadataStatus Status { get; set; } = MetadataStatus.New;
         public bool IsBeingDownloaded { get; set; } = false;
         public DateTime PublishedAt { get; set; }
+        public TimeSpan Duration { get; set; } // Video extension table
         public string ChannelSiteId { get; set; }
+        public object OriginalResponse { get; set; }
     }
 }

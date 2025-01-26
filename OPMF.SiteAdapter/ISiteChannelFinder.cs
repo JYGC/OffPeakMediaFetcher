@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace OPMF.SiteAdapter
 {
     public interface ISiteChannelFinder
     {
-        List<Entities.IChannel> FindChannelById(string[] channelIdList);
-        List<Entities.IChannel> FindChannelByName(string[] channelNameList);
-        List<Entities.IChannel> ImportChannels();
+        List<Entities.Channel> FindChannelById(string[] channelIdList);
+        List<Entities.Channel> FindChannelByName(string[] channelNameList);
+        List<Entities.Channel> ImportChannels();
     }
 }

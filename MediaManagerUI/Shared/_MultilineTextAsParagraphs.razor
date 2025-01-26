@@ -1,0 +1,14 @@
+﻿<MudStack>
+    @foreach (var paragraph in GetTextAsParagraphList(Text))
+    {
+        <MudText>@paragraph</MudText>
+    }
+</MudStack>
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+
+    private List<string> GetTextAsParagraphList(string description) =>
+        description.Split('\n').ToList();
+}

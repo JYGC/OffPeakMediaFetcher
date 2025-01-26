@@ -4,6 +4,6 @@
     {
         string GetSiteIdFromURL(string videoURL);
 
-        (Entities.IMetadata, Entities.IChannel) GetVideoByURL(string siteId);
+        (Entities.Metadata, Entities.Channel) GetVideoByURL(string siteId);
     }
 }

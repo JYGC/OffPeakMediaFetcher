@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>MediaManagerUI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Remove="App.xaml" />
+    <Content Remove="wwwroot\css\app.css" />
+    <Content Remove="wwwroot\index.html" />
+    <EmbeddedResource Include="wwwroot\css\app.css" />
+    <EmbeddedResource Include="wwwroot\index.html" />
+    <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="8.0.100" />
+    <PackageReference Include="MudBlazor" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediaManager.Services\MediaManager.Services.csproj" />
+    <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
+    <ProjectReference Include="..\OPMF.Filesystem\OPMF.Filesystem.csproj" />
+    <ProjectReference Include="..\OPMF.Settings\OPMF.Settings.csproj" />
+  </ItemGroup>
+
+</Project>

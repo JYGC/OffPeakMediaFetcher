@@ -2,7 +2,7 @@
 
 namespace OPMF.Database
 {
-    public class YoutubeMetadataDbCollection : MetadataDbCollection<Entities.IMetadata>, IMetadataDbCollection<Entities.IMetadata>
+    public class YoutubeMetadataDbCollection : MetadataDbCollection<Entities.Metadata>, IMetadataDbCollection<Entities.Metadata>
     {
         private static readonly string __collectionName = "YoutubeMetadata";
 

@@ -60,9 +60,9 @@ namespace OPMF.SiteAdapter.Youtube
             });
         }
 
-        public IEnumerable<Entities.IChannel> ImportChannels()
+        public IEnumerable<Entities.Channel> ImportChannels()
         {
-            IEnumerable<Entities.IChannel> channels = new Entities.IChannel[] { };
+            IEnumerable<Entities.Channel> channels = new Entities.Channel[] { };
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(OpmlTree), new XmlRootAttribute("opml"));
             OpmlTree opmlTree = xmlSerializer.Deserialize(new StringReader(__opml)) as OpmlTree;
@@ -75,7 +75,7 @@ namespace OPMF.SiteAdapter.Youtube
                 request.Id = xmlUrlParts[1];
                 ChannelListResponse response = request.Execute();
                 IList<Channel> channelList = response.Items;
-                Entities.IChannel channel = new Entities.YoutubeChannel {
+                Entities.Channel channel = new Entities.YoutubeChannel {
                     SiteId = xmlUrlParts[1]
                     , Url = string.Format(__channelUrlScaffolding, xmlUrlParts[1])
                 };
@@ -92,7 +92,7 @@ namespace OPMF.SiteAdapter.Youtube
                     channel.Thumbnail.Width = channelList[0].Snippet.Thumbnails.Default__.Width.Value;
                     channel.Thumbnail.Height = channelList[0].Snippet.Thumbnails.Default__.Height.Value;
                 }
-                channels = channels.Concat(new Entities.IChannel[] { channel });
+                channels = channels.Concat(new Entities.Channel[] { channel });
             }
 
             return channels;

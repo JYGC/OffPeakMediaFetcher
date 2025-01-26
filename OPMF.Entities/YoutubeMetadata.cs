@@ -1,4 +1,4 @@
 ﻿namespace OPMF.Entities
 {
-    public class YoutubeMetadata : Metadata, IMetadata { }
+    public class YoutubeMetadata : Metadata { }
 }
