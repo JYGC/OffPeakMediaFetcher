@@ -42,11 +42,14 @@
 
     private List<OPMF.Entities.ChannelMetadata> results = new();
 
-    private void Submit()
+    private async Task Submit()
     {
-        results = string.IsNullOrWhiteSpace(channelName)
-            ? ChannelMetadataServices.GetByTitleContainingWord(videoTitle, skip, pageSize)
-            : ChannelMetadataServices.GetByChannelAndTitleContainingWord(channelName, videoTitle,
-                skip, pageSize);
+        await Task.Run(() =>
+        {
+            results = string.IsNullOrWhiteSpace(channelName)
+                ? ChannelMetadataServices.GetByTitleContainingWord(videoTitle, skip, pageSize)
+                : ChannelMetadataServices.GetByChannelAndTitleContainingWord(channelName, videoTitle,
+                    skip, pageSize);
+        });
     }
 }
