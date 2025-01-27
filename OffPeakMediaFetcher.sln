@@ -29,9 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.Logging", "OPMF.Loggin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.TextLogging", "OPMF.TextLogging\OPMF.TextLogging.csproj", "{DDAEE84A-A44B-47EA-A66C-16E8955C94A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaManagerUI", "MediaManagerUI\MediaManagerUI.csproj", "{55CAD81E-9B84-4064-9448-A6DDAB5E0496}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaManagerUI", "MediaManagerUI\MediaManagerUI.csproj", "{55CAD81E-9B84-4064-9448-A6DDAB5E0496}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaManager.Services", "MediaManager.Services\MediaManager.Services.csproj", "{FC4925C9-6349-4A23-96FC-90B31F07EC43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaManager.Services", "MediaManager.Services\MediaManager.Services.csproj", "{FC4925C9-6349-4A23-96FC-90B31F07EC43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

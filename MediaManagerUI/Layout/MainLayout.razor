@@ -1,4 +1,6 @@
-@using MediaManagerUI.Pages
+@using MediaManagerUI.Pages.Videos
+
+@inherits LayoutComponentBase
 
 <MudThemeProvider IsDarkMode="@true" />
 <MudPopoverProvider />
@@ -10,6 +12,6 @@
         <AppBarMenus />
     </MudAppBar>
     <MudMainContent>
-        <FindVideos />
+        @Body
     </MudMainContent>
 </MudLayout>

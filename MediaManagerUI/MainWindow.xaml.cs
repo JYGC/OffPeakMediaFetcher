@@ -14,17 +14,14 @@ namespace MediaManagerUI
         {
             try
             {
-                OPMF.Settings.ConfigHelper.InitReadonlySettings();
-                OPMF.Filesystem.FolderSetup.EstablishFolders();
-                OPMF.Settings.ConfigHelper.EstablishConfig();
-
                 InitializeComponent();
 
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddScoped<IChannelMetadataServices, ChannelMetadataServices>();
-            serviceCollection.AddMudServices();
-            serviceCollection.AddWpfBlazorWebView();
-            Resources.Add("services", serviceCollection.BuildServiceProvider());
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddScoped<IChannelMetadataServices, ChannelMetadataServices>();
+                serviceCollection.AddMudServices();
+                serviceCollection.AddWpfBlazorWebView();
+
+                Resources.Add("services", serviceCollection.BuildServiceProvider());
             }
             catch (Exception e)
             {
