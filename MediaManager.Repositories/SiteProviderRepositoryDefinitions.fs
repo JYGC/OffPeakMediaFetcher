@@ -1,6 +1,7 @@
 ﻿namespace MediaManager.Repositories
 
 open System
+open System.Threading.Tasks
 open System.Collections.Generic
 open Dapper.FSharp.SQLite
 open MediaManager.Database.TableTypes
@@ -12,7 +13,8 @@ module SiteProviderRepositoryDefinitions =
     let addMultipleSiteProvider
       (dbConnection: DatabaseConnection)
       (siteProvidersTable: SiteProvidersTable)
-      (siteProviders: IEnumerable<FullSiteProviderDto>) =
+      (siteProviders: IEnumerable<FullSiteProviderDto>)
+      : Task<int> =
         let newSiteProviders = [
             for sp in siteProviders ->
                 {

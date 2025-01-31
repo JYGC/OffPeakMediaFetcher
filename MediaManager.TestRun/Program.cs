@@ -9,7 +9,7 @@ var newSiteProviders = new List<SiteProviderDtos.FullSiteProviderDto>
     new(Guid.Empty, "Dailymotion", "dailymotion.com")
 };
 
-var addTask = SiteProviderRepository.addMultipleSiteProvider(newSiteProviders);
+var addTask = SiteProviderRepository.Cs.addMultipleSiteProvider(newSiteProviders);
 _ = addTask.Result;
 
 var names = new List<string>
@@ -17,7 +17,7 @@ var names = new List<string>
     "Vimeo",
     "Youtube"
 };
-var testValue = SiteProviderRepository.getSiteProviderByNames(names);
+var testValue = SiteProviderRepository.Cs.getSiteProviderByNames(names);
 
 var jsonResult = JsonSerializer.Serialize(testValue);
 Console.WriteLine(jsonResult);

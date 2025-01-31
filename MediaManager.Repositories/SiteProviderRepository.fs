@@ -1,15 +1,20 @@
 ﻿namespace MediaManager.Repositories
 
+open System.Threading.Tasks
+open System.Collections.Generic
 open MediaManager.Database
+open MediaManager.Dtos
 
 module SiteProviderRepository =
-    let addMultipleSiteProvider siteProviders =
+    let addMultipleSiteProvider: IEnumerable<SiteProviderDtos.FullSiteProviderDto> -> Task<int> =
         SiteProviderRepositoryDefinitions.addMultipleSiteProvider
             DatabaseContext.databaseConnection
             DatabaseContext.siteProvidersTable
-            siteProviders
-    let getSiteProviderByNames names =
+    let getSiteProviderByNames: IEnumerable<string> -> List<SiteProviderDtos.FullSiteProviderDto> =
         SiteProviderRepositoryDefinitions.getSiteProviderByNames
             DatabaseContext.databaseConnection
             DatabaseContext.siteProvidersTable
-            names
+
+    module Cs =
+        let addMultipleSiteProvider siteProviders = addMultipleSiteProvider siteProviders
+        let getSiteProviderByNames names = getSiteProviderByNames names
