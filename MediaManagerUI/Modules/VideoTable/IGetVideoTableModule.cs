@@ -1,9 +1,13 @@
-﻿namespace MediaManagerUI.Modules.VideoTable
+﻿using OPMF.Entities;
+
+namespace MediaManagerUI.Modules.VideoTable
 {
     public interface IGetVideoTableModule
     {
         bool IsLoading { get; }
-        List<OPMF.Entities.ChannelMetadata> Results { get; }
+        List<ChannelMetadata> Results { get; }
+        MetadataStatus[] UnselectableMetadataStatuses { get; }
         Task GetResultsAsync();
+        void ScheduleMetadataStatusUpdate(MetadataStatus newStatus, IMetadata Metadata);
     }
 }

@@ -3,14 +3,13 @@ using OPMF.Entities;
 
 namespace MediaManagerUI.Modules.VideoTable
 {
-    public class NewVideosModule(IChannelMetadataServices channelMetadataServices) : IGetVideoTableModule
+    public class NewVideosModule(
+        IMetadataServices metadataServices,
+        IChannelMetadataServices channelMetadataServices) : VideoTableModuleBase(metadataServices), IGetVideoTableModule
     {
-        private const int _pageSize = 10000;
-        private int _skip = 0;
-
         private readonly IChannelMetadataServices _channelMetadataServices = channelMetadataServices;
-        public bool IsLoading { get; private set; } = false;
-        public List<ChannelMetadata> Results { get; private set; } = [];
+
+        public MetadataStatus[] UnselectableMetadataStatuses => [ MetadataStatus.Downloaded ];
 
         public async Task GetResultsAsync()
         {
@@ -29,6 +28,7 @@ namespace MediaManagerUI.Modules.VideoTable
                     _skip += _pageSize;
                 }
                 while (resultsChuck != null && resultsChuck.Count() == _pageSize);
+                _metadataIdResultsMap = Results.ToDictionary(cm => cm.Metadata.Id, cm => cm.Metadata);
             });
 
             IsLoading = false;

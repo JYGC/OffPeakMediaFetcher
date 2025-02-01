@@ -4,6 +4,7 @@
 @using MediaManagerUI.Modules.VideoTable
 @using MediaManagerUI.Shared
 
+@inject IMetadataServices _metadataServices
 @inject IChannelMetadataServices _channelMetadataServices
 
 <_VideoTable @bind-GetVideoTableModule="_getVideoTableModule">
@@ -29,7 +30,7 @@
 
     protected override void OnInitialized()
     {
-        _getVideoTableModule = new FindVideosModule(_channelMetadataServices);
+        _getVideoTableModule = new FindVideosModule(_metadataServices, _channelMetadataServices);
         _getVideoTableModuleAsDatabaseSearchable = _getVideoTableModule as IDatabaseSearchableGetVideoTableModule;
         if (_getVideoTableModuleAsDatabaseSearchable == null)
         {

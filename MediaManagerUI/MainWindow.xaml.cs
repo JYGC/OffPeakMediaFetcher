@@ -19,6 +19,7 @@ namespace MediaManagerUI
                 var serviceCollection = new ServiceCollection();
 
                 serviceCollection.AddScoped<IChannelMetadataServices, ChannelMetadataServices>();
+                serviceCollection.AddScoped<IMetadataServices, MetadataServices>();
 
                 serviceCollection.AddMudServices();
                 serviceCollection.AddWpfBlazorWebView();

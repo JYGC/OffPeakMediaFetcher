@@ -1,4 +1,5 @@
-﻿@using MediaManagerUI.Modules.VideoTable
+﻿@using OPMF.Entities
+@using MediaManagerUI.Modules.VideoTable
 
 <MudTable T="OPMF.Entities.ChannelMetadata"
           Items="_getVideoTableModule?.Results"
@@ -21,7 +22,21 @@
         <MudTh>PublishedAt</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Status">@context.Metadata.Status</MudTd>
+        <MudTd DataLabel="Status">
+            @foreach (var status in _metadataStatus)
+            {
+                @if (_getVideoTableModule != null)
+                {
+                    <MudButton Variant="@ComputeStatusButtonVariant(status, context.Metadata)"
+                               Color="@((context.Metadata.Status == status) ? Color.Secondary : Color.Default)"
+                               OnClick="() => _getVideoTableModule.ScheduleMetadataStatusUpdate(status, context.Metadata)"
+                               Disabled="_getVideoTableModule.UnselectableMetadataStatuses.Contains(status)"
+                               Class="ml-0 mr-0 pl-2 pr-2">
+                        @status
+                    </MudButton>
+                }
+            }
+        </MudTd>
         <MudTd DataLabel="Name">@context.Channel.Name</MudTd>
         <MudTd DataLabel="Title">@context.Metadata.Title</MudTd>
         <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
@@ -50,6 +65,8 @@
     [Parameter]
     public RenderFragment? TableToolBarContent { get; set; }
 
+    private MetadataStatus[] _metadataStatus = Enum.GetValues(typeof(MetadataStatus)).Cast<MetadataStatus>().ToArray();
+
     protected override void OnParametersSet()
     {
         if (_getVideoTableModule == null)
@@ -59,12 +76,8 @@
         base.OnParametersSet();
     }
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     if (_getVideoTableModule is IAutoGetVideoTableModule)
-    //     {
-    //         await ((IAutoGetVideoTableModule)_getVideoTableModule).AutoLoadGetResultsAsync();
-    //     }
-    //     await base.OnInitializedAsync();
-    // }
+    private Variant ComputeStatusButtonVariant(MetadataStatus status, IMetadata metadata) =>
+        (_getVideoTableModule != null && !_getVideoTableModule.UnselectableMetadataStatuses.Contains(status)) ? Variant.Filled
+            : (metadata.Status == status) ? Variant.Outlined
+            : Variant.Text;
 }
