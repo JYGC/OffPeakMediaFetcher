@@ -1,8 +1,68 @@
 ﻿@page "/"
 @page "/videos/new"
 
-<h3>NewVideos</h3>
+@using MediaManager.Services
 
-@code {
+@inject IChannelMetadataServices ChannelMetadataServices
 
+<MudTable T="OPMF.Entities.ChannelMetadata"
+          Items="_results"
+          Breakpoint="Breakpoint.Sm"
+          Loading="@_loading"
+          Virtualize="true"
+          FixedHeader="true"
+          LoadingProgressColor="Color.Info"
+          Height="80vh">
+    <ToolBarContent>
+        <MudText Typo="Typo.subtitle1">New Videos</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Status</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Title</MudTh>
+        <MudTh>PublishedAt</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Status">@context.Metadata.Status</MudTd>
+        <MudTd DataLabel="Name">@context.Channel.Name</MudTd>
+        <MudTd DataLabel="Title">@context.Metadata.Title</MudTd>
+        <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
+    </RowTemplate>
+</MudTable>
+
+    @code {
+    private const int pageSize = 10000;
+
+    private bool _loading = false;
+
+    private List<OPMF.Entities.ChannelMetadata> _results = new();
+    private int _skip = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetResults();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task GetResults()
+    {
+        _results = new();
+        _skip = 0;
+
+        List<OPMF.Entities.ChannelMetadata>? resultsChuck = null;
+
+        _loading = true;
+        await Task.Run(() =>
+        {
+            do
+            {
+                resultsChuck = ChannelMetadataServices.GetNew(_skip, pageSize);
+                _results.AddRange(resultsChuck);
+                _skip += pageSize;
+            }
+            while (resultsChuck != null && resultsChuck.Count() == pageSize);
+        });
+
+        _loading = false;
+    }
 }

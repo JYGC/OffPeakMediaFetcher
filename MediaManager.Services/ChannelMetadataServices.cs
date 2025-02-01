@@ -8,6 +8,7 @@ namespace MediaManager.Services
             string wordInChannelName,
             string wordInMetadataTitle, int skip, int pageSize);
         List<OPMF.Entities.ChannelMetadata> GetByTitleContainingWord(string wordInMetadataTitle, int skip, int pageSize);
+        List<OPMF.Entities.ChannelMetadata> GetNew(int skip, int pageSize);
     }
 
     public class ChannelMetadataServices : IChannelMetadataServices
@@ -69,6 +70,11 @@ namespace MediaManager.Services
             });
 
             return metadataChannels;
+        }
+
+        public List<OPMF.Entities.ChannelMetadata> GetNew(int skip, int pageSize)
+        {
+            return __GetChannelMetadatas((metadataDbAdapter) => metadataDbAdapter.GetNew(skip, pageSize));
         }
     }
 }
