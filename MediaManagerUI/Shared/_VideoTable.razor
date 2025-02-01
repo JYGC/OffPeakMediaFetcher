@@ -31,6 +31,7 @@
                                Color="@((context.Metadata.Status == status) ? Color.Secondary : Color.Default)"
                                OnClick="() => _getVideoTableModule.ScheduleMetadataStatusUpdate(status, context.Metadata)"
                                Disabled="_getVideoTableModule.UnselectableMetadataStatuses.Contains(status)"
+                               Size="Size.Small"
                                Class="ml-0 mr-0 pl-2 pr-2">
                         @status
                     </MudButton>
