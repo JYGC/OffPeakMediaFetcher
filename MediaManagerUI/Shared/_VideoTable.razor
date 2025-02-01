@@ -1,0 +1,70 @@
+﻿@using MediaManagerUI.Modules.VideoTable
+
+<MudTable T="OPMF.Entities.ChannelMetadata"
+          Items="_getVideoTableModule?.Results"
+          Breakpoint="Breakpoint.Sm"
+          Loading="@(_getVideoTableModule?.IsLoading ?? false)"
+          Virtualize="true"
+          FixedHeader="true"
+          LoadingProgressColor="Color.Info"
+          Height="80vh">
+    <ToolBarContent>
+        @if (TableToolBarContent != null)
+        {
+            @TableToolBarContent
+        }
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Status</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Title</MudTh>
+        <MudTh>PublishedAt</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Status">@context.Metadata.Status</MudTd>
+        <MudTd DataLabel="Name">@context.Channel.Name</MudTd>
+        <MudTd DataLabel="Title">@context.Metadata.Title</MudTd>
+        <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
+    </RowTemplate>
+</MudTable>
+
+    @code {
+    private IGetVideoTableModule? _getVideoTableModule;
+    [Parameter]
+    public IGetVideoTableModule? GetVideoTableModule
+    {
+        get => _getVideoTableModule;
+        set
+        {
+            if (_getVideoTableModule == value)
+            {
+                return;
+            }
+            _getVideoTableModule = value;
+            GetVideoTableModuleChanged.InvokeAsync(value);
+        }
+    }
+    [Parameter]
+    public EventCallback<IGetVideoTableModule> GetVideoTableModuleChanged { get; set; }
+
+    [Parameter]
+    public RenderFragment? TableToolBarContent { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (_getVideoTableModule == null)
+        {
+            throw new Exception("Please set GetResults to a method");
+        }
+        base.OnParametersSet();
+    }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     if (_getVideoTableModule is IAutoGetVideoTableModule)
+    //     {
+    //         await ((IAutoGetVideoTableModule)_getVideoTableModule).AutoLoadGetResultsAsync();
+    //     }
+    //     await base.OnInitializedAsync();
+    // }
+}

@@ -1,82 +1,40 @@
 ﻿@page "/videos/find"
 
 @using MediaManager.Services
+@using MediaManagerUI.Modules.VideoTable
+@using MediaManagerUI.Shared
 
-@inject IChannelMetadataServices ChannelMetadataServices
+@inject IChannelMetadataServices _channelMetadataServices
 
-<MudTable
-                T="OPMF.Entities.ChannelMetadata"
-                Items="_results"
-                Breakpoint="Breakpoint.Sm"
-                Loading="@_loading"
-                Virtualize="true"
-                FixedHeader="true"
-                LoadingProgressColor="Color.Info"
-                Height="80vh">
-    <ToolBarContent>
-        <MudText Typo="Typo.subtitle1">Find Videos from Database</MudText>
-        <MudSpacer />
-        <MudTextField
-                      @bind-Value="_videoTitle"
-                      Placeholder="Video title"
-                      Variant="Variant.Text"></MudTextField>
-        <MudTextField @bind-Value="_channelName"
-                      Placeholder="Channel name"
-                      Variant="Variant.Text"></MudTextField>
-        <MudButton Variant="Variant.Outlined" OnClick="Submit">Find</MudButton>
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh>Status</MudTh>
-        <MudTh>Name</MudTh>
-        <MudTh>Title</MudTh>
-        <MudTh>PublishedAt</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Status">@context.Metadata.Status</MudTd>
-        <MudTd DataLabel="Name">@context.Channel.Name</MudTd>
-        <MudTd DataLabel="Title">@context.Metadata.Title</MudTd>
-        <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
-    </RowTemplate>
-</MudTable>
-
-    @code {
-    private const int pageSize = 10000;
-
-    private string _videoTitle = "";
-    private string _channelName = "";
-
-    private bool _loading = false;
-
-    private List<OPMF.Entities.ChannelMetadata> _results = new();
-    private int _skip = 0;
-
-    private async Task Submit()
-    {
-        if (string.IsNullOrWhiteSpace(_videoTitle) && string.IsNullOrWhiteSpace(_channelName))
+<_VideoTable @bind-GetVideoTableModule="_getVideoTableModule">
+    <TableToolBarContent>
+        @if (_getVideoTableModule != null && _getVideoTableModuleAsDatabaseSearchable != null)
         {
-            return;
+            <MudText Typo="Typo.subtitle1">Find Videos from Database</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="_getVideoTableModuleAsDatabaseSearchable.SearchVideoTitle"
+                            Placeholder="Video title"
+                            Variant="Variant.Text"></MudTextField>
+            <MudTextField @bind-Value="_getVideoTableModuleAsDatabaseSearchable.SearchChannelName"
+                            Placeholder="Channel name"
+                            Variant="Variant.Text"></MudTextField>
+            <MudButton Variant="Variant.Outlined" OnClick="_getVideoTableModule.GetResultsAsync">Find</MudButton>
         }
+    </TableToolBarContent>
+</_VideoTable>
 
-        _results = new();
-        _skip = 0;
+@code {
+    private IGetVideoTableModule? _getVideoTableModule;
+    private IDatabaseSearchableGetVideoTableModule? _getVideoTableModuleAsDatabaseSearchable;
 
-        List<OPMF.Entities.ChannelMetadata>? resultsChuck = null;
-
-        _loading = true;
-        await Task.Run(() =>
+    protected override void OnInitialized()
+    {
+        _getVideoTableModule = new FindVideosModule(_channelMetadataServices);
+        _getVideoTableModuleAsDatabaseSearchable = _getVideoTableModule as IDatabaseSearchableGetVideoTableModule;
+        if (_getVideoTableModuleAsDatabaseSearchable == null)
         {
-            do
-            {
-                resultsChuck = string.IsNullOrWhiteSpace(_channelName)
-                ? ChannelMetadataServices.GetByTitleContainingWord(_videoTitle, _skip, pageSize)
-                : ChannelMetadataServices.GetByChannelAndTitleContainingWord(_channelName, _videoTitle,
-                    _skip, pageSize);
-                _results.AddRange(resultsChuck);
-                _skip += pageSize;
-            }
-            while (resultsChuck != null && resultsChuck.Count() == pageSize);
-        });
-
-        _loading = false;
+            throw new Exception("Module is not the correct type or is null");
+        }
+        base.OnInitialized();
     }
 }

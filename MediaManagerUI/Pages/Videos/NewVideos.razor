@@ -2,67 +2,32 @@
 @page "/videos/new"
 
 @using MediaManager.Services
+@using MediaManagerUI.Modules.VideoTable
+@using MediaManagerUI.Shared
 
-@inject IChannelMetadataServices ChannelMetadataServices
+@inject IChannelMetadataServices _channelMetadataServices
 
-<MudTable T="OPMF.Entities.ChannelMetadata"
-          Items="_results"
-          Breakpoint="Breakpoint.Sm"
-          Loading="@_loading"
-          Virtualize="true"
-          FixedHeader="true"
-          LoadingProgressColor="Color.Info"
-          Height="80vh">
-    <ToolBarContent>
+<_VideoTable @bind-GetVideoTableModule="_getVideoTableModule">
+    <TableToolBarContent>
         <MudText Typo="Typo.subtitle1">New Videos</MudText>
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh>Status</MudTh>
-        <MudTh>Name</MudTh>
-        <MudTh>Title</MudTh>
-        <MudTh>PublishedAt</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Status">@context.Metadata.Status</MudTd>
-        <MudTd DataLabel="Name">@context.Channel.Name</MudTd>
-        <MudTd DataLabel="Title">@context.Metadata.Title</MudTd>
-        <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
-    </RowTemplate>
-</MudTable>
+    </TableToolBarContent>
+</_VideoTable>
 
-    @code {
-    private const int pageSize = 10000;
+@code {
+    private IGetVideoTableModule? _getVideoTableModule;
 
-    private bool _loading = false;
-
-    private List<OPMF.Entities.ChannelMetadata> _results = new();
-    private int _skip = 0;
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await GetResults();
-        await base.OnInitializedAsync();
+        _getVideoTableModule = new NewVideosModule(_channelMetadataServices);
+        base.OnInitialized();
     }
 
-    private async Task GetResults()
+    protected override async Task OnParametersSetAsync()
     {
-        _results = new();
-        _skip = 0;
-
-        List<OPMF.Entities.ChannelMetadata>? resultsChuck = null;
-
-        _loading = true;
-        await Task.Run(() =>
+        if (_getVideoTableModule != null)
         {
-            do
-            {
-                resultsChuck = ChannelMetadataServices.GetNew(_skip, pageSize);
-                _results.AddRange(resultsChuck);
-                _skip += pageSize;
-            }
-            while (resultsChuck != null && resultsChuck.Count() == pageSize);
-        });
-
-        _loading = false;
+            await _getVideoTableModule.GetResultsAsync();
+        }
+        await base.OnParametersSetAsync();
     }
 }
