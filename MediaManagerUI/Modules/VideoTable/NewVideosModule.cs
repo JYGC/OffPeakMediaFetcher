@@ -3,19 +3,14 @@ using OPMF.Entities;
 
 namespace MediaManagerUI.Modules.VideoTable
 {
-    public class NewVideosModule(IChannelMetadataServices channelMetadataServices) : IAutoGetVideoTableModule
+    public class NewVideosModule(IChannelMetadataServices channelMetadataServices) : IGetVideoTableModule
     {
         private const int _pageSize = 10000;
         private int _skip = 0;
 
         private readonly IChannelMetadataServices _channelMetadataServices = channelMetadataServices;
         public bool IsLoading { get; private set; } = false;
-        public List<ChannelMetadata> Results { get; set; } = [];
-
-        public async Task AutoLoadGetResultsAsync()
-        {
-            await GetResultsAsync();
-        }
+        public List<ChannelMetadata> Results { get; private set; } = [];
 
         public async Task GetResultsAsync()
         {

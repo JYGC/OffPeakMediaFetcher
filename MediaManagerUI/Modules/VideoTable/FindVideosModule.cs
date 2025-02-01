@@ -11,7 +11,7 @@ namespace MediaManagerUI.Modules.VideoTable
         private readonly IChannelMetadataServices _channelMetadataServices = channelMetadataServices;
 
         public bool IsLoading { get; private set; } = false;
-        public List<ChannelMetadata> Results { get; set; } = [];
+        public List<ChannelMetadata> Results { get; private set; } = [];
         public string? SearchVideoTitle { get; set; }
         public string? SearchChannelName { get; set; }
 
