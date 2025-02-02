@@ -5,7 +5,7 @@ namespace MediaManagerUI.Modules.VideoBrowser
 {
     public class GetSingleModule(
         IMetadataServices metadataServices,
-        IChannelMetadataServices channelMetadataServices) : VideoTableModuleBase(metadataServices), IGetVideoTableModule, INetSearchableGetVideoTableModule
+        IChannelMetadataServices channelMetadataServices) : VideoBrowserModuleBase(metadataServices), IVideoBrowserModule, INetSearchableVideoBrowserModule
     {
         private readonly IChannelMetadataServices _channelMetadataServices = channelMetadataServices;
 

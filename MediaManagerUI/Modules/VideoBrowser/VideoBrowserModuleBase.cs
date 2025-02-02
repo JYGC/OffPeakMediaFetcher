@@ -3,14 +3,14 @@ using OPMF.Entities;
 
 namespace MediaManagerUI.Modules.VideoBrowser
 {
-    public class VideoTableModuleBase
+    public class VideoBrowserModuleBase
     {
         private readonly IMetadataServices _metadataServices;
 
         protected const int _pageSize = 10000;
         protected int _skip;
 
-        public VideoTableModuleBase(IMetadataServices metadataServices)
+        public VideoBrowserModuleBase(IMetadataServices metadataServices)
         {
             _metadataServices = metadataServices;
 

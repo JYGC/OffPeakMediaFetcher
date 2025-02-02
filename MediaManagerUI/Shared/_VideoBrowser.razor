@@ -52,9 +52,9 @@
 </MudTable>
 
     @code {
-    private IGetVideoTableModule? _getVideoTableModule;
+    private IVideoBrowserModule? _getVideoTableModule;
     [Parameter]
-    public IGetVideoTableModule? GetVideoTableModule
+    public IVideoBrowserModule? GetVideoTableModule
     {
         get => _getVideoTableModule;
         set
@@ -68,7 +68,7 @@
         }
     }
     [Parameter]
-    public EventCallback<IGetVideoTableModule> GetVideoTableModuleChanged { get; set; }
+    public EventCallback<IVideoBrowserModule> GetVideoTableModuleChanged { get; set; }
 
     [Parameter]
     public RenderFragment? TableToolBarContent { get; set; }

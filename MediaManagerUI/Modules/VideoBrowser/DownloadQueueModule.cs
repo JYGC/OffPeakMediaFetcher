@@ -5,7 +5,7 @@ namespace MediaManagerUI.Modules.VideoBrowser
 {
     public class DownloadQueueModule(
         IMetadataServices metadataServices,
-        IChannelMetadataServices channelMetadataServices) : VideoTableModuleBase(metadataServices), IGetVideoTableModule
+        IChannelMetadataServices channelMetadataServices) : VideoBrowserModuleBase(metadataServices), IVideoBrowserModule
     {
         private readonly IChannelMetadataServices _channelMetadataServices = channelMetadataServices;
 

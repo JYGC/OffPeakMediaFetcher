@@ -22,13 +22,13 @@
 </_VideoBrowser>
 
 @code {
-    private IGetVideoTableModule? _getVideoTableModule;
-    private INetSearchableGetVideoTableModule? _getVideoTableModuleAsNetSearchable;
+    private IVideoBrowserModule? _getVideoTableModule;
+    private INetSearchableVideoBrowserModule? _getVideoTableModuleAsNetSearchable;
 
     protected override void OnInitialized()
     {
         _getVideoTableModule = new GetSingleModule(_metadataServices, _channelMetadataServices);
-        _getVideoTableModuleAsNetSearchable = (INetSearchableGetVideoTableModule)_getVideoTableModule;
+        _getVideoTableModuleAsNetSearchable = (INetSearchableVideoBrowserModule)_getVideoTableModule;
         if (_getVideoTableModuleAsNetSearchable == null)
         {
             throw new Exception("Module is not the correct type or is null");

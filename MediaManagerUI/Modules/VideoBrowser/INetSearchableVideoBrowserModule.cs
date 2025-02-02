@@ -1,6 +1,6 @@
 ﻿namespace MediaManagerUI.Modules.VideoBrowser
 {
-    public interface INetSearchableGetVideoTableModule
+    public interface INetSearchableVideoBrowserModule
     {
         string? SearchVideoUrl { get; set; }
     }

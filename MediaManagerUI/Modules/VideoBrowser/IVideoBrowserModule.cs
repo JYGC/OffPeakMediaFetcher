@@ -2,7 +2,7 @@
 
 namespace MediaManagerUI.Modules.VideoBrowser
 {
-    public interface IGetVideoTableModule
+    public interface IVideoBrowserModule
     {
         bool IsLoading { get; }
         List<ChannelMetadata> Results { get; }

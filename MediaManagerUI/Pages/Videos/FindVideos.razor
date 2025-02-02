@@ -25,13 +25,13 @@
 </_VideoBrowser>
 
 @code {
-    private IGetVideoTableModule? _getVideoTableModule;
-    private IDatabaseSearchableGetVideoTableModule? _getVideoTableModuleAsDatabaseSearchable;
+    private IVideoBrowserModule? _getVideoTableModule;
+    private IDatabaseSearchableVideoBrowserModule? _getVideoTableModuleAsDatabaseSearchable;
 
     protected override void OnInitialized()
     {
         _getVideoTableModule = new FindVideosModule(_metadataServices, _channelMetadataServices);
-        _getVideoTableModuleAsDatabaseSearchable = (IDatabaseSearchableGetVideoTableModule)_getVideoTableModule;
+        _getVideoTableModuleAsDatabaseSearchable = (IDatabaseSearchableVideoBrowserModule)_getVideoTableModule;
         if (_getVideoTableModuleAsDatabaseSearchable == null)
         {
             throw new Exception("Module is not the correct type or is null");
