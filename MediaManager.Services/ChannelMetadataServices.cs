@@ -1,4 +1,8 @@
-﻿using OPMF.Entities;
+﻿using OPMF.Database;
+using OPMF.Entities;
+using OPMF.SiteAdapter;
+using OPMF.SiteAdapter.Youtube;
+using System.Data.Common;
 
 namespace MediaManager.Services
 {
@@ -9,6 +13,8 @@ namespace MediaManager.Services
             string wordInMetadataTitle, int skip, int pageSize);
         List<ChannelMetadata> GetByTitleContainingWord(string wordInMetadataTitle, int skip, int pageSize);
         List<ChannelMetadata> GetNew(int skip, int pageSize);
+        List<ChannelMetadata> GetToDownloadAndWait(int skip, int pageSize);
+        List<ChannelMetadata> GetVideoByUrl(string videoUrl, int skip, int pageSize);
     }
 
     public class ChannelMetadataServices : IChannelMetadataServices
@@ -75,6 +81,38 @@ namespace MediaManager.Services
         public List<ChannelMetadata> GetNew(int skip, int pageSize)
         {
             return __GetChannelMetadatas((metadataDbAdapter) => metadataDbAdapter.GetNew(skip, pageSize));
+        }
+
+        public List<ChannelMetadata> GetToDownloadAndWait(int skip, int pageSize)
+        {
+            return __GetChannelMetadatas((metadataDbAdapter) => metadataDbAdapter.GetToDownloadAndWait(skip, pageSize));
+        }
+
+        public List<ChannelMetadata> GetVideoByUrl(string videoUrl, int skip, int pageSize)
+        {
+            var siteVideoGetter = new YoutubeVideoMetadataGetter();
+            var siteId = siteVideoGetter.GetSiteIdFromURL(videoUrl);
+
+            (IMetadata? Metadata, IChannel? Channel) videoWithChannel = (null, null);
+            DatabaseAdapter.AccessDbAdapter((dbAdapter) =>
+            {
+                videoWithChannel.Metadata = dbAdapter.YoutubeMetadataDbCollection.GetBySiteId(siteId);
+                if (videoWithChannel.Metadata == null)
+                {
+                    videoWithChannel = siteVideoGetter.GetVideoByURL(siteId);
+                    if (videoWithChannel.Channel == null || videoWithChannel.Metadata == null)
+                    {
+                        throw new Exception("Failed to get video");
+                    }
+                    dbAdapter.YoutubeMetadataDbCollection.InsertNew(new List<IMetadata> { videoWithChannel.Metadata });
+                    dbAdapter.YoutubeChannelDbCollection.InsertOrUpdate(new List<IChannel> { videoWithChannel.Channel });
+                }
+                else
+                {
+                    videoWithChannel.Channel = dbAdapter.YoutubeChannelDbCollection.GetBySiteId(videoWithChannel.Metadata.ChannelSiteId);
+                }
+            });
+            return [ new ChannelMetadata { Channel = videoWithChannel.Channel, Metadata = videoWithChannel.Metadata } ];
         }
     }
 }

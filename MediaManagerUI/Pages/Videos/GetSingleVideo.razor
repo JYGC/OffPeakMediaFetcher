@@ -1,7 +1,38 @@
 ﻿@page "/videos/getsingle"
 
-<h3>GetSingleVideo</h3>
+@using MediaManager.Services
+@using MediaManagerUI.Modules.VideoTable
+@using MediaManagerUI.Shared
+
+@inject IMetadataServices _metadataServices
+@inject IChannelMetadataServices _channelMetadataServices
+
+<_VideoTable @bind-GetVideoTableModule="_getVideoTableModule">
+    <TableToolBarContent>
+        @if (_getVideoTableModule != null && _getVideoTableModuleAsNetSearchable != null)
+        {
+            <MudText Typo="Typo.subtitle1">Get Single Video from Internet</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="_getVideoTableModuleAsNetSearchable.SearchVideoUrl"
+                          Placeholder="Video URL"
+                          Variant="Variant.Text"></MudTextField>
+            <MudButton Variant="Variant.Outlined" OnClick="_getVideoTableModule.GetResultsAsync">Find</MudButton>
+        }
+    </TableToolBarContent>
+</_VideoTable>
 
 @code {
+    private IGetVideoTableModule? _getVideoTableModule;
+    private INetSearchableGetVideoTableModule? _getVideoTableModuleAsNetSearchable;
 
+    protected override void OnInitialized()
+    {
+        _getVideoTableModule = new GetSingleModule(_metadataServices, _channelMetadataServices);
+        _getVideoTableModuleAsNetSearchable = (INetSearchableGetVideoTableModule)_getVideoTableModule;
+        if (_getVideoTableModuleAsNetSearchable == null)
+        {
+            throw new Exception("Module is not the correct type or is null");
+        }
+        base.OnInitialized();
+    }
 }

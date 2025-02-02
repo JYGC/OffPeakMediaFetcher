@@ -1,7 +1,33 @@
 ﻿@page "/videos/todownload"
 
-<h3>DownloadQueue</h3>
+@using MediaManager.Services
+@using MediaManagerUI.Modules.VideoTable
+@using MediaManagerUI.Shared
+
+@inject IMetadataServices _metadataServices
+@inject IChannelMetadataServices _channelMetadataServices
+
+<_VideoTable @bind-GetVideoTableModule="_getVideoTableModule">
+    <TableToolBarContent>
+        <MudText Typo="Typo.subtitle1">Download Queue</MudText>
+    </TableToolBarContent>
+</_VideoTable>
 
 @code {
+    private IGetVideoTableModule? _getVideoTableModule;
 
+    protected override void OnInitialized()
+    {
+        _getVideoTableModule = new DownloadQueueModule(_metadataServices, _channelMetadataServices);
+        base.OnInitialized();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_getVideoTableModule != null)
+        {
+            await _getVideoTableModule.GetResultsAsync();
+        }
+        await base.OnParametersSetAsync();
+    }
 }

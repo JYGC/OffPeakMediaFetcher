@@ -31,7 +31,7 @@
     protected override void OnInitialized()
     {
         _getVideoTableModule = new FindVideosModule(_metadataServices, _channelMetadataServices);
-        _getVideoTableModuleAsDatabaseSearchable = _getVideoTableModule as IDatabaseSearchableGetVideoTableModule;
+        _getVideoTableModuleAsDatabaseSearchable = (IDatabaseSearchableGetVideoTableModule)_getVideoTableModule;
         if (_getVideoTableModuleAsDatabaseSearchable == null)
         {
             throw new Exception("Module is not the correct type or is null");
