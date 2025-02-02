@@ -45,7 +45,7 @@
         </MudTd>
         <MudTd DataLabel="Channel">@context.Channel.Name</MudTd>
         <MudTd DataLabel="Title">
-            <MudButton OnClick="@(() => OpenVideoDetailDialog())">@context.Metadata.Title</MudButton>
+            <MudButton OnClick="@(() => OpenVideoDetailDialog(context))">@context.Metadata.Title</MudButton>
         </MudTd>
         <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
     </RowTemplate>
@@ -84,14 +84,14 @@
         base.OnParametersSet();
     }
 
-    private Task OpenVideoDetailDialog()
+    private Task OpenVideoDetailDialog(ChannelMetadata channelMetadata)
     {
         return _dialog.ShowAsync<_VideoDetails>(
             "Video details",
             new DialogParameters<_VideoDetails>
             {
                 {
-                    x => x.Arg, "Test"
+                    x => x.ChannelMetadata, channelMetadata
                 }
             },
             new DialogOptions

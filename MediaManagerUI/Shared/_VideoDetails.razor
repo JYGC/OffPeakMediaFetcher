@@ -1,10 +1,34 @@
-﻿<h3>_VideoDetails</h3>
+﻿@using OPMF.Entities
 
-<div>
-    @Arg
-</div>
+@if (ChannelMetadata != null && ChannelMetadata.Metadata != null)
+{
+    <div style="overflow: scroll; height: 100vh">
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Title: </b></MudText>
+            <MudText>@ChannelMetadata.Metadata.Title</MudText>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Thumbnail: </b></MudText>
+            <MudImage Src="@ChannelMetadata.Metadata.Thumbnail.Url"
+                        Height="@((int?)ChannelMetadata.Metadata.Thumbnail.Height)"
+                        Width="@((int?)ChannelMetadata.Metadata.Thumbnail.Width)" />
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Channel: </b></MudText>
+            <MudText>@(ChannelMetadata.Channel == null ? "Unknown" : ChannelMetadata.Channel.Name)</MudText>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Url: </b></MudText>
+            <MudLink Href="@ChannelMetadata.Metadata.Url">@ChannelMetadata.Metadata.Url</MudLink>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Description: </b></MudText>
+                <MudText>@ChannelMetadata.Metadata.Description</MudText>
+        </MudPaper>
+    </div>
+}
 
 @code {
     [Parameter]
-    public string Arg { get; set; } = "";
+    public ChannelMetadata? ChannelMetadata { get; set; }
 }
