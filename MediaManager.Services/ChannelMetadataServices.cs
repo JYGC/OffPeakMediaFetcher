@@ -90,7 +90,7 @@ namespace MediaManager.Services
 
         public List<ChannelMetadata> GetVideoByUrl(string videoUrl, int skip, int pageSize)
         {
-            var siteVideoGetter = new YoutubeVideoMetadataGetter();
+            var siteVideoGetter = new YoutubeVideoMetadataGetter(); // Replace when adding other platforms
             var siteId = siteVideoGetter.GetSiteIdFromURL(videoUrl);
 
             (IMetadata? Metadata, IChannel? Channel) videoWithChannel = (null, null);
