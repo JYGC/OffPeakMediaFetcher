@@ -1,15 +1,15 @@
 ﻿using MediaManager.Services;
 using OPMF.Entities;
 
-namespace MediaManagerUI.Modules.VideoTable
+namespace MediaManagerUI.Modules.VideoBrowser
 {
-    public class NewVideosModule(
+    public class DownloadQueueModule(
         IMetadataServices metadataServices,
         IChannelMetadataServices channelMetadataServices) : VideoTableModuleBase(metadataServices), IGetVideoTableModule
     {
         private readonly IChannelMetadataServices _channelMetadataServices = channelMetadataServices;
 
-        public MetadataStatus[] UnselectableMetadataStatuses => [MetadataStatus.Downloaded];
+        public MetadataStatus[] UnselectableMetadataStatuses => [MetadataStatus.New, MetadataStatus.Downloaded];
 
         public async Task GetResultsAsync()
         {
@@ -23,7 +23,7 @@ namespace MediaManagerUI.Modules.VideoTable
             {
                 do
                 {
-                    resultsChuck = _channelMetadataServices.GetNew(_skip, _pageSize);
+                    resultsChuck = _channelMetadataServices.GetToDownloadAndWait(_skip, _pageSize);
                     Results.AddRange(resultsChuck);
                     _skip += _pageSize;
                 }

@@ -1,24 +1,18 @@
 ﻿using MediaManager.Services;
 using OPMF.Entities;
 
-namespace MediaManagerUI.Modules.VideoTable
+namespace MediaManagerUI.Modules.VideoBrowser
 {
-    public class GetSingleModule(
+    public class NewVideosModule(
         IMetadataServices metadataServices,
-        IChannelMetadataServices channelMetadataServices) : VideoTableModuleBase(metadataServices), IGetVideoTableModule, INetSearchableGetVideoTableModule
+        IChannelMetadataServices channelMetadataServices) : VideoTableModuleBase(metadataServices), IGetVideoTableModule
     {
         private readonly IChannelMetadataServices _channelMetadataServices = channelMetadataServices;
 
-        public string? SearchVideoUrl { get; set; }
         public MetadataStatus[] UnselectableMetadataStatuses => [MetadataStatus.Downloaded];
 
         public async Task GetResultsAsync()
         {
-            if (string.IsNullOrWhiteSpace(SearchVideoUrl))
-            {
-                return;
-            }
-
             Results = [];
             _skip = 0;
 
@@ -27,10 +21,16 @@ namespace MediaManagerUI.Modules.VideoTable
             IsLoading = true;
             await Task.Run(() =>
             {
-                resultsChuck = _channelMetadataServices.GetVideoByUrl(SearchVideoUrl, _skip, _pageSize);
-                Results.AddRange(resultsChuck);
+                do
+                {
+                    resultsChuck = _channelMetadataServices.GetNew(_skip, _pageSize);
+                    Results.AddRange(resultsChuck);
+                    _skip += _pageSize;
+                }
+                while (resultsChuck != null && resultsChuck.Count() == _pageSize);
                 _metadataIdResultsMap = Results.ToDictionary(cm => cm.Metadata.Id, cm => cm.Metadata);
             });
+
             IsLoading = false;
         }
     }

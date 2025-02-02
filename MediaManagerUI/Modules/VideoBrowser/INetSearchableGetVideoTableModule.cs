@@ -1,4 +1,4 @@
-﻿namespace MediaManagerUI.Modules.VideoTable
+﻿namespace MediaManagerUI.Modules.VideoBrowser
 {
     public interface INetSearchableGetVideoTableModule
     {

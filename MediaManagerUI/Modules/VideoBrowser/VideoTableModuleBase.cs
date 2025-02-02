@@ -1,7 +1,7 @@
 ﻿using MediaManager.Services;
 using OPMF.Entities;
 
-namespace MediaManagerUI.Modules.VideoTable
+namespace MediaManagerUI.Modules.VideoBrowser
 {
     public class VideoTableModuleBase
     {

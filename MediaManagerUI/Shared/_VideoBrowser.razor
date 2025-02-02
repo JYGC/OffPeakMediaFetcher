@@ -1,5 +1,7 @@
 ﻿@using OPMF.Entities
-@using MediaManagerUI.Modules.VideoTable
+@using MediaManagerUI.Modules.VideoBrowser
+
+@inject IDialogService _dialog
 
 <MudTable T="OPMF.Entities.ChannelMetadata"
           Items="_getVideoTableModule?.Results"
@@ -42,7 +44,9 @@
             }
         </MudTd>
         <MudTd DataLabel="Channel">@context.Channel.Name</MudTd>
-        <MudTd DataLabel="Title">@context.Metadata.Title</MudTd>
+        <MudTd DataLabel="Title">
+            <MudButton OnClick="@(() => OpenVideoDetailDialog())">@context.Metadata.Title</MudButton>
+        </MudTd>
         <MudTd DataLabel="PublishedAt">@context.Metadata.PublishedAt</MudTd>
     </RowTemplate>
 </MudTable>
@@ -78,6 +82,23 @@
             throw new Exception("Please set GetResults to a method");
         }
         base.OnParametersSet();
+    }
+
+    private Task OpenVideoDetailDialog()
+    {
+        return _dialog.ShowAsync<_VideoDetails>(
+            "Video details",
+            new DialogParameters<_VideoDetails>
+            {
+                {
+                    x => x.Arg, "Test"
+                }
+            },
+            new DialogOptions
+            {
+                FullScreen = true,
+                CloseButton = true
+            });
     }
 
     private Variant ComputeStatusButtonVariant(MetadataStatus status, IMetadata metadata) =>

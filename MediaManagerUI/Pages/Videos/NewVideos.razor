@@ -2,17 +2,17 @@
 @page "/videos/new"
 
 @using MediaManager.Services
-@using MediaManagerUI.Modules.VideoTable
+@using MediaManagerUI.Modules.VideoBrowser
 @using MediaManagerUI.Shared
 
 @inject IMetadataServices _metadataServices
 @inject IChannelMetadataServices _channelMetadataServices
 
-<_VideoTable @bind-GetVideoTableModule="_getVideoTableModule">
+<_VideoBrowser @bind-GetVideoTableModule="_getVideoTableModule">
     <TableToolBarContent>
         <MudText Typo="Typo.subtitle1">New Videos</MudText>
     </TableToolBarContent>
-</_VideoTable>
+</_VideoBrowser>
 
 @code {
     private IGetVideoTableModule? _getVideoTableModule;
