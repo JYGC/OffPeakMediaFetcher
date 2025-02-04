@@ -7,8 +7,7 @@ open MediaManager.Definitions.DatabaseContextDefinitions
 
 module ChannelRepository =
     let getAll (getCollection: unit -> TChannelCollection): ResizeArray<Channel> =
-        getCollection().FindAll()
-        |> ResizeArray<Channel>
+        getCollection().FindAll() |> ResizeArray<Channel>
 
     let getNotBacklisted (getCollection: unit -> TChannelCollection): ResizeArray<Channel> =
         getCollection().Query().Where(fun c -> c.BlackListed = false).ToList()
@@ -16,7 +15,8 @@ module ChannelRepository =
 
     let getManyByWordInName
       (getCollection: unit -> TChannelCollection)
-      (wordInChannelName: string): ResizeArray<Channel> =
+      (wordInChannelName: string)
+      : ResizeArray<Channel> =
         getCollection().Query().Where(fun c -> c.Name.Contains(wordInChannelName)).ToList()
         |> ResizeArray<Channel>
 
@@ -41,7 +41,7 @@ module ChannelRepository =
         -> Map<string,Channel>
         -> List<Channel>)
       (channelsFromUi: Channel seq)
-      : Exception Option =
+      : exn Option =
         let (channelCollection, dbConnection) = getCollectionAndDbCollection()
         try
             let siteIdChannelFromUiMap =
@@ -52,7 +52,7 @@ module ChannelRepository =
               (siteIdChannelFromUiMap: Map<string,Channel>)
               : unit =
                 let channel = Map.find channelFromDb.SiteId siteIdChannelFromUiMap
-                channelFromDb.Name <- channel.Name
+                channelFromDb.Name <- channel.Name // Use channels from Ui instead?
                 channelFromDb.Url <- channel.Url
                 channelFromDb.Thumbnail.Url <- channel.Thumbnail.Url
                 channelFromDb.Thumbnail.Width <- channel.Thumbnail.Width
@@ -86,7 +86,7 @@ module ChannelRepository =
     let insertOrUpdate
       (getCollectionAndDbCollection: unit -> TChannelCollection * TDatabaseConnection)
       (channelsFromUi: Channel seq)
-      : Exception Option =
+      : exn Option =
         _insertOrUpdate
             getCollectionAndDbCollection
             _updateExistingChannelsAndReturnThem
