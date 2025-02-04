@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Compile Include="DatabaseContextDefinitions.fs" />
-    <Compile Include="ChannelRepositoryDefinitions.fs" />
   </ItemGroup>
 
   <ItemGroup>

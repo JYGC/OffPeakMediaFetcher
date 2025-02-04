@@ -13,7 +13,11 @@ module DatabaseContextComposition =
     let channelCollectionName = "YoutubeChannel"
     let getChannelCollection: unit -> TChannelCollection =
         fun _ -> DatabaseContext.getChannelCollection getDatabaseConnection channelCollectionName
+    let getChannelCollectionWithDatabaseConnection: unit -> TChannelCollection * TDatabaseConnection =
+        fun _ -> DatabaseContext.getChannelCollectionWithDatabaseConnection getDatabaseConnection channelCollectionName
 
     let metadataCollectionName = "YoutubeMetadata"
     let getMetadataCollection: unit -> TMetadataCollection =
         fun _ -> DatabaseContext.getMetadataCollection getDatabaseConnection metadataCollectionName
+
+    let ert () = (1, 3)
