@@ -9,7 +9,10 @@ module DatabaseContext =
     let getDatabaseConnection databasePath connectionType: TDatabaseConnection =
         new LiteDatabase($"Filename={databasePath};connection={connectionType}")
 
-    let getChannelCollection (getDbConnection: unit -> TDatabaseConnection) (collectionName: string): TChannelCollection =
+    let getChannelCollection
+      (getDbConnection: unit -> TDatabaseConnection)
+      (collectionName: string)
+      : TChannelCollection =
         getDbConnection().GetCollection<Channel>(collectionName)
 
     let getChannelCollectionWithDatabaseConnection
@@ -19,5 +22,8 @@ module DatabaseContext =
         let dbConnection = getDbConnection()
         (dbConnection.GetCollection<Channel>(collectionName), dbConnection)
 
-    let getMetadataCollection (getDbConnection: unit -> TDatabaseConnection) (collectionName: string): TMetadataCollection =
+    let getMetadataCollection
+      (getDbConnection: unit -> TDatabaseConnection)
+      (collectionName: string)
+      : TMetadataCollection =
         getDbConnection().GetCollection<Metadata>(collectionName)

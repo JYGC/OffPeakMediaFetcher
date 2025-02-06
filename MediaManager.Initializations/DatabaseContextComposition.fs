@@ -19,5 +19,3 @@ module DatabaseContextComposition =
     let metadataCollectionName = "YoutubeMetadata"
     let getMetadataCollection: unit -> TMetadataCollection =
         fun _ -> DatabaseContext.getMetadataCollection getDatabaseConnection metadataCollectionName
-
-    let ert () = (1, 3)
