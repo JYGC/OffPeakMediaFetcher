@@ -8,7 +8,7 @@ using System.Linq;
 using OPMF.Entities;
 using System.Collections.Generic;
 
-namespace OPMF.Tests.Repositories
+namespace OPMF.Tests.Services
 {
     public class TestChannelServiceHelper
     {
