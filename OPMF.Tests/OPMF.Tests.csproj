@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MediaManager.Initializations\MediaManager.Initializations.fsproj" />
     <ProjectReference Include="..\OPMF.Database\OPMF.Database.csproj" />
     <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
     <ProjectReference Include="..\OPMF.Filesystem\OPMF.Filesystem.csproj" />

@@ -7,13 +7,13 @@
 
   <ItemGroup>
     <Compile Include="DatabaseContextComposition.fs" />
-    <Compile Include="ChannelRepositoryComposition.fs" />
+    <Compile Include="ChannelServicesComposition.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MediaManager.Database\MediaManager.Database.fsproj" />
     <ProjectReference Include="..\MediaManager.Definitions\MediaManager.Definitions.fsproj" />
-    <ProjectReference Include="..\MediaManager.Repositories\MediaManager.Repositories.fsproj" />
+    <ProjectReference Include="..\MediaManager.Services\MediaManager.Services.fsproj" />
     <ProjectReference Include="..\OPMF.Settings\OPMF.Settings.csproj" />
   </ItemGroup>
 
