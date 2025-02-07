@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace OPMF.Tests.Repositories
 {
     [TestCaseOrderer(ordererTypeName: "OPMF.Tests.PriorityOrderer", ordererAssemblyName: "OPMF.Tests")]
-    public class TestChannelServices : IClassFixture<AppFolderFixture>
+    public class TestChannelServicesInsertOrUpdate : IClassFixture<AppFolderFixture>
     {
         private void AssertChannelIsEqual(Channel expectedChannel, Channel actualChannel)
         {
@@ -105,6 +105,21 @@ namespace OPMF.Tests.Repositories
                 Assert.Contains(channel.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
                 AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
             }
+        }
+    }
+
+    [TestCaseOrderer(ordererTypeName: "OPMF.Tests.PriorityOrderer", ordererAssemblyName: "OPMF.Tests")]
+    public class TestChannelServicesInsertOrUpdateDuplicates : IClassFixture<AppFolderFixture>
+    {
+        [Fact, TestPriority(1)]
+        public void TestInsertDuplicate()
+        {
+            var result = ChannelServices.InsertOrUpdate(ChannelMetadata.ChannelList2);
+            Assert.True(result.IsError);
+            Assert.IsType<LiteDB.LiteException>(result.ErrorValue);
+            Assert.Contains("Cannot insert duplicate key in unique index", result.ErrorValue.Message);
+            var channelsFromDb = ChannelServices.GetAll();
+            Assert.Empty(channelsFromDb);
         }
     }
 }
