@@ -47,7 +47,7 @@ namespace OPMF.Tests.Repositories
     public class TestChannelServicesInsertOrUpdate : IClassFixture<AppFolderFixture>
     {
         [Fact, TestPriority(1)]
-        public void TestInsertNew()
+        public void Test1InsertNew()
         {
             var channel45List = ChannelMetadata.ChannelList1.Take(ChannelMetadata.ChannelList1.Length * 4 / 5).ToList();
             var result = ChannelServices.InsertOrUpdate(channel45List);
@@ -65,7 +65,7 @@ namespace OPMF.Tests.Repositories
         }
 
         [Fact, TestPriority(2)]
-        public void TestUpdateExisting()
+        public void Test2UpdateExisting()
         {
             var channel23List = ChannelMetadata.ChannelList1.Take(ChannelMetadata.ChannelList1.Length * 2 / 3).ToList();
             var modifiedChannels = new List<Channel>();
@@ -91,7 +91,7 @@ namespace OPMF.Tests.Repositories
         }
 
         [Fact, TestPriority(3)]
-        public void TestInsertAndUpdate()
+        public void Test3InsertAndUpdate()
         {
             var result = ChannelServices.InsertOrUpdate(ChannelMetadata.ChannelList1);
             Assert.True(result.IsOk);
@@ -114,7 +114,7 @@ namespace OPMF.Tests.Repositories
     public class TestChannelServicesInsertOrUpdateDuplicates : IClassFixture<AppFolderFixture>
     {
         [Fact, TestPriority(1)]
-        public void TestInsertDuplicate()
+        public void Test1InsertDuplicate()
         {
             var result = ChannelServices.InsertOrUpdate(ChannelMetadata.ChannelList2);
             Assert.True(result.IsError);
