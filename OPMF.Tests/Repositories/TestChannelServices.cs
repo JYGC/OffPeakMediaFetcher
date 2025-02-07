@@ -10,10 +10,9 @@ using System.Collections.Generic;
 
 namespace OPMF.Tests.Repositories
 {
-    [TestCaseOrderer(ordererTypeName: "OPMF.Tests.PriorityOrderer", ordererAssemblyName: "OPMF.Tests")]
-    public class TestChannelServicesInsertOrUpdate : IClassFixture<AppFolderFixture>
+    public class TestChannelServiceHelper
     {
-        private void AssertChannelIsEqual(Channel expectedChannel, Channel actualChannel)
+        public static void AssertChannelIsEqual(Channel expectedChannel, Channel actualChannel)
         {
             Assert.Equal(expectedChannel.Name, actualChannel.Name);
             if (!string.IsNullOrWhiteSpace(expectedChannel.Description))
@@ -29,7 +28,7 @@ namespace OPMF.Tests.Repositories
             Assert.Equal(JsonSerializer.Serialize(expectedChannel.Thumbnail), JsonSerializer.Serialize(actualChannel.Thumbnail));
         }
 
-        private void ModifyChannel(Channel channel, int i)
+        public static void ModifyChannel(Channel channel, int i)
         {
             channel.Name = $"{channel.Name}{from number in Enumerable.Range(0, i * i) select Math.Pow(i, i)}";
             channel.Description = $"{channel.Description}{from number in Enumerable.Range(0, i * i) select Math.Pow(i, i)}";
@@ -41,9 +40,12 @@ namespace OPMF.Tests.Repositories
             channel.Url = $"{channel.Url}{from number in Enumerable.Range(0, i * i) select Math.Pow(i, i)}";
             channel.Thumbnail.Width = 2 * i;
             channel.Thumbnail.Height = 3 * i * i;
-
         }
+    }
 
+    [TestCaseOrderer(ordererTypeName: "OPMF.Tests.PriorityOrderer", ordererAssemblyName: "OPMF.Tests")]
+    public class TestChannelServicesInsertOrUpdate : IClassFixture<AppFolderFixture>
+    {
         [Fact, TestPriority(1)]
         public void TestInsertNew()
         {
@@ -53,12 +55,12 @@ namespace OPMF.Tests.Repositories
             var (insertNumber, updateNumber) = result.ResultValue;
             Assert.Equal(channel45List.Count, insertNumber);
             Assert.Equal(0, updateNumber);
-            var siteIdToChannelsFromDb = ChannelServices.GetAll().ToDictionary(c => c.SiteId, c => c);
+            var siteIdToChannelsFromDb = ChannelServices.GetAll().ResultValue.ToDictionary(c => c.SiteId, c => c);
             
             foreach (var channel in channel45List)
             {
                 Assert.Contains(channel.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
-                AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
+                TestChannelServiceHelper.AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
             }
         }
 
@@ -70,7 +72,7 @@ namespace OPMF.Tests.Repositories
             for (int i = 0; i < channel23List.Count; i++)
             {
                 var copiedChannel = JsonSerializer.Deserialize<Channel>(JsonSerializer.Serialize(channel23List[i]));
-                ModifyChannel(copiedChannel, i);
+                TestChannelServiceHelper.ModifyChannel(copiedChannel, i);
                 modifiedChannels.Add(copiedChannel);
             }
 
@@ -79,12 +81,12 @@ namespace OPMF.Tests.Repositories
             var (insertNumber, updateNumber) = result.ResultValue;
             Assert.Equal(0, insertNumber);
             Assert.Equal(modifiedChannels.Count, updateNumber);
-            var siteIdToChannelsFromDb = ChannelServices.GetAll().ToDictionary(c => c.SiteId, c => c);
+            var siteIdToChannelsFromDb = ChannelServices.GetAll().ResultValue.ToDictionary(c => c.SiteId, c => c);
 
             foreach (var channel in modifiedChannels)
             {
                 Assert.Contains(channel.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
-                AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
+                TestChannelServiceHelper.AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
             }
         }
 
@@ -98,12 +100,12 @@ namespace OPMF.Tests.Repositories
             var channel45ListCount = ChannelMetadata.ChannelList1.Take(channelListCount * 4 / 5).Count();
             Assert.Equal(channelListCount - channel45ListCount, insertNumber);
             Assert.Equal(channel45ListCount, updateNumber);
-            var siteIdToChannelsFromDb = ChannelServices.GetAll().ToDictionary(c => c.SiteId, c => c);
+            var siteIdToChannelsFromDb = ChannelServices.GetAll().ResultValue.ToDictionary(c => c.SiteId, c => c);
 
             foreach (var channel in ChannelMetadata.ChannelList1)
             {
                 Assert.Contains(channel.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
-                AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
+                TestChannelServiceHelper.AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
             }
         }
     }
@@ -118,7 +120,7 @@ namespace OPMF.Tests.Repositories
             Assert.True(result.IsError);
             Assert.IsType<LiteDB.LiteException>(result.ErrorValue);
             Assert.Contains("Cannot insert duplicate key in unique index", result.ErrorValue.Message);
-            var channelsFromDb = ChannelServices.GetAll();
+            var channelsFromDb = ChannelServices.GetAll().ResultValue;
             Assert.Empty(channelsFromDb);
         }
     }
