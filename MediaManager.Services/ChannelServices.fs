@@ -65,9 +65,9 @@ module ChannelServices =
             inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
 
         let updateFunction
-            (channelFromDb: Channel)
-            (siteIdToChannelsFromUiMap: Map<string,Channel>)
-            : unit =
+          (channelFromDb: Channel)
+          (siteIdToChannelsFromUiMap: Map<string,Channel>)
+          : unit =
             let channelFromUi = Map.find channelFromDb.SiteId siteIdToChannelsFromUiMap
             channelFromDb.Name <- channelFromUi.Name // Use channels from Ui instead?
             if not (String.IsNullOrWhiteSpace(channelFromUi.Description)) then
