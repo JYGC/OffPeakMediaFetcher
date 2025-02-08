@@ -18,9 +18,10 @@ module ChannelServices =
       : Result<ResizeArray<Channel>, exn> =
         match getCollection() with
         | Error ex -> Error ex
-        | Ok channelCollection -> Ok (
-            channelCollection.Query().Where(fun c -> c.BlackListed = false).ToList()
-            |> ResizeArray<Channel>)
+        | Ok channelCollection -> 
+            Ok (
+                channelCollection.Query().Where(fun c -> c.BlackListed = false).ToList()
+                |> ResizeArray<Channel>)
 
     let getManyByWordInName
       (getCollection: unit -> Result<TChannelCollection, exn>)
@@ -28,9 +29,11 @@ module ChannelServices =
       : Result<ResizeArray<Channel>, exn> =
         match getCollection() with
         | Error ex -> Error ex
-        | Ok channelCollection -> Ok (
-            channelCollection.Query().Where(fun c -> c.Name.Contains(wordInChannelName)).ToList()
-            |> ResizeArray<Channel>)
+        | Ok channelCollection ->
+            Ok (
+                channelCollection.Query().Where(fun c ->
+                    c.Name.Contains(wordInChannelName)).ToList()
+                |> ResizeArray<Channel>)
 
     let private _updateExistingChannelsAndReturnThem
       (updateFunction: Channel -> Map<string, Channel> -> unit)

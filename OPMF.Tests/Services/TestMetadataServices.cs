@@ -1,6 +1,8 @@
-﻿namespace OPMF.Tests.Services
+﻿using Xunit;
+
+namespace OPMF.Tests.Services
 {
-    public class TestMetadataServices
+    public class TestMetadataServices : IClassFixture<AppFolderFixture>
     {
     }
 }

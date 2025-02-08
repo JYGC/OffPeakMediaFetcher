@@ -56,12 +56,12 @@ namespace OPMF.Tests.Services
             Assert.Equal(channel45List.Count, insertNumber);
             Assert.Equal(0, updateNumber);
             var siteIdToChannelsFromDb = ChannelServices.GetAll().ResultValue.ToDictionary(c => c.SiteId, c => c);
-            
-            foreach (var channel in channel45List)
+
+            Assert.All(channel45List, c =>
             {
-                Assert.Contains(channel.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
-                TestChannelServiceHelper.AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
-            }
+                Assert.Contains(c.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
+                TestChannelServiceHelper.AssertChannelIsEqual(c, siteIdToChannelsFromDb[c.SiteId]);
+            });
         }
 
         [Fact, TestPriority(2)]
@@ -83,11 +83,11 @@ namespace OPMF.Tests.Services
             Assert.Equal(modifiedChannels.Count, updateNumber);
             var siteIdToChannelsFromDb = ChannelServices.GetAll().ResultValue.ToDictionary(c => c.SiteId, c => c);
 
-            foreach (var channel in modifiedChannels)
+            Assert.All(modifiedChannels, c =>
             {
-                Assert.Contains(channel.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
-                TestChannelServiceHelper.AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
-            }
+                Assert.Contains(c.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
+                TestChannelServiceHelper.AssertChannelIsEqual(c, siteIdToChannelsFromDb[c.SiteId]);
+            });
         }
 
         [Fact, TestPriority(3)]
@@ -102,11 +102,11 @@ namespace OPMF.Tests.Services
             Assert.Equal(channel45ListCount, updateNumber);
             var siteIdToChannelsFromDb = ChannelServices.GetAll().ResultValue.ToDictionary(c => c.SiteId, c => c);
 
-            foreach (var channel in ChannelMetadata.ChannelList1)
+            Assert.All(ChannelMetadata.ChannelList1, c =>
             {
-                Assert.Contains(channel.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
-                TestChannelServiceHelper.AssertChannelIsEqual(channel, siteIdToChannelsFromDb[channel.SiteId]);
-            }
+                Assert.Contains(c.SiteId, (IDictionary<string, Channel>)siteIdToChannelsFromDb);
+                TestChannelServiceHelper.AssertChannelIsEqual(c, siteIdToChannelsFromDb[c.SiteId]);
+            });
         }
     }
 
@@ -122,6 +122,37 @@ namespace OPMF.Tests.Services
             Assert.Contains("Cannot insert duplicate key in unique index", result.ErrorValue.Message);
             var channelsFromDb = ChannelServices.GetAll().ResultValue;
             Assert.Empty(channelsFromDb);
+        }
+    }
+
+    public class TestChannelServicesGetResults : IClassFixture<AppFolderFixture>
+    {
+        public TestChannelServicesGetResults()
+        {
+            _ = ChannelServices.InsertOrUpdate(ChannelMetadata.ChannelList1);
+            _ = ChannelServices.InsertOrUpdate(ChannelMetadata.ChannelList2);
+        }
+
+        [Fact]
+        public void TestGetNotBacklisted()
+        {
+            var result = ChannelServices.GetNotBacklisted();
+            Assert.True(result.IsOk);
+            Assert.All(result.ResultValue, c => Assert.False(c.BlackListed));
+            var allNotBlacklist = ChannelServices.GetAll().ResultValue.Where(c => !c.BlackListed).ToList();
+            Assert.Equal(allNotBlacklist.Count, result.ResultValue.Count);
+        }
+
+        [Fact]
+        public void TestGetManyByWordInName()
+        {
+            var wordInChannelName = "LetsPlay";
+            var result = ChannelServices.GetManyByWordInName(wordInChannelName);
+            Assert.True(result.IsOk);
+            Assert.All(result.ResultValue, c => Assert.Contains(wordInChannelName, c.Name));
+            var allResultsWithWordInChannelName = ChannelServices.GetAll().ResultValue
+                .Where(c => c.Name != null && c.Name.Contains(wordInChannelName)).ToList();
+            Assert.Equal(allResultsWithWordInChannelName.Count, result.ResultValue.Count);
         }
     }
 }
