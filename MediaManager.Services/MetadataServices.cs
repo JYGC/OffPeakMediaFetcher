@@ -10,8 +10,10 @@ namespace MediaManager.Services
         void UpdateIsBeingProcessed(IEnumerable<IMetadata> metadatas);
         void DownloadNow(IMetadata metadata);
     }
-    public class MetadataServices : IMetadataServices
+    public class MetadataServices(ITaskRunnerServices taskRunnerServices) : IMetadataServices
     {
+        private readonly ITaskRunnerServices _taskRunnerServices = taskRunnerServices;
+
         public void UpdateStatus(IEnumerable<IMetadata> metadatas)
         {
             DatabaseAdapter.AccessDbAdapter(dbAdapter =>
@@ -22,18 +24,12 @@ namespace MediaManager.Services
 
         public void DownloadNow(IMetadata metadata)
         {
-            const string __offPeakMediaFetcherEXE = @"OffPeakMediaFetcher.exe";
-            const string __offPeakMediaFetcherArgsScaffold = "videos {0}";
-
             DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
                 dbAdapter.YoutubeMetadataDbCollection.UpdateIsBeingProcessed([metadata]);
             });
 
-            Process process = new Process();
-            process.StartInfo.FileName = __offPeakMediaFetcherEXE;
-            process.StartInfo.Arguments = string.Format(__offPeakMediaFetcherArgsScaffold, metadata.SiteId);
-            process.Start();
+            taskRunnerServices.DownloadOneVideo(metadata);
         }
 
         public void UpdateIsBeingProcessed(IEnumerable<IMetadata> metadatas)
