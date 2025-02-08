@@ -31,6 +31,18 @@ namespace MediaManagerUI.Modules.VideoBrowser
             _metadataStatusUpdateQueue.Add(metadata);
         }
 
+        public void RemoveIsBeingDownloadedStatus(ChannelMetadata channelMetadata)
+        {
+            channelMetadata.Metadata.IsBeingDownloaded = false;
+            _metadataServices.UpdateIsBeingProcessed([channelMetadata.Metadata]);
+        }
+
+        public void DownloadVideoNow(ChannelMetadata channelMetadata)
+        {
+            channelMetadata.Metadata.IsBeingDownloaded = true;
+            _metadataServices.DownloadNow(channelMetadata.Metadata);
+        }
+
         private void UpdateMetadataStatuses(object? source, System.Timers.ElapsedEventArgs e)
         {
             if (_metadataStatusUpdateQueue.Count == 0)

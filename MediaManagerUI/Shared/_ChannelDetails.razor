@@ -1,5 +1,42 @@
-﻿<h3>_ChannelDetails</h3>
+﻿@using OPMF.Entities
+
+@if (Channel != null)
+{
+    <div style="overflow: scroll; height: 100vh">
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Channel Name: </b></MudText>
+            <MudText>@Channel.Name</MudText>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Thumbnail: </b></MudText>
+            <MudImage Src="@Channel.Thumbnail.Url"
+                      Height="@((int?)Channel.Thumbnail.Height)"
+                      Width="@((int?)Channel.Thumbnail.Width)" />
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Url: </b></MudText>
+            <MudLink Href="@Channel.Url">@Channel.Url</MudLink>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Last checked out on: </b></MudText>
+            <MudText>@Channel.LastCheckedOut</MudText>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Date of last activity: </b></MudText>
+            <MudText>@Channel.LastActivityDate</MudText>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Status: </b></MudText>
+            <MudText>@(Channel.NotFound ? "Channel Not Found" : "Channel Exists")</MudText>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Description: </b></MudText>
+            <MudText>@Channel.Description</MudText>
+        </MudPaper>
+    </div>
+}
 
 @code {
-
+    [Parameter]
+    public Channel? Channel { get; set; }
 }
