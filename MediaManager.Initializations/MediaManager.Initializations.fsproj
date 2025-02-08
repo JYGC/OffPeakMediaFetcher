@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="DatabaseContextComposition.fs" />
     <Compile Include="ChannelServicesComposition.fs" />
+    <Compile Include="MetadataServicesComposition.fs" />
   </ItemGroup>
 
   <ItemGroup>

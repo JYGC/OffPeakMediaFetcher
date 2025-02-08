@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="MetadataServices.fs" />
     <Compile Include="ChannelServices.fs" />
   </ItemGroup>
 

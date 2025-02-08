@@ -11,17 +11,21 @@ module ChannelServices =
       : Result<ResizeArray<Channel>, exn> =
         match getCollection() with
         | Error ex -> Error ex
-        | Ok channelCollection -> Ok (channelCollection.FindAll() |> ResizeArray<Channel>)
+        | Ok channelCollection ->
+            try
+                Ok (channelCollection.FindAll() |> ResizeArray<Channel>)
+            with e -> Error e
 
     let getNotBacklisted
       (getCollection: unit -> Result<TChannelCollection, exn>)
       : Result<ResizeArray<Channel>, exn> =
         match getCollection() with
         | Error ex -> Error ex
-        | Ok channelCollection -> 
-            Ok (
-                channelCollection.Query().Where(fun c -> c.BlackListed = false).ToList()
-                |> ResizeArray<Channel>)
+        | Ok channelCollection ->
+            try
+                Ok (channelCollection.Query().Where(fun c ->
+                    c.BlackListed = false).ToList() |> ResizeArray<Channel>)
+            with e -> Error e
 
     let getManyByWordInName
       (getCollection: unit -> Result<TChannelCollection, exn>)
@@ -30,10 +34,10 @@ module ChannelServices =
         match getCollection() with
         | Error ex -> Error ex
         | Ok channelCollection ->
-            Ok (
-                channelCollection.Query().Where(fun c ->
-                    c.Name.Contains(wordInChannelName)).ToList()
-                |> ResizeArray<Channel>)
+            try
+                Ok (channelCollection.Query().Where(fun c ->
+                    c.Name.Contains(wordInChannelName)).ToList() |> ResizeArray<Channel>)
+            with e -> Error e
 
     let private _updateExistingChannelsAndReturnThem
       (updateFunction: Channel -> Map<string, Channel> -> unit)
@@ -55,10 +59,10 @@ module ChannelServices =
         -> TChannelCollection
         -> Map<string,Channel>
         -> List<Channel> * int)
-      (channelsFromUi: Channel seq)
+      (inboundChannels: Channel seq)
       : int * int =
         let siteIdChannelFromUiMap =
-            channelsFromUi |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
+            inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
 
         let updateFunction
             (channelFromDb: Channel)
@@ -87,7 +91,7 @@ module ChannelServices =
             List.except channelsToUpdateSiteIds (channelsFromUiSiteIds |> Seq.toList)
             |> ResizeArray
         let newChannels =
-            channelsFromUi |> Seq.filter(fun c -> newChannelSiteIds.Contains(c.SiteId))
+            inboundChannels |> Seq.filter(fun c -> newChannelSiteIds.Contains(c.SiteId))
         let insertNumber = channelCollection.InsertBulk(newChannels)
 
         (insertNumber, updateNumber)
