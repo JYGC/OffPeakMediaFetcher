@@ -4,6 +4,10 @@ open OPMF.Entities
 open MediaManager.Services
 
 module MetadataServicesComposition =
+    let getAll: unit -> Result<ResizeArray<Metadata>, exn> =
+        fun _ -> MetadataServices.getAll DatabaseContextComposition.getMetadataCollection
+    let GetAll() = getAll()
+
     let getToDownload: unit -> Result<ResizeArray<Metadata>, exn> =
         fun _ -> MetadataServices.getToDownload DatabaseContextComposition.getMetadataCollection
     let GetToDownload() = getToDownload()

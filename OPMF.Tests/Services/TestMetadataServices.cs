@@ -1,4 +1,6 @@
-﻿using OPMF.Tests.TestData;
+﻿using OPMF.Entities;
+using OPMF.Tests.TestData;
+using System.Linq;
 using Xunit;
 
 using ChannelServices = MediaManager.Initializations.ChannelServicesComposition;
@@ -18,31 +20,57 @@ namespace OPMF.Tests.Services
         [Fact]
         public void TestGetToDownload()
         {
-            Assert.True(false);
+            var result = MetadataServices.GetToDownload();
+            Assert.True(result.IsOk);
+            Assert.All(result.ResultValue, m => Assert.Equal(MetadataStatus.ToDownload, m.Status));
+            var allToDownload = MetadataServices.GetAll().ResultValue.Where(m => m.Status == MetadataStatus.ToDownload).ToList();
+            Assert.Equal(allToDownload.Count, result.ResultValue.Count);
         }
 
         [Fact]
         public void TestGetNew()
         {
-            Assert.True(false);
+            var result = MetadataServices.GetNew(0, VideoMetadata.MetadataList1.Length);
+            Assert.True(result.IsOk);
+            Assert.All(result.ResultValue, m => Assert.Equal(MetadataStatus.New, m.Status));
+            var allNew = MetadataServices.GetAll().ResultValue.Where(m => m.Status == MetadataStatus.New).ToList();
+            Assert.Equal(allNew.Count, result.ResultValue.Count);
         }
 
         [Fact]
         public void TestGetToDownloadAndWait()
         {
-            Assert.True(false);
+            var result = MetadataServices.GetToDownloadAndWait(0, VideoMetadata.MetadataList1.Length);
+            Assert.True(result.IsOk);
+            Assert.All(result.ResultValue, m => Assert.True(m.Status == MetadataStatus.ToDownload || m.Status == MetadataStatus.Wait));
+            var allToDownloadAndWait = MetadataServices.GetAll().ResultValue
+                .Where(m => m.Status == MetadataStatus.ToDownload || m.Status == MetadataStatus.Wait).ToList();
+            Assert.Equal(allToDownloadAndWait.Count, result.ResultValue.Count);
         }
 
         [Fact]
         public void TestGetManyByWordInTitle()
         {
-            Assert.True(false);
+            var wordInTitle = "NASA";
+            var result = MetadataServices.GetManyByWordInTitle(wordInTitle, 0, VideoMetadata.MetadataList1.Length);
+            Assert.True(result.IsOk);
+            Assert.All(result.ResultValue, m => Assert.Contains(wordInTitle, m.Title));
+            var titlesContainingWord = MetadataServices.GetAll().ResultValue.Where(m => m.Title.Contains(wordInTitle)).ToList();
+            Assert.Equal(titlesContainingWord.Count, result.ResultValue.Count);
         }
 
         [Fact]
         public void TestGetManyByChannelSiteIdAndWordInTitle()
         {
-            Assert.True(false);
+            var wordInChannelName = "Gab";
+            var channelSiteIds = ChannelServices.GetManyByWordInName(wordInChannelName).ResultValue.Select(c => c.SiteId).ToList();
+            var wordInTitle = "Rocket";
+            var result = MetadataServices.GetManyByChannelSiteIdAndWordInTitle(channelSiteIds, wordInTitle, 0, VideoMetadata.MetadataList1.Length);
+            Assert.True(result.IsOk);
+            Assert.All(result.ResultValue, m => Assert.Contains(wordInTitle, m.Title));
+            var titlesContainingWordAndHasChannelSiteIds = MetadataServices.GetAll().ResultValue
+                .Where(m => m.Title.Contains(wordInTitle) && channelSiteIds.Contains(m.ChannelSiteId)).ToList();
+            Assert.Equal(titlesContainingWordAndHasChannelSiteIds.Count, result.ResultValue.Count);
         }
     }
 }

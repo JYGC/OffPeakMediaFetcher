@@ -6,6 +6,16 @@ open OPMF.Entities
 open MediaManager.Definitions.DatabaseContextDefinitions
 
 module MetadataServices =
+    let getAll
+      (getCollection: unit -> Result<TMetadataCollection, exn>)
+      : Result<ResizeArray<Metadata>, exn> =
+        match getCollection() with
+        | Error ex -> Error ex
+        | Ok channelCollection ->
+            try
+                Ok (channelCollection.FindAll() |> ResizeArray<Metadata>)
+            with e -> Error e
+
     let getToDownload
       (getCollection: unit -> Result<TMetadataCollection, exn>)
       : Result<ResizeArray<Metadata>, exn> =
