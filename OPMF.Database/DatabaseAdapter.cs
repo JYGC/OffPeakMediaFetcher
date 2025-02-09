@@ -12,48 +12,26 @@ namespace OPMF.Database
         private readonly string __dbPath;
         private readonly LiteDatabase __db;
 
-        // Collections
-        private readonly YoutubeMetadataDbCollection __youtubeMetadataDbCollection = null;
-        public YoutubeMetadataDbCollection YoutubeMetadataDbCollection
-        {
-            get
-            {
-                return __youtubeMetadataDbCollection;
-            }
-        }
-        private readonly YoutubeChannelDbCollection __youtubeChannelDbCollection = null;
-        public YoutubeChannelDbCollection YoutubeChannelDbCollection
-        {
-            get
-            {
-                return __youtubeChannelDbCollection;
-            }
-        }
-        private readonly OPMFLogDbCollection __oPMFLogDbCollection = null;
-        public OPMFLogDbCollection OPMFLogDbCollection
-        {
-            get
-            {
-                return __oPMFLogDbCollection;
-            }
-        }
+        public YoutubeMetadataDbCollection YoutubeMetadataDbCollection { get; } = null;
+        public YoutubeChannelDbCollection YoutubeChannelDbCollection { get; } = null;
+        public OPMFLogDbCollection OPMFLogDbCollection { get; } = null;
 
         public DatabaseAdapter(string dbPath)
         {
             __dbPath = dbPath;
             __db = new LiteDatabase(string.Format(@"Filename={0};connection={1}", __dbPath, __CONNECTION));
 
-            __youtubeMetadataDbCollection = new YoutubeMetadataDbCollection(__db);
-            __youtubeChannelDbCollection = new YoutubeChannelDbCollection(__db);
-            __oPMFLogDbCollection = new OPMFLogDbCollection(__db);
+            YoutubeMetadataDbCollection = new YoutubeMetadataDbCollection(__db);
+            YoutubeChannelDbCollection = new YoutubeChannelDbCollection(__db);
+            OPMFLogDbCollection = new OPMFLogDbCollection(__db);
         }
 
         public void MigrateData()
         {
             DatabaseAdapter newDatabaseAdapter = new DatabaseAdapter(Settings.ConfigHelper.ReadonlySettings.GetDatabasePath() + ".new");
-            newDatabaseAdapter.YoutubeMetadataDbCollection.InsertBulk(__youtubeMetadataDbCollection.GetAll());
-            newDatabaseAdapter.YoutubeChannelDbCollection.InsertBulk(__youtubeChannelDbCollection.GetAll());
-            newDatabaseAdapter.OPMFLogDbCollection.InsertBulk(__oPMFLogDbCollection.GetAll());
+            newDatabaseAdapter.YoutubeMetadataDbCollection.InsertBulk(YoutubeMetadataDbCollection.GetAll());
+            newDatabaseAdapter.YoutubeChannelDbCollection.InsertBulk(YoutubeChannelDbCollection.GetAll());
+            newDatabaseAdapter.OPMFLogDbCollection.InsertBulk(OPMFLogDbCollection.GetAll());
         }
 
         public void Dispose()

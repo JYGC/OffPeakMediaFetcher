@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OPMF.Database\OPMF.Database.csproj" />
+    <ProjectReference Include="..\OPMF.Entities\OPMF.Entities.csproj" />
+    <ProjectReference Include="..\OPMF.SiteAdapter.Youtube\OPMF.SiteAdapter.Youtube.csproj" />
+    <ProjectReference Include="..\OPMF.SiteAdapter\OPMF.SiteAdapter.csproj" />
+  </ItemGroup>
+
+</Project>

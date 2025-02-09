@@ -14,4 +14,10 @@
         public IPropertyChangedMetadata Metadata { get; set; }
         public IChannel Channel { get; set; }
     }
+
+    public class ChannelMetadata
+    {
+        public IMetadata Metadata { get; set; }
+        public IChannel Channel { get; set; }
+    }
 }

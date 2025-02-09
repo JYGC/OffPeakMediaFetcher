@@ -1,0 +1,34 @@
+﻿@page "/"
+@page "/videos/new"
+
+@using MediaManager.Services
+@using MediaManagerUI.Modules.VideoBrowser
+@using MediaManagerUI.Shared
+
+@inject IMetadataServices _metadataServices
+@inject IChannelMetadataServices _channelMetadataServices
+
+<_VideoBrowser @bind-VideoBrowserModule="_videoBrowserModule">
+    <TableToolBarContent>
+        <MudText Typo="Typo.subtitle1">New Videos</MudText>
+    </TableToolBarContent>
+</_VideoBrowser>
+
+@code {
+    private IVideoBrowserModule? _videoBrowserModule;
+
+    protected override void OnInitialized()
+    {
+        _videoBrowserModule = new NewVideosModule(_metadataServices, _channelMetadataServices);
+        base.OnInitialized();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_videoBrowserModule != null)
+        {
+            await _videoBrowserModule.GetResultsAsync();
+        }
+        await base.OnParametersSetAsync();
+    }
+}
