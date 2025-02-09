@@ -62,7 +62,7 @@ namespace OPMF.Tests.Services
         [Fact]
         public void TestGetManyByChannelSiteIdAndWordInTitle()
         {
-            var wordInChannelName = "Gab";
+            var wordInChannelName = "Sm";
             var channelSiteIds = ChannelServices.GetManyByWordInName(wordInChannelName).ResultValue.Select(c => c.SiteId).ToList();
             var wordInTitle = "Rocket";
             var result = MetadataServices.GetManyByChannelSiteIdAndWordInTitle(channelSiteIds, wordInTitle, 0, VideoMetadata.MetadataList1.Length);
