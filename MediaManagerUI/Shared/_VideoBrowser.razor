@@ -1,8 +1,6 @@
 ﻿@using OPMF.Entities
 @using MediaManagerUI.Modules.VideoBrowser
 
-@inject IDialogService _dialog
-
 <MudTable T="OPMF.Entities.ChannelMetadata"
           Items="_videoBrowserModule?.Results"
           Breakpoint="Breakpoint.Sm"
@@ -60,14 +58,24 @@
     </RowTemplate>
 </MudTable>
 
-<MudDialog @bind-Visible="_showVideoDetailsDialog" 
-            style="overflow: scroll; height: 100vh"
-            Options="_dialogOptions">
-    <DialogContent>
-        <_VideoDetails @bind-VideoBrowserModule="_videoBrowserModule"
-                       @bind-ChannelMetadata="_selectedChannelMetadata" />
-    </DialogContent>
-</MudDialog>
+@if (_selectedChannelMetadata != null)
+{
+    <MudDialog @bind-Visible="_showVideoDetailsDialog"
+               style="overflow: scroll; height: 100vh"
+               Options="_dialogOptions">
+        <DialogContent>
+            <_VideoDetails @bind-VideoBrowserModule="_videoBrowserModule"
+                           @bind-ChannelMetadata="_selectedChannelMetadata" />
+        </DialogContent>
+    </MudDialog>
+    <MudDialog @bind-Visible="_showChannelDetailsDialog"
+               style="overflow: scroll; height: 100vh"
+               Options="_dialogOptions">
+        <DialogContent>
+            <_ChannelDetails @bind-Channel="_selectedChannelMetadata.Channel" />
+        </DialogContent>
+    </MudDialog>
+}
 
     @code {
     private IVideoBrowserModule? _videoBrowserModule;
@@ -103,6 +111,7 @@
     }
 
     private readonly DialogOptions _dialogOptions = new() { FullScreen = true, CloseButton = true };
+
     private ChannelMetadata? _selectedChannelMetadata = new ChannelMetadata { Metadata = new Metadata(), Channel = new Channel() };
     private bool _showVideoDetailsDialog;
     private void OpenVideoDetailDialog(ChannelMetadata channelMetadata)
@@ -111,21 +120,11 @@
         _showVideoDetailsDialog = true;
     }
 
-    private Task OpenChannelDetailDialog(ChannelMetadata channelMetadata)
+    private bool _showChannelDetailsDialog;
+    private void OpenChannelDetailDialog(ChannelMetadata channelMetadata)
     {
-        return _dialog.ShowAsync<_ChannelDetails>(
-            "Channel details",
-            new DialogParameters<_ChannelDetails>
-            {
-                {
-                    x => x.Channel, channelMetadata.Channel
-                }
-            },
-            new DialogOptions
-            {
-                FullScreen = true,
-                CloseButton = true
-            });
+        _selectedChannelMetadata = channelMetadata;
+        _showChannelDetailsDialog = true;
     }
 
     private Variant ComputeStatusButtonVariant(MetadataStatus status, IMetadata metadata) =>

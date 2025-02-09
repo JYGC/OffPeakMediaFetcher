@@ -37,6 +37,21 @@
 }
 
 @code {
+    private IChannel? _channel;
     [Parameter]
-    public Channel? Channel { get; set; }
+    public IChannel? Channel
+    {
+        get => _channel;
+        set
+        {
+            if (_channel == value)
+            {
+                return;
+            }
+            _channel = value;
+            ChannelChanged.InvokeAsync(value);
+        }
+    }
+    [Parameter]
+    public EventCallback<IChannel> ChannelChanged { get; set; }
 }
