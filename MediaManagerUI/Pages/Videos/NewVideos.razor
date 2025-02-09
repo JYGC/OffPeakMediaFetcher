@@ -8,26 +8,26 @@
 @inject IMetadataServices _metadataServices
 @inject IChannelMetadataServices _channelMetadataServices
 
-<_VideoBrowser @bind-VideoBrowserModule="_getVideoTableModule">
+<_VideoBrowser @bind-VideoBrowserModule="_videoBrowserModule">
     <TableToolBarContent>
         <MudText Typo="Typo.subtitle1">New Videos</MudText>
     </TableToolBarContent>
 </_VideoBrowser>
 
 @code {
-    private IVideoBrowserModule? _getVideoTableModule;
+    private IVideoBrowserModule? _videoBrowserModule;
 
     protected override void OnInitialized()
     {
-        _getVideoTableModule = new NewVideosModule(_metadataServices, _channelMetadataServices);
+        _videoBrowserModule = new NewVideosModule(_metadataServices, _channelMetadataServices);
         base.OnInitialized();
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (_getVideoTableModule != null)
+        if (_videoBrowserModule != null)
         {
-            await _getVideoTableModule.GetResultsAsync();
+            await _videoBrowserModule.GetResultsAsync();
         }
         await base.OnParametersSetAsync();
     }

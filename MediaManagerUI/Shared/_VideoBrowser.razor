@@ -1,7 +1,7 @@
 ﻿@using OPMF.Entities
 @using MediaManagerUI.Modules.VideoBrowser
 
-<MudTable T="OPMF.Entities.ChannelMetadata"
+<MudTable T="ChannelMetadata"
           Items="_videoBrowserModule?.Results"
           Breakpoint="Breakpoint.Sm"
           Loading="@(_videoBrowserModule?.IsLoading ?? false)"
@@ -37,11 +37,11 @@
                     @foreach (var status in _metadataStatus)
                     {
                         <MudButton Variant="@ComputeStatusButtonVariant(status, context.Metadata)"
-                        Color="@((context.Metadata.Status == status) ? Color.Secondary : Color.Default)"
-                        OnClick="() => _videoBrowserModule.ScheduleMetadataStatusUpdate(status, context.Metadata)"
-                        Disabled="_videoBrowserModule.UnselectableMetadataStatuses.Contains(status)"
-                        Size="Size.Small"
-                        Class="ml-0 mr-0 pl-2 pr-2">
+                                   Color="@((context.Metadata.Status == status) ? Color.Secondary : Color.Default)"
+                                   OnClick="() => _videoBrowserModule.ScheduleMetadataStatusUpdate(status, context.Metadata)"
+                                   Disabled="_videoBrowserModule.UnselectableMetadataStatuses.Contains(status)"
+                                   Size="Size.Small"
+                                   Class="ml-0 mr-0 pl-2 pr-2">
                             @status
                         </MudButton>
                     }
@@ -77,7 +77,7 @@
     </MudDialog>
 }
 
-    @code {
+@code {
     private IVideoBrowserModule? _videoBrowserModule;
     [Parameter]
     public IVideoBrowserModule? VideoBrowserModule

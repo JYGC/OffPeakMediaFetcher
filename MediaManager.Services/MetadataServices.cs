@@ -1,6 +1,5 @@
 ﻿using OPMF.Database;
 using OPMF.Entities;
-using System.Diagnostics;
 
 namespace MediaManager.Services
 {
