@@ -125,42 +125,39 @@ module MetadataServices =
                 Error e
 
     let private _updateExistingMetadatasAndReturnThem
-      (updateFunction: Metadata -> Map<string, Metadata> -> unit)
+      (updateFunction: Metadata -> Metadata -> unit)
       (metadataCollection: TMetadataCollection)
-      (siteIdToInboundMetadataMap: Map<string, Metadata>)
+      (inboundMetadata: Metadata seq)
       : List<Metadata> * int =
+        let siteIdToInboundMetadataMap =
+            inboundMetadata |> Seq.map(fun m -> (m.SiteId, m)) |> Map.ofSeq
         let inboundMetadataSiteIds: List<string> = siteIdToInboundMetadataMap |> Map.keys |> ResizeArray
         let metadatasToUpdate = metadataCollection.Query().Where(fun m ->
             inboundMetadataSiteIds.Contains(m.SiteId)).ToList()
         metadatasToUpdate
-        |> Seq.iter(fun metadataFromDb -> updateFunction metadataFromDb siteIdToInboundMetadataMap)
+        |> Seq.iter(fun metadataFromDb ->
+            let inboundMetadata = Map.find metadataFromDb.SiteId siteIdToInboundMetadataMap
+            updateFunction metadataFromDb inboundMetadata)
         let updateNumber = metadataCollection.Update(metadatasToUpdate)
         (metadatasToUpdate, updateNumber)
 
     let private _updateStatus
       (metadataCollection: TMetadataCollection)
       (updateExistingChannelsAndReturnThem:
-        (Metadata -> Map<string, Metadata> -> unit)
+        (Metadata -> Metadata -> unit)
         -> TMetadataCollection
-        -> Map<string, Metadata>
+        -> Metadata seq
         -> List<Metadata> * int)
       (inboundMetadata: Metadata seq)
       : int =
-        let siteIdToInboundMetadataMap =
-            inboundMetadata |> Seq.map(fun m -> (m.SiteId, m)) |> Map.ofSeq
-
-        let updateFunction
-          (metadataFromDb: Metadata)
-          (siteIdToInboundMetadataMap: Map<string, Metadata>)
-          : unit =
-            let inboundMetadata = Map.find metadataFromDb.SiteId siteIdToInboundMetadataMap
+        let updateFunction (metadataFromDb: Metadata) (inboundMetadata: Metadata): unit =
             metadataFromDb.Status <- inboundMetadata.Status
 
         let (_, updateNumber) =
             updateExistingChannelsAndReturnThem
                 updateFunction
                 metadataCollection
-                siteIdToInboundMetadataMap
+                inboundMetadata
 
         updateNumber
 
@@ -187,21 +184,14 @@ module MetadataServices =
     let _updateIsBeingProcessed
       (metadataCollection: TMetadataCollection)
       (updateExistingChannelsAndReturnThem:
-        (Metadata -> Map<string, Metadata> -> unit)
+        (Metadata -> Metadata -> unit)
         -> TMetadataCollection
-        -> Map<string, Metadata>
+        -> Metadata seq
         -> List<Metadata> * int)
       (inboundMetadata: Metadata seq)
       (isBeingProcessed: bool option)
       : int =
-        let siteIdToInboundMetadataMap =
-            inboundMetadata |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
-
-        let updateFunction
-          (metadataFromDb: Metadata)
-          (siteIdToInboundMetadataMap: Map<string, Metadata>)
-          : unit =
-            let inboundMetadata = Map.find metadataFromDb.SiteId siteIdToInboundMetadataMap
+        let updateFunction (metadataFromDb: Metadata) (inboundMetadata: Metadata): unit =
             metadataFromDb.IsBeingDownloaded <-
                 match isBeingProcessed with
                 | None -> inboundMetadata.IsBeingDownloaded
@@ -211,7 +201,7 @@ module MetadataServices =
             updateExistingChannelsAndReturnThem
                 updateFunction
                 metadataCollection
-                siteIdToInboundMetadataMap
+                inboundMetadata
 
         updateNumber
 

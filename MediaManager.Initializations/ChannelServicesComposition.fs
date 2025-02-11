@@ -25,3 +25,8 @@ module ChannelServicesComposition =
         ChannelServices.updateLastCheckedOutAndActivity
             DatabaseContextComposition.getChannelCollectionWithDatabaseConnection
     let UpdateLastCheckedOutAndActivity channels = updateLastCheckedOutAndActivity channels
+
+    let updateBlackListStatus: Channel seq -> Result<int, exn> =
+        ChannelServices.updateBlackListStatus
+            DatabaseContextComposition.getChannelCollectionWithDatabaseConnection
+    let UpdateBlackListStatus channels = updateBlackListStatus channels
