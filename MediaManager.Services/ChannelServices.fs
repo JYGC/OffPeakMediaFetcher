@@ -51,55 +51,52 @@ module ChannelServices =
             with e -> Error e
 
     let private _updateExistingChannelsAndReturnThem
-      (updateFunction: Channel -> Map<string, Channel> -> unit)
+      (updateFunction: Channel -> Channel -> unit)
       (channelCollection: TChannelCollection)
-      (siteIdChannelFromUiMap: Map<string, Channel>)
+      (inboundChannels: Channel seq)
       : List<Channel> * int =
+        let siteIdChannelFromUiMap =
+            inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
         let channelsFromUiSiteIds: List<string> = siteIdChannelFromUiMap |> Map.keys |> ResizeArray
         let channelsToUpdate = channelCollection.Query().Where(fun c ->
             channelsFromUiSiteIds.Contains(c.SiteId)).ToList()
         channelsToUpdate
-        |> Seq.iter(fun channelFromDb -> updateFunction channelFromDb siteIdChannelFromUiMap)
+        |> Seq.iter(fun channelFromDb ->
+            let inboundChannel = Map.find channelFromDb.SiteId siteIdChannelFromUiMap
+            updateFunction channelFromDb inboundChannel)
         let updateNumber = channelCollection.Update(channelsToUpdate)
         (channelsToUpdate, updateNumber)
 
     let private _insertOrUpdate
       (channelCollection: TChannelCollection)
       (updateExistingChannelsAndReturnThem:
-        (Channel -> Map<string, Channel> -> unit)
+        (Channel -> Channel -> unit)
         -> TChannelCollection
-        -> Map<string,Channel>
+        -> Channel seq
         -> List<Channel> * int)
       (inboundChannels: Channel seq)
       : int * int =
-        let siteIdChannelFromUiMap =
-            inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
-
-        let updateFunction
-          (channelFromDb: Channel)
-          (siteIdToChannelsFromUiMap: Map<string,Channel>)
-          : unit =
-            let channelFromUi = Map.find channelFromDb.SiteId siteIdToChannelsFromUiMap
-            channelFromDb.Name <- channelFromUi.Name // Use channels from Ui instead?
-            if not (String.IsNullOrWhiteSpace(channelFromUi.Description)) then
-                channelFromDb.Description <- channelFromUi.Description
-            channelFromDb.Thumbnail.Url <- channelFromUi.Thumbnail.Url
-            channelFromDb.Thumbnail.Width <- channelFromUi.Thumbnail.Width
-            channelFromDb.Thumbnail.Height <- channelFromUi.Thumbnail.Height
-            channelFromDb.Url <- channelFromUi.Url
+        let updateFunction (channelFromDb: Channel) (inboundChannel: Channel): unit =
+            channelFromDb.Name <- inboundChannel.Name
+            if not (String.IsNullOrWhiteSpace(inboundChannel.Description)) then
+                channelFromDb.Description <- inboundChannel.Description
+            channelFromDb.Thumbnail.Url <- inboundChannel.Thumbnail.Url
+            channelFromDb.Thumbnail.Width <- inboundChannel.Thumbnail.Width
+            channelFromDb.Thumbnail.Height <- inboundChannel.Thumbnail.Height
+            channelFromDb.Url <- inboundChannel.Url
 
         let (channelsToUpdate, updateNumber) =
             updateExistingChannelsAndReturnThem
                 updateFunction
                 channelCollection
-                siteIdChannelFromUiMap
+                inboundChannels
 
-        let channelsFromUiSiteIds: List<string> =
-            siteIdChannelFromUiMap |> Map.keys |> ResizeArray
+        let inboundChannelsSiteIds: List<string> =
+            inboundChannels |> Seq.map(fun c -> c.SiteId) |> ResizeArray
         let channelsToUpdateSiteIds: List<string> =
             channelsToUpdate |> Seq.map(fun c -> c.SiteId) |> ResizeArray
         let newChannelSiteIds: List<string> =
-            List.except channelsToUpdateSiteIds (channelsFromUiSiteIds |> Seq.toList)
+            List.except channelsToUpdateSiteIds (inboundChannelsSiteIds |> Seq.toList)
             |> ResizeArray
         let newChannels =
             inboundChannels |> Seq.filter(fun c -> newChannelSiteIds.Contains(c.SiteId))
@@ -129,28 +126,21 @@ module ChannelServices =
     let private _updateLastCheckedOutAndActivity
       (channelCollection: TChannelCollection)
       (updateExistingChannelsAndReturnThem:
-        (Channel -> Map<string, Channel> -> unit)
+        (Channel -> Channel -> unit)
         -> TChannelCollection
-        -> Map<string,Channel>
+        -> Channel seq
         -> List<Channel> * int)
       (inboundChannels: Channel seq)
       : int =
-        let siteIdToInboundChannelMap =
-            inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
-
-        let updateFunction
-          (channelFromDb: Channel)
-          (siteIdToChannelsFromUiMap: Map<string,Channel>)
-          : unit =
-            let channelFromUi = Map.find channelFromDb.SiteId siteIdToChannelsFromUiMap
-            channelFromDb.LastCheckedOut <- channelFromUi.LastCheckedOut
-            channelFromDb.LastActivityDate <- channelFromUi.LastActivityDate
+        let updateFunction (channelFromDb: Channel) (inboundChannel: Channel): unit =
+            channelFromDb.LastCheckedOut <- inboundChannel.LastCheckedOut
+            channelFromDb.LastActivityDate <- inboundChannel.LastActivityDate
 
         let (_, updateNumber) =
             updateExistingChannelsAndReturnThem
                 updateFunction
                 channelCollection
-                siteIdToInboundChannelMap
+                inboundChannels
 
         updateNumber
 
@@ -176,27 +166,20 @@ module ChannelServices =
     let _updateBlackListStatus
       (channelCollection: TChannelCollection)
       (updateExistingChannelsAndReturnThem:
-        (Channel -> Map<string, Channel> -> unit)
+        (Channel -> Channel -> unit)
         -> TChannelCollection
-        -> Map<string,Channel>
+        -> Channel seq
         -> List<Channel> * int)
       (inboundChannels: Channel seq)
       : int =
-        let siteIdToInboundChannelMap =
-            inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
-
-        let updateFunction
-          (channelFromDb: Channel)
-          (siteIdToChannelsFromUiMap: Map<string,Channel>)
-          : unit =
-            let channelFromUi = Map.find channelFromDb.SiteId siteIdToChannelsFromUiMap
-            channelFromDb.BlackListed <- channelFromUi.BlackListed
+        let updateFunction (channelFromDb: Channel) (inboundChannel: Channel): unit =
+            channelFromDb.BlackListed <- inboundChannel.BlackListed
 
         let (_, updateNumber) =
             updateExistingChannelsAndReturnThem
                 updateFunction
                 channelCollection
-                siteIdToInboundChannelMap
+                inboundChannels
 
         updateNumber
 
