@@ -16,6 +16,17 @@ module ChannelServices =
                 Ok (channelCollection.FindAll() |> ResizeArray<Channel>)
             with e -> Error e
 
+    let getBySiteId
+      (getCollection: unit -> Result<TChannelCollection, exn>)
+      (siteId: string)
+      : Result<ResizeArray<Channel>, exn> =
+        match getCollection() with
+        | Error ex -> Error ex
+        | Ok channelCollection ->
+            try
+                Ok (channelCollection.Query().Where(fun m -> m.SiteId = siteId).ToList())
+            with e -> Error e
+
     let getNotBacklisted
       (getCollection: unit -> Result<TChannelCollection, exn>)
       : Result<ResizeArray<Channel>, exn> =
@@ -98,7 +109,7 @@ module ChannelServices =
 
     let insertOrUpdate
       (getCollectionAndDbCollection: unit -> Result<TChannelCollection * TDatabaseConnection, exn>)
-      (channelsFromUi: Channel seq)
+      (inboundChannels: Channel seq)
       : Result<int * int, exn> =
         match getCollectionAndDbCollection() with
         | Error ex -> Error ex
@@ -108,7 +119,7 @@ module ChannelServices =
                     _insertOrUpdate
                         channelCollection
                         _updateExistingChannelsAndReturnThem
-                        channelsFromUi
+                        inboundChannels
                 dbConnection.Commit() |> ignore
                 Ok (insertNumber, updateNumber)
             with e ->
@@ -122,15 +133,15 @@ module ChannelServices =
         -> TChannelCollection
         -> Map<string,Channel>
         -> List<Channel> * int)
-      (channelsFromUi: Channel seq)
+      (inboundChannels: Channel seq)
       : int =
-        let siteIdChannelFromUiMap =
-            channelsFromUi |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
+        let siteIdToInboundChannelMap =
+            inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
 
         let updateFunction
-            (channelFromDb: Channel)
-            (siteIdToChannelsFromUiMap: Map<string,Channel>)
-            : unit =
+          (channelFromDb: Channel)
+          (siteIdToChannelsFromUiMap: Map<string,Channel>)
+          : unit =
             let channelFromUi = Map.find channelFromDb.SiteId siteIdToChannelsFromUiMap
             channelFromDb.LastCheckedOut <- channelFromUi.LastCheckedOut
             channelFromDb.LastActivityDate <- channelFromUi.LastActivityDate
@@ -139,13 +150,13 @@ module ChannelServices =
             updateExistingChannelsAndReturnThem
                 updateFunction
                 channelCollection
-                siteIdChannelFromUiMap
+                siteIdToInboundChannelMap
 
         updateNumber
 
     let updateLastCheckedOutAndActivity
       (getCollectionAndDbCollection: unit -> Result<TChannelCollection * TDatabaseConnection, exn>)
-      (channelsFromUi: Channel seq)
+      (inboundChannels: Channel seq)
       : Result<int, exn> =
         match getCollectionAndDbCollection() with
         | Error ex -> Error ex
@@ -155,7 +166,53 @@ module ChannelServices =
                     _updateLastCheckedOutAndActivity
                         channelCollection
                         _updateExistingChannelsAndReturnThem
-                        channelsFromUi
+                        inboundChannels
+                dbConnection.Commit() |> ignore
+                Ok updateNumber
+            with e ->
+                dbConnection.Rollback() |> ignore
+                Error e
+
+    let _updateBlackListStatus
+      (channelCollection: TChannelCollection)
+      (updateExistingChannelsAndReturnThem:
+        (Channel -> Map<string, Channel> -> unit)
+        -> TChannelCollection
+        -> Map<string,Channel>
+        -> List<Channel> * int)
+      (inboundChannels: Channel seq)
+      : int =
+        let siteIdToInboundChannelMap =
+            inboundChannels |> Seq.map(fun c -> (c.SiteId, c)) |> Map.ofSeq
+
+        let updateFunction
+          (channelFromDb: Channel)
+          (siteIdToChannelsFromUiMap: Map<string,Channel>)
+          : unit =
+            let channelFromUi = Map.find channelFromDb.SiteId siteIdToChannelsFromUiMap
+            channelFromDb.BlackListed <- channelFromUi.BlackListed
+
+        let (_, updateNumber) =
+            updateExistingChannelsAndReturnThem
+                updateFunction
+                channelCollection
+                siteIdToInboundChannelMap
+
+        updateNumber
+
+    let updateBlackListStatus
+      (getCollectionAndDbCollection: unit -> Result<TChannelCollection * TDatabaseConnection, exn>)
+      (inboundChannels: Channel seq)
+      : Result<int, exn> =
+        match getCollectionAndDbCollection() with
+        | Error ex -> Error ex
+        | Ok (channelCollection, dbConnection) ->
+            try
+                let updateNumber =
+                    _updateBlackListStatus
+                        channelCollection
+                        _updateExistingChannelsAndReturnThem
+                        inboundChannels
                 dbConnection.Commit() |> ignore
                 Ok updateNumber
             with e ->
