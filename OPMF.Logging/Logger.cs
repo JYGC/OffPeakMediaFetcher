@@ -5,11 +5,11 @@ namespace OPMF.Logging
 {
     public class Logger
     {
-        public void LogEntry(IOPMFLog oPMFLog)
+        public void LogEntry(OPMFLog oPMFLog)
         {
             Database.DatabaseAdapter.AccessDbAdapter(dbAdapter =>
             {
-                dbAdapter.OPMFLogDbCollection.InsertBulk(new List<IOPMFLog> { oPMFLog });
+                dbAdapter.OPMFLogDbCollection.InsertBulk(new List<OPMFLog> { oPMFLog });
             });
         }
 

@@ -10,7 +10,7 @@ namespace OPMF.Database
         TItem GetBySiteId(string id);
     }
 
-    public class DatabaseCollection<TItem> : IDatabaseCollection<TItem> where TItem : Entities.IStringId
+    public class DatabaseCollection<TItem> : IDatabaseCollection<TItem>
     {
         protected string _KeyName { get; } = "_id";
 
@@ -53,20 +53,6 @@ namespace OPMF.Database
         public IEnumerable<TItem> GetAll()
         {
             return _Collection.FindAll();
-        }
-
-        protected IEnumerable<TItem> _UpdateFields(IEnumerable<TItem> items, Action<TItem, TItem> UpdateFields)
-        {
-            IEnumerable<string> itemIds = items.Select(i => i.Id);
-            List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.Id)).ToList(); // dbToUpdate must be list or it won't update in foreach loop
-            foreach (TItem dbItem in dbToUpdate)
-            {
-                TItem item = items.First(i => i.Id == dbItem.Id);
-                UpdateFields(item, dbItem);
-            }
-            _Collection.Update(dbToUpdate);
-
-            return dbToUpdate;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OPMF.Database
 {
-    public class YoutubeChannelDbCollection : ChannelDbCollection<Entities.IChannel>, IChannelDbCollection<Entities.IChannel>
+    public class YoutubeChannelDbCollection : ChannelDbCollection<Entities.Channel>, IChannelDbCollection<Entities.Channel>
     {
         private static readonly string __collectionName = "YoutubeChannel";
 

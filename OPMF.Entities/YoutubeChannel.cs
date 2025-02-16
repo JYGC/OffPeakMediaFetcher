@@ -1,4 +1,4 @@
 ﻿namespace OPMF.Entities
 {
-    public class YoutubeChannel : Channel, IChannel { }
+    public class YoutubeChannel : Channel { }
 }

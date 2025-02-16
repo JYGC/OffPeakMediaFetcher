@@ -6,8 +6,9 @@ using LiteDB;
 
 namespace OPMF.Database
 {
-    public interface IChannelDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : Entities.IChannel
+    public interface IChannelDbCollection<TItem> : IDatabaseCollection<TItem> where TItem : Entities.Channel
     {
+        List<TItem> GetManyBySiteIds(IEnumerable<string> ids);
         IEnumerable<TItem> GetAll();
         IEnumerable<TItem> GetNotBacklisted();
         IEnumerable<TItem> GetManyByWordInName(string wordInChannelName);
@@ -16,13 +17,18 @@ namespace OPMF.Database
         void UpdateBlackListStatus(IEnumerable<TItem> items);
     }
 
-    public class ChannelDbCollection<TItem> : DatabaseCollection<TItem>, IChannelDbCollection<TItem> where TItem : Entities.IChannel
+    public class ChannelDbCollection<TItem> : DatabaseCollection<TItem>, IChannelDbCollection<TItem> where TItem : Entities.Channel
     {
         public ChannelDbCollection(LiteDatabase db, string collectionName) : base(db, collectionName) { }
 
+        public List<TItem> GetManyBySiteIds(IEnumerable<string> ids)
+        {
+            return _Collection.Query().Where(c => ids.Contains(c.SiteId)).ToList();
+        }
+
         public IEnumerable<TItem> GetNotBacklisted()
         {
-            return _Collection.Find(i => i.BlackListed == false).ToList();
+            return _Collection.Find(i => i.Blacklisted == false).ToList();
         }
 
         public IEnumerable<TItem> GetManyByWordInName(string wordInChannelName)
@@ -82,7 +88,7 @@ namespace OPMF.Database
         {
             try
             {
-                _UpdateFields(items, (item, dbItem) => dbItem.BlackListed = item.BlackListed);
+                _UpdateFields(items, (item, dbItem) => dbItem.Blacklisted = item.Blacklisted);
             }
             catch (Exception)
             {
@@ -91,7 +97,7 @@ namespace OPMF.Database
             }
         }
 
-        protected new IEnumerable<TItem> _UpdateFields(IEnumerable<TItem> items, Action<TItem, TItem> UpdateFields)
+        protected IEnumerable<TItem> _UpdateFields(IEnumerable<TItem> items, Action<TItem, TItem> UpdateFields)
         {
             IEnumerable<string> itemIds = items.Select(i => i.Id);
             List<TItem> dbToUpdate = _Collection.Find(i => itemIds.Contains(i.SiteId)).ToList(); // dbToUpdate must be list or it won't update in foreach loop

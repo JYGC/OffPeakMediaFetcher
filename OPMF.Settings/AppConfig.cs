@@ -12,7 +12,6 @@ namespace OPMF.Settings
         public int StopDownloadInstanceAfterSeconds { get; set; } = 60 * 60 * 12;
         public string GoogleClientSecretPath { get; set; } = "gmail-python-quickstart.json";
         public string VideoOutputFolderPath { get; set; } = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "OffPeakVideos");
-        public string WebBrowserPath { get; set; } = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe";
         public YoutubeDLConfig YoutubeDL { get; set; } = new YoutubeDLConfig();
     }
 }

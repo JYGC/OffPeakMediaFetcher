@@ -25,19 +25,19 @@ namespace OPMF.SiteAdapter.Youtube
             });
         }
 
-        public List<Entities.IChannel> FindChannelById(string[] channelIdList)
+        public List<Entities.Channel> FindChannelById(string[] channelIdList)
         {
             return __ImportChannels(channelIdList, (channelIdentifier, request) => { request.Id = channelIdentifier; });
         }
 
-        public List<Entities.IChannel> FindChannelByName(string[] channelNameList)
+        public List<Entities.Channel> FindChannelByName(string[] channelNameList)
         {
             return __ImportChannels(channelNameList, (channelIdentifier, request) => { request.ForUsername = channelIdentifier; });
         }
 
-        private List<Entities.IChannel> __ImportChannels(string[] channelIdentifierList, Action<string, ChannelsResource.ListRequest> SetRequestParameter)
+        private List<Entities.Channel> __ImportChannels(string[] channelIdentifierList, Action<string, ChannelsResource.ListRequest> SetRequestParameter)
         {
-            List<Entities.IChannel> newChannels = new List<Entities.IChannel>();
+            List<Entities.Channel> newChannels = new List<Entities.Channel>();
             ChannelsResource.ListRequest request;
             request = __youtubeService.Channels. List(__channelParts);
             foreach (string channelIdentifier in channelIdentifierList)
@@ -66,9 +66,9 @@ namespace OPMF.SiteAdapter.Youtube
             return newChannels;
         }
 
-        public List<Entities.IChannel> ImportChannels() // Test this
+        public List<Entities.Channel> ImportChannels() // Test this
         {
-            List<Entities.IChannel> channels = new List<Entities.IChannel>();
+            List<Entities.Channel> channels = new List<Entities.Channel>();
 
             Console.WriteLine("importing channels from google");
             SubscriptionsResource.ListRequest request = this.__youtubeService.Subscriptions.List(__channelParts);

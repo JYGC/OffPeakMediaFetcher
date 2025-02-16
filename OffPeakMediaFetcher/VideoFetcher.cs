@@ -9,12 +9,12 @@ namespace OffPeakMediaFetcher
     {
         public void Run(string siteId)
         {
-            __Run(dbConn => new List<OPMF.Entities.IMetadata> { dbConn.YoutubeMetadataDbCollection.GetBySiteId(siteId) });
+            __Run(dbConn => new List<OPMF.Entities.Metadata> { dbConn.YoutubeMetadataDbCollection.GetBySiteId(siteId) });
         }
 
         public void Run()
         {
-            __Run(dbConn => new List<OPMF.Entities.IMetadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload()));
+            __Run(dbConn => new List<OPMF.Entities.Metadata>(dbConn.YoutubeMetadataDbCollection.GetToDownload()));
         }
 
         private static void __MoveAllInFolder(string srcFolderPath, string dstFolderPath, string[] fileExtensions)
@@ -36,12 +36,12 @@ namespace OffPeakMediaFetcher
             }
         }
 
-        public void __Run(Func<OPMF.Database.DatabaseAdapter, List<OPMF.Entities.IMetadata>> GetVideoMetadata)
+        public void __Run(Func<OPMF.Database.DatabaseAdapter, List<OPMF.Entities.Metadata>> GetVideoMetadata)
         {
-            List<OPMF.Entities.IMetadata> metadatasForErrorLogging = null;
+            List<OPMF.Entities.Metadata> metadatasForErrorLogging = null;
             try
             {
-                OPMF.Downloader.IDownloader<OPMF.Entities.IMetadata> downloader = new OPMF.Downloader.YTDownloader.YTDownloader();
+                OPMF.Downloader.IDownloader downloader = new OPMF.Downloader.YTDownloader.YTDownloader();
 
                 Console.WriteLine("fetching videos");
                 OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbConn =>

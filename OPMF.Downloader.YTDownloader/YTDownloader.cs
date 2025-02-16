@@ -6,10 +6,10 @@ using NYoutubeDL;
 
 namespace OPMF.Downloader.YTDownloader
 {
-    public class YTDownloader : IDownloader<Entities.IMetadata>
+    public class YTDownloader : IDownloader
     {
         private List<DownloadInstance> __downloadInstances;
-        public List<Entities.IMetadata> DownloadQueue { get; set; }
+        public List<Entities.Metadata> DownloadQueue { get; set; }
 
         public YTDownloader()
         {
@@ -95,7 +95,7 @@ namespace OPMF.Downloader.YTDownloader
             WriteOnLine(ScreenPosition, "download instance not needed. removed...");
         }
 
-        public void Download(Entities.IMetadata metadata)
+        public void Download(Entities.Metadata metadata)
         {
             NotDownloading = false;
             __downloadError = null;

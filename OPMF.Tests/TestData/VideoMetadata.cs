@@ -7,7 +7,7 @@ namespace OPMF.Tests.TestData
 {
     public class VideoMetadata
     {
-        private static readonly IMetadata[] __metadataList1 = new IMetadata[]
+        private static readonly Metadata[] __metadataList1 = new Metadata[]
         {
             new YoutubeMetadata
             {
@@ -87,10 +87,10 @@ namespace OPMF.Tests.TestData
             }
         };
 
-        public static IMetadata[] MetadataList1 { get => __metadataList1; }
+        public static Metadata[] MetadataList1 { get => __metadataList1; }
 
 
-        private static readonly IMetadata[] metadataList2 = new IMetadata[]
+        private static readonly Metadata[] metadataList2 = new Metadata[]
         {
             new YoutubeMetadata
             {
@@ -293,6 +293,6 @@ namespace OPMF.Tests.TestData
             }
         };
 
-        public static IMetadata[] MetadataList2 { get => metadataList2; }
+        public static Metadata[] MetadataList2 { get => metadataList2; }
     }
 }

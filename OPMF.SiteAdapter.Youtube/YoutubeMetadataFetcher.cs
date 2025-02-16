@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace OPMF.SiteAdapter.Youtube
 {
-    public class YoutubeMetadataFetcher : IMetadataFetcher<Entities.IChannel, Entities.IMetadata>
+    public class YoutubeMetadataFetcher : IMetadataFetcher<Entities.Channel, Entities.Metadata>
     {
         private readonly string[] __apiScope = new string[] { YouTubeService.Scope.YoutubeReadonly };
         private readonly string __videoInfoParts = "snippet,contentDetails";
@@ -28,9 +28,9 @@ namespace OPMF.SiteAdapter.Youtube
             });
         }
 
-        public List<Entities.IMetadata> FetchMetadata(ref List<Entities.IChannel> channels)
+        public List<Entities.Metadata> FetchMetadata(ref List<Entities.Channel> channels)
         {
-            List<Entities.IMetadata> vidoeInfos = new List<Entities.IMetadata>();
+            List<Entities.Metadata> vidoeInfos = new List<Entities.Metadata>();
             foreach (Entities.YoutubeChannel channel in channels)
             {
                 Console.WriteLine("fetching video metadata for youtube channel: " + channel.Name);

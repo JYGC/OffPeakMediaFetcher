@@ -16,7 +16,7 @@ namespace OPMF.Tests.SiteAdapter.Youtube
 <outline text=""Ann Lieven"" title=""Ann Lieven"" type=""rss"" xmlUrl=""https://www.youtube.com/feeds/videos.xml?channel_id=UC-jjYbFILVe9B6ab-RGOxpw"" />
 </body>
 </opml>";
-        private readonly IEnumerable<IChannel> __fiveChannels = new IChannel[]
+        private readonly IEnumerable<Channel> __fiveChannels = new Channel[]
         {
             new YoutubeChannel
             {

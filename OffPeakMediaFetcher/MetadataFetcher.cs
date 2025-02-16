@@ -7,16 +7,16 @@ namespace OffPeakMediaFetcher
     {
         public void Run()
         {
-            List<OPMF.Entities.IChannel> channels = null;
-            List<OPMF.Entities.IMetadata> metadatas = null;
+            List<OPMF.Entities.Channel> channels = null;
+            List<OPMF.Entities.Metadata> metadatas = null;
             try
             {
-                OPMF.SiteAdapter.IMetadataFetcher<OPMF.Entities.IChannel, OPMF.Entities.IMetadata> siteAdapter = new OPMF.SiteAdapter.Youtube.YoutubeMetadataFetcher();
+                OPMF.SiteAdapter.IMetadataFetcher<OPMF.Entities.Channel, OPMF.Entities.Metadata> siteAdapter = new OPMF.SiteAdapter.Youtube.YoutubeMetadataFetcher();
 
                 Console.WriteLine("getting channels");
                 OPMF.Database.DatabaseAdapter.AccessDbAdapter(dbConn =>
                 {
-                    channels = new List<OPMF.Entities.IChannel>(dbConn.YoutubeChannelDbCollection.GetNotBacklisted());
+                    channels = new List<OPMF.Entities.Channel>(dbConn.YoutubeChannelDbCollection.GetNotBacklisted());
                 });
                 metadatas = siteAdapter.FetchMetadata(ref channels);
                 Console.WriteLine("saving metadata to database");

@@ -1,0 +1,41 @@
+@using MediaManagerUI.Shared
+
+@inherits LayoutComponentBase
+
+<MudThemeProvider IsDarkMode="@true" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<ErrorBoundary @ref="_errorBoundary">
+    <ChildContent>
+        <MudLayout>
+            <MudAppBar>
+                <AppBarMenus />
+            </MudAppBar>
+            <MudMainContent>
+                @Body
+            </MudMainContent>
+        </MudLayout>
+    </ChildContent>
+    <ErrorContent>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudText><b>Error: </b></MudText>
+            <MudText Color="Color.Error">@context.Message</MudText>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2" Outlined="true">
+            <MudButton Variant="Variant.Filled" OnClick="() => _errorBoundary?.Recover()">Continue</MudButton>
+        </MudPaper>
+        <MudPaper Class="pa-2 ma-2">
+            <MudExpansionPanels Outlined="false" Elevation="0">
+                <MudExpansionPanel Text="StackTrace">
+                    <_MultilineTextAsParagraphs Text="@context.StackTrace" />
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudPaper>
+    </ErrorContent>
+</ErrorBoundary>
+
+@code {
+    private ErrorBoundary? _errorBoundary;
+}

@@ -4,6 +4,7 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using System;
 using System.Linq;
+using System.Xml;
 
 namespace OPMF.SiteAdapter.Youtube
 {
@@ -38,10 +39,10 @@ namespace OPMF.SiteAdapter.Youtube
             return videoURL.Split(__siteIdExtractorSeperator, StringSplitOptions.None)[1];
         }
 
-        public (Entities.IMetadata, Entities.IChannel) GetVideoByURL(string siteId)
+        public (Entities.Metadata, Entities.Channel) GetVideoByURL(string siteId)
         {
-            Entities.IMetadata videoMetaData;
-            Entities.IChannel channelMetaData;
+            Entities.Metadata videoMetaData;
+            Entities.Channel channelMetaData;
 
             VideosResource.ListRequest videoRequest = __youtubeService.Videos.List(__videoInfoParts);
             videoRequest.Id = siteId;
@@ -64,7 +65,9 @@ namespace OPMF.SiteAdapter.Youtube
                 },
                 Description = videoResponse.Items[0].Snippet.Description,
                 ChannelSiteId = videoResponse.Items[0].Snippet.ChannelId,
-                PublishedAt = Convert.ToDateTime(videoResponse.Items[0].Snippet.PublishedAt)
+                PublishedAt = Convert.ToDateTime(videoResponse.Items[0].Snippet.PublishedAt),
+                Duration = XmlConvert.ToTimeSpan(videoResponse.Items[0].ContentDetails.Duration),
+                OriginalResponse = videoResponse,
             };
 
             ChannelsResource.ListRequest channelRequest = __youtubeService.Channels.List(__channelParts);
@@ -83,8 +86,9 @@ namespace OPMF.SiteAdapter.Youtube
                     Height = channelResponse.Items[0].Snippet.Thumbnails.Default__.Height.Value,
                 },
                 Description = channelResponse.Items[0].Snippet.Description,
-                BlackListed = true,
+                Blacklisted = true,
                 IsAddedBySingleVideo = true,
+                OriginalResponse = channelResponse,
             };
 
             return (videoMetaData, channelMetaData);

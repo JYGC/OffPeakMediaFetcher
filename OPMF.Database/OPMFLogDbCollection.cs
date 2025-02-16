@@ -1,27 +1,43 @@
 ﻿using LiteDB;
 using OPMF.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace OPMF.Database
 {
-    public class OPMFLogDbCollection : DatabaseCollection<IOPMFLog>
+    public class OPMFLogDbCollection : DatabaseCollection<OPMFLog>
     {
         private static readonly string __collectionName = "OPMFLog";
         public OPMFLogDbCollection(LiteDatabase db) : base(db, __collectionName) { }
 
-        public IEnumerable<IOPMFLog> GetWarnings(int __skip, int __pageSize)
+        public List<OPMFLog> GetWarnings(DateTime startDateTime, DateTime endDateTime)
         {
-            return _Collection.Query().Where(i => i.Type == OPMFLogType.Warning).OrderByDescending(i => i.DateCreated).Skip(__skip).Limit(__pageSize).ToList();
+            return _Collection.Query().Where(i => i.Type == OPMFLogType.Warning
+                && i.DateCreated > startDateTime && i.DateCreated < endDateTime)
+                    .OrderByDescending(i => i.DateCreated).Select(i => new OPMFLog
+                    {
+                        Id = i.Id,
+                        DateCreated = i.DateCreated,
+                        ExceptionObject = i.ExceptionObject,
+                        Message = i.Message,
+                        Type = i.Type,
+                        Variables = i.Variables,
+                    }).ToList();
         }
 
-        public IEnumerable<IOPMFLog> GetErrors(int __skip, int __pageSize)
+        public List<OPMFLog> GetErrors(DateTime startDateTime, DateTime endDateTime)
         {
-            return _Collection.Query().Where(i => i.Type == OPMFLogType.Error).OrderByDescending(i => i.DateCreated).Skip(__skip).Limit(__pageSize).ToList();
-        }
-
-        public IEnumerable<IOPMFLog> GetInfos(int __skip, int __pageSize)
-        {
-            return _Collection.Query().Where(i => i.Type == OPMFLogType.Info).OrderByDescending(i => i.DateCreated).Skip(__skip).Limit(__pageSize).ToList();
+            return _Collection.Query().Where(i => i.Type == OPMFLogType.Error
+                && i.DateCreated > startDateTime && i.DateCreated < endDateTime)
+                    .OrderByDescending(i => i.DateCreated).Select(i => new OPMFLog
+                    {
+                        Id = i.Id,
+                        DateCreated = i.DateCreated,
+                        ExceptionObject = i.ExceptionObject,
+                        Message = i.Message,
+                        Type = i.Type,
+                        Variables = i.Variables,
+                    }).ToList();
         }
     }
 }

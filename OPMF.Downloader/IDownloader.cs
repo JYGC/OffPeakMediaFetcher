@@ -2,9 +2,9 @@
 
 namespace OPMF.Downloader
 {
-    public interface IDownloader<TItem> where TItem : Entities.IStringId
+    public interface IDownloader
     {
-        List<Entities.IMetadata> DownloadQueue { get; set; }
+        List<Entities.Metadata> DownloadQueue { get; set; }
         void StartDownloadingQueue();
     }
 }
