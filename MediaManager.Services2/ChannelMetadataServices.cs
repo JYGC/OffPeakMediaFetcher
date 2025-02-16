@@ -1,10 +1,8 @@
 ﻿using OPMF.Database;
 using OPMF.Entities;
-using OPMF.SiteAdapter;
 using OPMF.SiteAdapter.Youtube;
-using System.Data.Common;
 
-namespace MediaManager.Services
+namespace MediaManager.Services2
 {
     public interface IChannelMetadataServices
     {

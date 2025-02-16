@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OPMF.TextLogging", "OPMF.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaManagerUI", "MediaManagerUI\MediaManagerUI.csproj", "{55CAD81E-9B84-4064-9448-A6DDAB5E0496}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaManager.Services", "MediaManager.Services\MediaManager.Services.csproj", "{FC4925C9-6349-4A23-96FC-90B31F07EC43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaManager.Services2", "MediaManager.Services2\MediaManager.Services2.csproj", "{FC4925C9-6349-4A23-96FC-90B31F07EC43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

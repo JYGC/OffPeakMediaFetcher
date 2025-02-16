@@ -1,4 +1,4 @@
-﻿using MediaManager.Services;
+﻿using MediaManager.Services2;
 
 namespace MediaManagerUI.Modules.LogBrowser
 {
