@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using MediaManager.Services;
+using MediaManager.Services2;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
 

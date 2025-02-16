@@ -1,7 +1,7 @@
 ﻿using OPMF.Database;
 using OPMF.Entities;
 
-namespace MediaManager.Services
+namespace MediaManager.Services2
 {
     public interface ILogServices
     {

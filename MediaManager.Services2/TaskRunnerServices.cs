@@ -1,7 +1,7 @@
 ﻿using OPMF.Entities;
 using System.Diagnostics;
 
-namespace MediaManager.Services
+namespace MediaManager.Services2
 {
     public interface ITaskRunnerServices
     {

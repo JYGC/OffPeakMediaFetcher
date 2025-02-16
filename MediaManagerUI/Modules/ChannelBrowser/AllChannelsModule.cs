@@ -1,4 +1,4 @@
-﻿using MediaManager.Services;
+﻿using MediaManager.Services2;
 using OPMF.Entities;
 
 namespace MediaManagerUI.Modules.ChannelBrowser
